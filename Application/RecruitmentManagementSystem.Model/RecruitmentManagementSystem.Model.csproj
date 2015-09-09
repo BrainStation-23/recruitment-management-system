@@ -59,6 +59,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationUser.cs" />
+    <Compile Include="Candidate.cs" />
+    <Compile Include="CandidateEducation.cs" />
+    <Compile Include="CandidateExperience.cs" />
+    <Compile Include="CandidatePlatform.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Question.cs" />
     <Compile Include="QuestionCategory.cs" />
