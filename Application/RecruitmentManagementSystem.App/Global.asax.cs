@@ -1,6 +1,12 @@
-﻿using System.Web.Mvc;
+﻿using System.Data.Entity;
+using System.Linq;
+using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
+using RecruitmentManagementSystem.Data.DbContext;
+using RecruitmentManagementSystem.Model;
 
 namespace RecruitmentManagementSystem.App
 {
@@ -12,6 +18,31 @@ namespace RecruitmentManagementSystem.App
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+
+            Database.SetInitializer(new Init());
+        }
+    }
+
+    public class Init : DropCreateDatabaseIfModelChanges<ApplicationDbContext>
+    {
+        protected override void Seed(ApplicationDbContext context)
+        {
+            if (!context.Users.Any(u => u.UserName == "HRadmin"))
+            {
+                var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
+                var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
+
+                var admin = new IdentityRole {Name = "Admin"};
+                var user = new ApplicationUser {UserName = "HRadmin"};
+
+                userManager.Create(user, "hradmin");
+                roleManager.Create(admin);
+
+                userManager.AddToRole(user.Id, "Admin");
+            }
+
+            base.Seed(context);
         }
     }
 }
