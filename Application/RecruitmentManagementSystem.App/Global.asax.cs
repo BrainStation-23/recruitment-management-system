@@ -18,9 +18,7 @@ namespace RecruitmentManagementSystem.App
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-
-
-            Database.SetInitializer(new Init());
+            //Database.SetInitializer(new Init());
         }
     }
 
@@ -28,15 +26,20 @@ namespace RecruitmentManagementSystem.App
     {
         protected override void Seed(ApplicationDbContext context)
         {
-            if (!context.Users.Any(u => u.UserName == "HRadmin"))
+            if (!context.Users.Any(u => u.UserName == "hr@bs-23.com"))
             {
                 var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
                 var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
 
                 var admin = new IdentityRole {Name = "Admin"};
-                var user = new ApplicationUser {UserName = "HRadmin"};
+                var user = new ApplicationUser
+                {
+                    UserName = "hr@bs-23.com",
+                    Email = "hr@bs-23.com",
+                    Name = "Adnan"
+                };
 
-                userManager.Create(user, "hradmin");
+                userManager.Create(user, "Admin123+");
                 roleManager.Create(admin);
 
                 userManager.AddToRole(user.Id, "Admin");

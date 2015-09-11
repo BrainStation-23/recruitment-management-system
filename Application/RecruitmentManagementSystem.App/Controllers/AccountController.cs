@@ -3,9 +3,11 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using RecruitmentManagementSystem.App.ViewModels;
+using RecruitmentManagementSystem.Data.DbContext;
 using RecruitmentManagementSystem.Model;
 
 namespace RecruitmentManagementSystem.App.Controllers
@@ -152,6 +154,15 @@ namespace RecruitmentManagementSystem.App.Controllers
             var result = await UserManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
             {
+                // role create
+                var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(new ApplicationDbContext()));
+                var admin = new IdentityRole { Name = model.Role };
+                if (!roleManager.RoleExists(model.Role))
+                {
+                    roleManager.Create(admin);
+                    UserManager.AddToRole(user.Id, model.Role);
+                }
+
                 await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
 
                 // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771

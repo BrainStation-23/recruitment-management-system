@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace RecruitmentManagementSystem.Model
+﻿namespace RecruitmentManagementSystem.Model
 {
     public class CandidatePlatform
     {
-        public int Id { get; set; }
+        public int CandidatePlatformId { get; set; }
+        public int CandidateId { get; set; }
         public string Platform { get; set; }
         public string Duration { get; set; }
+        public virtual Candidate Candidate { get; set; }
     }
 }

@@ -8,9 +8,11 @@ namespace RecruitmentManagementSystem.Model
     }
     public class CandidateEducation
     {
-        public int Id { get; set; }
+        public int CandidateEducationId { get; set; }
+        public int CandidateId { get; set; }
         public Degree Degree { get; set; }
         public List<string> Subject { get; set; }
         public List<string> University { get; set; }
+        public virtual Candidate Candidate { get; set; }
     }
 }
