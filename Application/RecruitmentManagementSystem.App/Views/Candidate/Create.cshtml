@@ -17,18 +17,10 @@
         @Html.ValidationSummary(true)
 
         <div class="form-group">
-            @Html.LabelFor(model => model.ResumeAttachmentPath, new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.UserId, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.ResumeAttachmentPath)
-                @Html.ValidationMessageFor(model => model.ResumeAttachmentPath)
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.PhotoAttachmentPath, new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.PhotoAttachmentPath)
-                @Html.ValidationMessageFor(model => model.PhotoAttachmentPath)
+                @Html.EditorFor(model => model.UserId)
+                @Html.ValidationMessageFor(model => model.UserId)
             </div>
         </div>
 
