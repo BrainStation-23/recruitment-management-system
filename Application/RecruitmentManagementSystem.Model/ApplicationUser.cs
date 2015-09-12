@@ -19,6 +19,14 @@ namespace RecruitmentManagementSystem.Model
 
         [Required]
         [StringLength(30, ErrorMessage = "The {0} must be at most {1} characters long.")]
-        public string Name { get; set; }
+        public string FirstName { get; set; }
+
+        [Required]
+        [StringLength(30, ErrorMessage = "The {0} must be at most {1} characters long.")]
+        public string LastName { get; set; }
+
+        public File Avatar { get; set; }
+
+        public int? CanidateId { get; set; }
     }
 }

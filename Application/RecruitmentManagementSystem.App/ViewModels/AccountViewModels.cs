@@ -31,6 +31,7 @@ namespace RecruitmentManagementSystem.App.ViewModels
         [Required]
         [Display(Name = "Code")]
         public string Code { get; set; }
+
         public string ReturnUrl { get; set; }
 
         [Display(Name = "Remember this browser?")]
@@ -65,8 +66,14 @@ namespace RecruitmentManagementSystem.App.ViewModels
     public class RegisterViewModel
     {
         [Required]
+        [Display(Name = "First Name")]
         [StringLength(30, ErrorMessage = "The {0} must be at least {2} characters long.")]
-        public string Name { get; set; }
+        public string FirstName { get; set; }
+
+        [Required]
+        [Display(Name = "Last Name")]
+        [StringLength(30, ErrorMessage = "The {0} must be at least {2} characters long.")]
+        public string LastName { get; set; }
 
         [Display(Name = "Phone Number")]
         public string PhoneNumber { get; set; }

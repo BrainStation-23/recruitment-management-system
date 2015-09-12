@@ -36,7 +36,8 @@ namespace RecruitmentManagementSystem.App
                 {
                     UserName = "hr@bs-23.com",
                     Email = "hr@bs-23.com",
-                    Name = "Adnan"
+                    FirstName = "Adnan",
+                    LastName = "Ahmed"
                 };
 
                 userManager.Create(user, "Admin123+");
