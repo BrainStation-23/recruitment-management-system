@@ -61,7 +61,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DbContext\ApplicationDbContext.cs" />
+    <Compile Include="Interfaces\ICandidateRepository.cs" />
+    <Compile Include="Interfaces\IRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\BaseRepository.cs" />
+    <Compile Include="Repositories\CandidateRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RecruitmentManagementSystem.Model\RecruitmentManagementSystem.Model.csproj">
