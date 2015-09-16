@@ -5,6 +5,8 @@ namespace RecruitmentManagementSystem.App.ViewModels
 {
     public class CandidateViewModel
     {
+        public int Id { get; set; }
+
         [Required]
         [Display(Name = "First Name")]
         [StringLength(30, ErrorMessage = "The {0} must be at most {1} characters long.")]

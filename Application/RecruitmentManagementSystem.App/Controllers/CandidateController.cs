@@ -19,12 +19,28 @@ namespace RecruitmentManagementSystem.App.Controllers
             _candidateRepository = candidateRepository;
         }
 
+        private CandidateViewModel ViewModelCandidate (Candidate candidaate)
+        {
+            var viewModel = new CandidateViewModel
+                {
+                    Id = candidaate.Id,
+                    FirstName = candidaate.FirstName,
+                    LastName = candidaate.LastName,
+                    Email = candidaate.Email,
+                    PhoneNumber = candidaate.PhoneNumber,
+                    Others = candidaate.Others,
+                    Website = candidaate.Website
+                };
+            return viewModel;
+        }
+
         public ActionResult Index()
         {
             var results = _candidateRepository.FindAll();
 
             var resultViewModel = results.Select(result => new CandidateViewModel
             {
+                Id = result.Id,
                 FirstName = result.FirstName,
                 LastName = result.LastName,
                 Email = result.Email,
@@ -79,27 +95,29 @@ namespace RecruitmentManagementSystem.App.Controllers
 
         public ActionResult Edit(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
             var candidate = _candidateRepository.Find(x => x.Id == id);
-
-            if (candidate == null)
-            {
-                return HttpNotFound();
-            }
-            return View(candidate);
+            if (candidate == null) return new HttpNotFoundResult();
+            return View(ViewModelCandidate(candidate));
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id, UserId")] Candidate candidate)
+        public ActionResult Edit(CandidateViewModel candidate)
         {
             if (!ModelState.IsValid) return View(candidate);
 
-            _candidateRepository.Update(candidate);
+            _candidateRepository.Update(new Candidate
+            {
+                Id = candidate.Id,
+                FirstName = candidate.FirstName,
+                LastName = candidate.LastName,
+                Email = candidate.Email,
+                PhoneNumber = candidate.PhoneNumber,
+                Others = candidate.Others,
+                Website = candidate.Website
+            });
 
+            _candidateRepository.Save();
             return RedirectToAction("Index");
         }
 
