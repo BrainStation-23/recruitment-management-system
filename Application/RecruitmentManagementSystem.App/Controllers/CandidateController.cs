@@ -54,16 +54,9 @@ namespace RecruitmentManagementSystem.App.Controllers
 
         public ActionResult Details(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
             var candidate = _candidateRepository.Find(x => x.Id == id);
-            if (candidate == null)
-            {
-                return HttpNotFound();
-            }
-            return View(candidate);
+            if (candidate == null) return new HttpNotFoundResult();
+            return View(ViewModelCandidate(candidate));
         }
 
         public ActionResult Create()
