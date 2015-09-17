@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Net;
 using System.Web.Mvc;
-using System.Web.Optimization;
 using RecruitmentManagementSystem.App.ViewModels;
 using RecruitmentManagementSystem.Model;
 using RecruitmentManagementSystem.Data.Interfaces;
@@ -123,26 +121,17 @@ namespace RecruitmentManagementSystem.App.Controllers
 
         public ActionResult Delete(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
             var candidate = _candidateRepository.Find(x => x.Id == id);
-
-            if (candidate == null)
-            {
-                return HttpNotFound();
-            }
-
-            return View(candidate);
+            if (candidate == null) return new HttpNotFoundResult();
+            return View(ViewModelCandidate(candidate));
         }
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            var candidate = _candidateRepository.Find(x => x.Id == id);
-            _candidateRepository.Delete(candidate);
+            _candidateRepository.Delete(id);
+            _candidateRepository.Save();
 
             return RedirectToAction("Index");
         }
