@@ -3,6 +3,7 @@
 @if (Request.IsAuthenticated)
 {
     <ul class="nav navbar-nav">
+        <li>@Html.ActionLink("Account", "Details", "Account", new {id = User.Identity.GetUserId()},null)</li>
         <li>@Html.ActionLink("Candidate", "Index", "Candidate")</li>
     </ul>
     

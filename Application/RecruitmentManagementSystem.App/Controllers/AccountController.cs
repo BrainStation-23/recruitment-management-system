@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -38,6 +39,19 @@ namespace RecruitmentManagementSystem.App.Controllers
         {
             get { return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>(); }
             private set { _userManager = value; }
+        }
+
+        private RegisterViewModel ViewModelApplicationUser(ApplicationUser applicationUser)
+        {
+            var viewModel = new RegisterViewModel
+            {
+                Id = applicationUser.Id,
+                FirstName = applicationUser.FirstName,
+                LastName = applicationUser.LastName,
+                PhoneNumber = applicationUser.PhoneNumber,
+                Email = applicationUser.Email
+            };
+            return viewModel;
         }
 
         //
@@ -413,6 +427,37 @@ namespace RecruitmentManagementSystem.App.Controllers
         public ActionResult ExternalLoginFailure()
         {
             return View();
+        }
+
+        public ActionResult Details(string id)
+        {
+            var applicationUser = UserManager.FindById(id);
+            if (applicationUser == null) return new HttpNotFoundResult();
+            return View(ViewModelApplicationUser(applicationUser));
+        }
+
+        public ActionResult Edit(string id)
+        {
+            var applicationUser = UserManager.FindById(id);
+            if (applicationUser == null) return new HttpNotFoundResult();
+            return View(ViewModelApplicationUser(applicationUser));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Edit(RegisterViewModel applicationUserViewModel)
+        {
+            if (!ModelState.IsValid) return View(applicationUserViewModel);
+
+            var user = UserManager.FindById(User.Identity.GetUserId());
+            user.FirstName = applicationUserViewModel.FirstName;
+            user.LastName = applicationUserViewModel.LastName;
+            user.Email = applicationUserViewModel.Email;
+            user.PhoneNumber = applicationUserViewModel.PhoneNumber;
+
+            await UserManager.UpdateAsync(user);
+
+            return RedirectToAction("Details", new { id = User.Identity.GetUserId() });
         }
 
         protected override void Dispose(bool disposing)

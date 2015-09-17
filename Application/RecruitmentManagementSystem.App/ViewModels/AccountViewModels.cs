@@ -65,6 +65,8 @@ namespace RecruitmentManagementSystem.App.ViewModels
 
     public class RegisterViewModel
     {
+        public string Id { get; set; }
+
         [Required]
         [Display(Name = "First Name")]
         [StringLength(30, ErrorMessage = "The {0} must be at least {2} characters long.")]
@@ -83,7 +85,7 @@ namespace RecruitmentManagementSystem.App.ViewModels
         [Display(Name = "Email")]
         public string Email { get; set; }
 
-        [Required]
+        //[Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
