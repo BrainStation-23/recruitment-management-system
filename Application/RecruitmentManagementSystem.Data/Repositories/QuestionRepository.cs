@@ -5,5 +5,6 @@ namespace RecruitmentManagementSystem.Data.Repositories
 {
     public class QuestionRepository : BaseRepository<Question>, IQuestionRepository
     {
+
     }
 }
