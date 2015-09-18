@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -41,9 +40,9 @@ namespace RecruitmentManagementSystem.App.Controllers
             private set { _userManager = value; }
         }
 
-        private RegisterViewModel ViewModelApplicationUser(ApplicationUser applicationUser)
+        private ApplicationUserVIewModel ViewModelApplicationUser(ApplicationUser applicationUser)
         {
-            var viewModel = new RegisterViewModel
+            var viewModel = new ApplicationUserVIewModel
             {
                 Id = applicationUser.Id,
                 FirstName = applicationUser.FirstName,
@@ -155,7 +154,7 @@ namespace RecruitmentManagementSystem.App.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(RegisterViewModel model)
+        public async Task<ActionResult> Register(ApplicationUserVIewModel model)
         {
             if (!ModelState.IsValid) return View(model);
             var user = new ApplicationUser
@@ -445,7 +444,7 @@ namespace RecruitmentManagementSystem.App.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(RegisterViewModel applicationUserViewModel)
+        public async Task<ActionResult> Edit(ApplicationUserVIewModel applicationUserViewModel)
         {
             if (!ModelState.IsValid) return View(applicationUserViewModel);
 
