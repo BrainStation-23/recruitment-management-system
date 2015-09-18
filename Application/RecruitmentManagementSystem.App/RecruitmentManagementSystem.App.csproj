@@ -202,6 +202,7 @@
     <Compile Include="ViewModels\ApplicationUserVIewModel.cs" />
     <Compile Include="ViewModels\CandidateViewModel.cs" />
     <Compile Include="ViewModels\ManageViewModels.cs" />
+    <Compile Include="ViewModels\QuestionViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="favicon.ico" />
