@@ -6,7 +6,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
-using RecruitmentManagementSystem.App.ViewModels;
+using RecruitmentManagementSystem.App.ViewModels.Account;
 using RecruitmentManagementSystem.Data.DbContext;
 using RecruitmentManagementSystem.Model;
 
@@ -40,19 +40,6 @@ namespace RecruitmentManagementSystem.App.Controllers
             private set { _userManager = value; }
         }
 
-        private ApplicationUserVIewModel ViewModelApplicationUser(ApplicationUser applicationUser)
-        {
-            var viewModel = new ApplicationUserVIewModel
-            {
-                Id = applicationUser.Id,
-                FirstName = applicationUser.FirstName,
-                LastName = applicationUser.LastName,
-                PhoneNumber = applicationUser.PhoneNumber,
-                Email = applicationUser.Email
-            };
-            return viewModel;
-        }
-
         //
         // GET: /Account/Login
         [AllowAnonymous]
@@ -78,8 +65,7 @@ namespace RecruitmentManagementSystem.App.Controllers
             // To enable password failures to trigger account lockout, change to shouldLockout: true
             var result =
                 await
-                    SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe,
-                        shouldLockout: false);
+                    SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -87,8 +73,7 @@ namespace RecruitmentManagementSystem.App.Controllers
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
-                    return RedirectToAction("SendCode", new {ReturnUrl = returnUrl, RememberMe = model.RememberMe});
-                case SignInStatus.Failure:
+                    return RedirectToAction("SendCode", new {ReturnUrl = returnUrl, model.RememberMe});
                 default:
                     ModelState.AddModelError("", "Invalid login attempt.");
                     return View(model);
@@ -134,7 +119,6 @@ namespace RecruitmentManagementSystem.App.Controllers
                     return RedirectToLocal(model.ReturnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
-                case SignInStatus.Failure:
                 default:
                     ModelState.AddModelError("", "Invalid code.");
                     return View(model);
@@ -154,7 +138,7 @@ namespace RecruitmentManagementSystem.App.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(ApplicationUserVIewModel model)
+        public async Task<ActionResult> Register(RegisterViewModel model)
         {
             if (!ModelState.IsValid) return View(model);
             var user = new ApplicationUser
@@ -168,16 +152,15 @@ namespace RecruitmentManagementSystem.App.Controllers
             var result = await UserManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
             {
-                // role create
                 var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(new ApplicationDbContext()));
-                var admin = new IdentityRole { Name = model.Role };
-                if (!roleManager.RoleExists(model.Role))
+                var admin = new IdentityRole {Name = "Admin"};
+                if (!roleManager.RoleExists("Admin"))
                 {
                     roleManager.Create(admin);
-                    UserManager.AddToRole(user.Id, model.Role);
+                    UserManager.AddToRole(user.Id, "Admin");
                 }
 
-                await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                await SignInManager.SignInAsync(user, false, false);
 
                 // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                 // Send an email with this link
@@ -337,7 +320,7 @@ namespace RecruitmentManagementSystem.App.Controllers
                 return View("Error");
             }
             return RedirectToAction("VerifyCode",
-                new {Provider = model.SelectedProvider, ReturnUrl = model.ReturnUrl, RememberMe = model.RememberMe});
+                new {Provider = model.SelectedProvider, model.ReturnUrl, model.RememberMe});
         }
 
         //
@@ -361,7 +344,6 @@ namespace RecruitmentManagementSystem.App.Controllers
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
                     return RedirectToAction("SendCode", new {ReturnUrl = returnUrl, RememberMe = false});
-                case SignInStatus.Failure:
                 default:
                     // If the user does not have an account, then prompt the user to create an account
                     ViewBag.ReturnUrl = returnUrl;
@@ -426,37 +408,6 @@ namespace RecruitmentManagementSystem.App.Controllers
         public ActionResult ExternalLoginFailure()
         {
             return View();
-        }
-
-        public ActionResult Details(string id)
-        {
-            var applicationUser = UserManager.FindById(id);
-            if (applicationUser == null) return new HttpNotFoundResult();
-            return View(ViewModelApplicationUser(applicationUser));
-        }
-
-        public ActionResult Edit(string id)
-        {
-            var applicationUser = UserManager.FindById(id);
-            if (applicationUser == null) return new HttpNotFoundResult();
-            return View(ViewModelApplicationUser(applicationUser));
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(ApplicationUserVIewModel applicationUserViewModel)
-        {
-            if (!ModelState.IsValid) return View(applicationUserViewModel);
-
-            var user = UserManager.FindById(User.Identity.GetUserId());
-            user.FirstName = applicationUserViewModel.FirstName;
-            user.LastName = applicationUserViewModel.LastName;
-            user.Email = applicationUserViewModel.Email;
-            user.PhoneNumber = applicationUserViewModel.PhoneNumber;
-
-            await UserManager.UpdateAsync(user);
-
-            return RedirectToAction("Details", new { id = User.Identity.GetUserId() });
         }
 
         protected override void Dispose(bool disposing)

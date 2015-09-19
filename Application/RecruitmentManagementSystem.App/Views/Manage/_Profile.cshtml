@@ -1,0 +1,27 @@
+﻿@model RecruitmentManagementSystem.App.ViewModels.IndexViewModel
+
+<h3>Account Details</h3>
+<hr />
+
+<div>
+    <dl class="dl-horizontal">
+        <dt>First Name:</dt>
+        <dd>
+            @Model.ApplicationUser.FirstName
+        </dd>
+        <dt>Last Name:</dt>
+        <dd>
+            @Model.ApplicationUser.LastName
+        </dd>
+        <dt>Email:</dt>
+        <dd>
+            @Model.ApplicationUser.Email
+        </dd>
+        <dt>Phone Number:</dt>
+        <dd>
+            @Model.ApplicationUser.PhoneNumber
+        </dd>
+    </dl>
+
+    @Html.ActionLink("Edit", "EditProfile", "Manage")
+</div>

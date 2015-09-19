@@ -1,27 +1,17 @@
 ﻿@model RecruitmentManagementSystem.App.ViewModels.IndexViewModel
 @{
-    ViewBag.Title = "Manage";
+    ViewBag.Title = "Manage Account";
 }
 
-<h2>@ViewBag.Title.</h2>
+<h3>Account Security</h3>
+<hr />
 
 <p class="text-success">@ViewBag.StatusMessage</p>
 <div>
-    <h4>Change your account settings</h4>
-    <hr/>
     <dl class="dl-horizontal">
         <dt>Password:</dt>
         <dd>
-            [
-            @if (Model.HasPassword)
-            {
-                @Html.ActionLink("Change your password", "ChangePassword")
-            }
-            else
-            {
-                @Html.ActionLink("Create", "SetPassword")
-            }
-            ]
+            [@(Model.HasPassword ? Html.ActionLink("Change your password", "ChangePassword") : Html.ActionLink("Create", "SetPassword"))]
         </dd>
         <dt>External Logins:</dt>
         <dd>
@@ -82,3 +72,5 @@
         </dd>
     </dl>
 </div>
+
+@Html.Partial("_Profile")

@@ -6,6 +6,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using RecruitmentManagementSystem.App.ViewModels;
+using RecruitmentManagementSystem.App.ViewModels.Account;
 
 namespace RecruitmentManagementSystem.App.Controllers
 {
@@ -57,13 +58,22 @@ namespace RecruitmentManagementSystem.App.Controllers
                                         : "";
 
             var userId = User.Identity.GetUserId();
+            var user = await UserManager.FindByIdAsync(userId);
+
             var model = new IndexViewModel
             {
                 HasPassword = HasPassword(),
                 PhoneNumber = await UserManager.GetPhoneNumberAsync(userId),
                 TwoFactor = await UserManager.GetTwoFactorEnabledAsync(userId),
                 Logins = await UserManager.GetLoginsAsync(userId),
-                BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId)
+                BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId),
+                ApplicationUser = new ApplicationUserViewModel
+                {
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Email = user.Email,
+                    PhoneNumber = user.PhoneNumber
+                }
             };
             return View(model);
         }
@@ -114,15 +124,14 @@ namespace RecruitmentManagementSystem.App.Controllers
             }
             // Generate the token and send it
             var code = await UserManager.GenerateChangePhoneNumberTokenAsync(User.Identity.GetUserId(), model.Number);
-            if (UserManager.SmsService != null)
+            if (UserManager.SmsService == null)
+                return RedirectToAction("VerifyPhoneNumber", new {PhoneNumber = model.Number});
+            var message = new IdentityMessage
             {
-                var message = new IdentityMessage
-                {
-                    Destination = model.Number,
-                    Body = "Your security code is: " + code
-                };
-                await UserManager.SmsService.SendAsync(message);
-            }
+                Destination = model.Number,
+                Body = "Your security code is: " + code
+            };
+            await UserManager.SmsService.SendAsync(message);
             return RedirectToAction("VerifyPhoneNumber", new {PhoneNumber = model.Number});
         }
 
@@ -326,6 +335,40 @@ namespace RecruitmentManagementSystem.App.Controllers
             return result.Succeeded
                 ? RedirectToAction("ManageLogins")
                 : RedirectToAction("ManageLogins", new {Message = ManageMessageId.Error});
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> EditProfile()
+        {
+            var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+
+            var viewModel = new ApplicationUserViewModel
+            {
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber
+            };
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> EditProfile(ApplicationUserViewModel applicationUserViewModel)
+        {
+            if (!ModelState.IsValid) return View(applicationUserViewModel);
+
+            var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+
+            user.FirstName = applicationUserViewModel.FirstName;
+            user.LastName = applicationUserViewModel.LastName;
+            user.Email = applicationUserViewModel.Email;
+            user.PhoneNumber = applicationUserViewModel.PhoneNumber;
+
+            await UserManager.UpdateAsync(user);
+
+            return RedirectToAction("EditProfile");
         }
 
         protected override void Dispose(bool disposing)

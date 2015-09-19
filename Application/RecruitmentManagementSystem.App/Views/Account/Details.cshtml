@@ -1,5 +1,5 @@
 ﻿@using Microsoft.AspNet.Identity
-@model RecruitmentManagementSystem.App.ViewModels.ApplicationUserVIewModel
+@model RecruitmentManagementSystem.App.ViewModels.Account.ApplicationUserViewModel
 
 @{
     ViewBag.Title = "Details";
@@ -8,7 +8,7 @@
 <h2>Details</h2>
 
 <div>
-	<hr />
+    <hr/>
     <dl class="dl-horizontal">
         <dt>
             @Html.DisplayNameFor(model => model.FirstName)
@@ -44,7 +44,8 @@
 
     </dl>
 </div>
+
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = User.Identity.GetUserId() }) 
+    @Html.ActionLink("Edit", "Edit", new {id = User.Identity.GetUserId()})
     @Html.ActionLink("Back to List", "Index")
 </p>
