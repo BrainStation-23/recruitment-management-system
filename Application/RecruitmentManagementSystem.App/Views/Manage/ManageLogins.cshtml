@@ -4,7 +4,7 @@
     ViewBag.Title = "Manage your external logins";
 }
 
-<h2>@ViewBag.Title.</h2>
+<h2>@ViewBag.Title</h2>
 
 <p class="text-success">@ViewBag.StatusMessage</p>
 @{
@@ -59,7 +59,7 @@
                 @Html.AntiForgeryToken()
                 <div id="socialLoginList">
                     <p>
-                        @foreach (AuthenticationDescription p in Model.OtherLogins)
+                        @foreach (var p in Model.OtherLogins)
                         {
                             <button type="submit" class="btn btn-default" id="@p.AuthenticationType" name="provider" value="@p.AuthenticationType" title="Log in using your @p.Caption account">@p.AuthenticationType</button>
                         }
