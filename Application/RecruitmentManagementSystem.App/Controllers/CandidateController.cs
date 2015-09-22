@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using System.Net;
 using System.Web.Mvc;
 using RecruitmentManagementSystem.App.ViewModels;
 using RecruitmentManagementSystem.Model;

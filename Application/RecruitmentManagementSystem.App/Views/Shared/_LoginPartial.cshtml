@@ -4,6 +4,7 @@
 {
     <ul class="nav navbar-nav">
         <li>@Html.ActionLink("Candidate", "Index", "Candidate")</li>
+        <li>@Html.ActionLink("Question", "Index", "Question")</li>
     </ul>
 
     using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new {id = "logoutForm", @class = "navbar-right"}))

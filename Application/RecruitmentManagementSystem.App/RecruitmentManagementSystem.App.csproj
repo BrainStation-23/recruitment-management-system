@@ -193,6 +193,8 @@
     <Compile Include="Controllers\CandidateController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\QuestionCategoryController.cs" />
+    <Compile Include="Controllers\QuestionController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -203,7 +205,12 @@
     <Compile Include="ViewModels\Account\ApplicationUserViewModel.cs" />
     <Compile Include="ViewModels\CandidateViewModel.cs" />
     <Compile Include="ViewModels\ManageViewModels.cs" />
-    <Compile Include="ViewModels\QuestionViewModel.cs" />
+    <Compile Include="ViewModels\Question\BaseQuestion.cs" />
+    <Compile Include="ViewModels\Question\QuestionCreateModel.cs" />
+    <Compile Include="ViewModels\Question\QuestionViewModel.cs" />
+    <Compile Include="ViewModels\Question\BaseCategory.cs" />
+    <Compile Include="ViewModels\Question\CategoryCreateViewModel.cs" />
+    <Compile Include="ViewModels\Question\CategoryViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="favicon.ico" />
@@ -295,6 +302,24 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Manage\_Profile.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Question\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Question\Details.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Question\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Question\Delete.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Question\Create.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\QuestionCategory\List.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
