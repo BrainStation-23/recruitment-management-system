@@ -43,7 +43,7 @@ namespace RecruitmentManagementSystem.App.Controllers
                 Tittle = result.Tittle,
                 Type = result.Type,
                 DisplayType = result.DisplayType,
-                Note = result.Note
+                Note = result.Note,
             }).ToList();
 
             ViewData["QuestionNo"] = resultViewModel.Count;
@@ -75,7 +75,9 @@ namespace RecruitmentManagementSystem.App.Controllers
                 Tittle = question.Tittle,
                 Type = question.Type,
                 DisplayType = question.DisplayType,
-                Note = question.Note
+                Note = question.Note,
+                CategoryId = question.CategoryId
+
             });
 
             _questionRepository.Save();
