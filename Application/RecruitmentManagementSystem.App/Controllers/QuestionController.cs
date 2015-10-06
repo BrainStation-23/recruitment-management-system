@@ -37,13 +37,15 @@ namespace RecruitmentManagementSystem.App.Controllers
         {
             var results = _questionRepository.FindAll();
 
-            var resultViewModel = results.Select(result => new QuestionViewModel
+            var resultViewModel = results.ToList().Select(result => new QuestionViewModel
             {
                 Id = result.Id,
                 Tittle = result.Tittle,
                 Type = result.Type,
                 DisplayType = result.DisplayType,
                 Note = result.Note,
+                CategoryId = result.CategoryId,
+                CategoryName = _questionCategoryRepository.FindAll().Where(x=>x.Id==result.CategoryId).FirstOrDefault().Name
             }).ToList();
 
             ViewData["QuestionNo"] = resultViewModel.Count;
@@ -61,6 +63,7 @@ namespace RecruitmentManagementSystem.App.Controllers
         public ActionResult Create()
         {
             var categories = _questionCategoryRepository.FindAll();
+            ViewBag.categories = categories;
             return View();
         }
 
@@ -77,7 +80,6 @@ namespace RecruitmentManagementSystem.App.Controllers
                 DisplayType = question.DisplayType,
                 Note = question.Note,
                 CategoryId = question.CategoryId
-
             });
 
             _questionRepository.Save();

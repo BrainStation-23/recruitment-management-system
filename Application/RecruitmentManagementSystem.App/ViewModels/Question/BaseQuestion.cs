@@ -27,5 +27,7 @@ namespace RecruitmentManagementSystem.App.ViewModels.Question
 
         [Required]
         public int CategoryId { get; set; }
+        [Display(Name = "Category")]
+        public string CategoryName { get; set; }
     }
 }

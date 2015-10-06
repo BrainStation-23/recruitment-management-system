@@ -48,16 +48,10 @@
         </div>
         
         <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <select name="CategoryId">
-                    <option value="1">Basic Programming (C)</option>
-                    <option value="2">OOP</option>
-                    <option value="3">C#</option>
-                    <option value="4">Java</option>
-                    <option value="5">Data Structure</option>
-                    <option value="6">Algorithm</option>
-                    <option value="2">Database</option>
-                </select>
+            @Html.LabelFor(model => model.CategoryName, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("categoryId", new SelectList(ViewBag.categories, "Id", "Name"))
+                @Html.ValidationMessageFor(model => model.CategoryName)
             </div>
         </div>
 
