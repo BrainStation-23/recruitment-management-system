@@ -27,7 +27,8 @@ namespace RecruitmentManagementSystem.App.Controllers
                 Tittle = question.Tittle,
                 Type = question.Type,
                 DisplayType = question.DisplayType,
-                Note = question.Note
+                Note = question.Note,
+                CategoryName = question.Category.Name
             };
             return viewModel;
         }
@@ -90,6 +91,10 @@ namespace RecruitmentManagementSystem.App.Controllers
         {
             var question = _questionRepository.Find(x => x.Id == id);
             if (question == null) return new HttpNotFoundResult();
+
+            var categories = _questionCategoryRepository.FindAll();
+            ViewBag.categories = categories;
+
             return View(ViewModelQuestion(question));
         }
 
@@ -105,7 +110,8 @@ namespace RecruitmentManagementSystem.App.Controllers
                 Tittle = question.Tittle,
                 Type = question.Type,
                 DisplayType = question.DisplayType,
-                Note = question.Note
+                Note = question.Note,
+                CategoryId = question.CategoryId
             });
 
             _questionRepository.Save();

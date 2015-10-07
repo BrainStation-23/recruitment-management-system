@@ -9,7 +9,7 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-
+    
     <div class="form-horizontal">
         <hr />
         @Html.ValidationSummary(true)
@@ -22,7 +22,7 @@
                 @Html.ValidationMessageFor(model => model.Tittle)
             </div>
         </div>
-
+        
         <div class="form-group">
             @Html.LabelFor(model => model.Type, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
@@ -44,6 +44,14 @@
             <div class="col-md-10">
                 @Html.EditorFor(model => model.Note)
                 @Html.ValidationMessageFor(model => model.Note)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.CategoryName, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("categoryId", new SelectList(ViewBag.categories, "Id", "Name"))
+                @Html.ValidationMessageFor(model => model.CategoryName)
             </div>
         </div>
 
