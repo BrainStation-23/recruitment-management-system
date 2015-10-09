@@ -368,7 +368,7 @@ namespace RecruitmentManagementSystem.App.Controllers
 
             await UserManager.UpdateAsync(user);
 
-            return RedirectToAction("EditProfile");
+            return RedirectToAction("Index");
         }
 
         protected override void Dispose(bool disposing)

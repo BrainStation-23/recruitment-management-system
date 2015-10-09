@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
 using RecruitmentManagementSystem.Model;
 
 namespace RecruitmentManagementSystem.App.ViewModels.Question
@@ -21,6 +18,9 @@ namespace RecruitmentManagementSystem.App.ViewModels.Question
 
         [Display(Name = "Answer Display Type")]
         public DisplayType DisplayType { get; set; }
+
+        [Display(Name = "Choices")]
+        public IList<Choice> Choices { get; set; }
 
         [StringLength(500, ErrorMessage = "The {0} must be at most {1} characters long.")]
         public string Note { get; set; }
