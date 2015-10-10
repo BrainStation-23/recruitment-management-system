@@ -1,6 +1,8 @@
 using System;
+using System.Linq;
 using Microsoft.Practices.Unity;
 using RecruitmentManagementSystem.App.Controllers;
+using RecruitmentManagementSystem.App.Infrastructure.Tasks;
 
 namespace RecruitmentManagementSystem.App
 {
@@ -45,6 +47,8 @@ namespace RecruitmentManagementSystem.App
                 WithMappings.FromMatchingInterface,
                 WithName.Default
                 );
+
+            TaskRegistry.RegisterTypes(container);
         }
     }
 }

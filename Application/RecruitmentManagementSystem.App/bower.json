@@ -5,7 +5,6 @@
     "BrainStation-23"
   ],
   "keywords": [
-    "angular.js",
     "asp.net mvc"
   ],
   "license": "MIT",
@@ -18,7 +17,6 @@
     "tests"
   ],
   "dependencies": {
-    "angular": "~1.4.5",
     "bootstrap": "~3.3.5",
     "jquery": "~2.1.4",
     "jquery-validation": "~1.14.0",

@@ -1,6 +1,8 @@
-﻿using System.Linq;
-using System.Web.Mvc;
-using RecruitmentManagementSystem.App.ViewModels;
+﻿using System.Web.Mvc;
+using AutoMapper.QueryableExtensions;
+using Microsoft.AspNet.Identity;
+using RecruitmentManagementSystem.App.Infrastructure.Mappings;
+using RecruitmentManagementSystem.App.ViewModels.Candidate;
 using RecruitmentManagementSystem.Model;
 using RecruitmentManagementSystem.Data.Interfaces;
 
@@ -9,55 +11,33 @@ namespace RecruitmentManagementSystem.App.Controllers
     [Authorize]
     public class CandidateController : BaseController
     {
+        private readonly ModelFactory _modelFactory;
         private readonly ICandidateRepository _candidateRepository;
 
-        public CandidateController(ICandidateRepository candidateRepository)
+        public CandidateController(ModelFactory modelFactory, ICandidateRepository candidateRepository)
         {
+            _modelFactory = modelFactory;
             _candidateRepository = candidateRepository;
-        }
-
-        private CandidateViewModel ViewModelCandidate (Candidate candidaate)
-        {
-            var viewModel = new CandidateViewModel
-                {
-                    Id = candidaate.Id,
-                    FirstName = candidaate.FirstName,
-                    LastName = candidaate.LastName,
-                    Email = candidaate.Email,
-                    PhoneNumber = candidaate.PhoneNumber,
-                    Others = candidaate.Others,
-                    Website = candidaate.Website
-                };
-            return viewModel;
         }
 
         public ActionResult Index()
         {
-            var results = _candidateRepository.FindAll();
+            var model = _candidateRepository.FindAll().Project().To<CandidateViewModel>();
 
-            var resultViewModel = results.Select(result => new CandidateViewModel
-            {
-                Id = result.Id,
-                FirstName = result.FirstName,
-                LastName = result.LastName,
-                Email = result.Email,
-                PhoneNumber = result.PhoneNumber,
-                Others = result.Others,
-                Website = result.Website
-            }).ToList();
-
-            ViewData["CandidateNo"] = resultViewModel.Count;
-
-            return View(resultViewModel);
+            return View(model);
         }
 
+        [HttpGet]
         public ActionResult Details(int? id)
         {
-            var candidate = _candidateRepository.Find(x => x.Id == id);
-            if (candidate == null) return new HttpNotFoundResult();
-            return View(ViewModelCandidate(candidate));
+            var model = _modelFactory.Map(_candidateRepository.Find(x => x.Id == id));
+
+            if (model == null) return new HttpNotFoundResult();
+
+            return View(model);
         }
 
+        [HttpGet]
         public ActionResult Create()
         {
             return View();
@@ -65,29 +45,36 @@ namespace RecruitmentManagementSystem.App.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create( CandidateViewModel candidate)
+        public ActionResult Create(CandidateViewModel model)
         {
-            if (!ModelState.IsValid) return View(candidate);
+            if (!ModelState.IsValid) return View(model);
 
-            _candidateRepository.Insert(new Candidate
+            var candidate = new Candidate
             {
-                FirstName = candidate.FirstName,
-                LastName = candidate.LastName,
-                Email = candidate.Email,
-                PhoneNumber = candidate.PhoneNumber,
-                Others = candidate.Others,
-                Website = candidate.Website
-            });
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                Email = model.Email,
+                PhoneNumber = model.PhoneNumber,
+                Others = model.Others,
+                Website = model.Website,
+                CreatedBy = User.Identity.GetUserId(),
+                UpdatedBy = User.Identity.GetUserId()
+            };
 
+            _candidateRepository.Insert(candidate);
             _candidateRepository.Save();
-            return RedirectToAction("Index");
+
+            return RedirectToAction("Edit", new {id = candidate.Id});
         }
 
+        [HttpGet]
         public ActionResult Edit(int? id)
         {
-            var candidate = _candidateRepository.Find(x => x.Id == id);
-            if (candidate == null) return new HttpNotFoundResult();
-            return View(ViewModelCandidate(candidate));
+            var model = _modelFactory.Map(_candidateRepository.Find(x => x.Id == id));
+
+            if (model == null) return new HttpNotFoundResult();
+
+            return View(model);
         }
 
         [HttpPost]
@@ -111,11 +98,14 @@ namespace RecruitmentManagementSystem.App.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpGet]
         public ActionResult Delete(int? id)
         {
-            var candidate = _candidateRepository.Find(x => x.Id == id);
-            if (candidate == null) return new HttpNotFoundResult();
-            return View(ViewModelCandidate(candidate));
+            var model = _modelFactory.Map(_candidateRepository.Find(x => x.Id == id));
+
+            if (model == null) return new HttpNotFoundResult();
+
+            return View(model);
         }
 
         [HttpPost, ActionName("Delete")]

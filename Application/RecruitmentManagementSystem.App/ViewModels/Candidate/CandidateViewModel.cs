@@ -1,9 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using RecruitmentManagementSystem.App.Infrastructure.Mappings;
 using RecruitmentManagementSystem.Model;
 
-namespace RecruitmentManagementSystem.App.ViewModels
+namespace RecruitmentManagementSystem.App.ViewModels.Candidate
 {
-    public class CandidateViewModel
+    public class CandidateViewModel : IMapFrom<Model.Candidate>
     {
         public int Id { get; set; }
 
@@ -33,7 +34,7 @@ namespace RecruitmentManagementSystem.App.ViewModels
         public string Others { get; set; }
 
         [Url]
-        [Display(Name = "Website link")]
+        [Display(Name = "Website")]
         [StringLength(50, ErrorMessage = "The {0} must be at most {1} characters long.")]
         public string Website { get; set; }
     }
