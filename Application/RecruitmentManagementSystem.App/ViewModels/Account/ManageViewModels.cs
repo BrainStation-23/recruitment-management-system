@@ -2,9 +2,8 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
-using RecruitmentManagementSystem.App.ViewModels.Account;
 
-namespace RecruitmentManagementSystem.App.ViewModels
+namespace RecruitmentManagementSystem.App.ViewModels.Account
 {
     public class IndexViewModel
     {

@@ -1,26 +1,31 @@
-﻿@model IEnumerable<RecruitmentManagementSystem.App.ViewModels.CandidateViewModel>
+﻿@model IEnumerable<RecruitmentManagementSystem.App.ViewModels.Candidate.CandidateViewModel>
 
-    @{
-        ViewBag.Title = "Index";
-    }
+@{
+    ViewBag.Title = "Canidate List";
+}
 
-    <h2>Index</h2>
+<h3>Canidate List</h3>
+<hr />
     
-    @if ((int)ViewData["CandidateNo"]==0)
-    {
-        <p>You haven't insert any candidate information.</p>
-        <p>
-            @Html.ActionLink("Create New", "Create")
-        </p>
-    }
+@if (!Model.Any())
+{
+    <div class="alert alert-warning" role="alert">
+        <strong>Sorry!</strong>
+        No candidates are found.
+    </div>
+    
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+}
 
-    else
-    {
-        <p>
-            @Html.ActionLink("Create New", "Create")
-        </p>
-        
-     <table class="table">
+else
+{
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+
+    <table class="table">
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.FirstName)
@@ -65,15 +70,12 @@
                     @Html.DisplayFor(modelItem => item.Website)
                 </td>
                 <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                    @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                    @Html.ActionLink("Edit", "Edit", new {id = item.Id}) |
+                    @Html.ActionLink("Details", "Details", new {id = item.Id}) |
+                    @Html.ActionLink("Delete", "Delete", new {id = item.Id})
                 </td>
             </tr>
-            
-            
         }
 
-    </table>   
-    }
-
+    </table>
+}

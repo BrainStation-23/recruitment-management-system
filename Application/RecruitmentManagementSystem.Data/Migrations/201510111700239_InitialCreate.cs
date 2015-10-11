@@ -150,10 +150,9 @@ namespace RecruitmentManagementSystem.Data.Migrations
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        Tittle = c.String(nullable: false),
+                        Title = c.String(nullable: false),
                         Type = c.Int(nullable: false),
-                        DisplayType = c.Int(nullable: false),
-                        Note = c.String(maxLength: 500),
+                        Notes = c.String(maxLength: 500),
                         CategoryId = c.Int(nullable: false),
                         CreatedBy = c.String(),
                         UpdatedBy = c.String(),
@@ -182,11 +181,11 @@ namespace RecruitmentManagementSystem.Data.Migrations
                     {
                         Id = c.Int(nullable: false, identity: true),
                         Text = c.String(nullable: false, maxLength: 100),
-                        Question_Id = c.Int(),
+                        QuestionId = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.Questions", t => t.Question_Id)
-                .Index(t => t.Question_Id);
+                .ForeignKey("dbo.Questions", t => t.QuestionId, cascadeDelete: true)
+                .Index(t => t.QuestionId);
             
             CreateTable(
                 "dbo.AspNetRoles",
@@ -272,7 +271,7 @@ namespace RecruitmentManagementSystem.Data.Migrations
             DropForeignKey("dbo.AspNetUsers", "Avatar_Id", "dbo.Files");
             DropForeignKey("dbo.AspNetUserRoles", "RoleId", "dbo.AspNetRoles");
             DropForeignKey("dbo.Files", "Question_Id", "dbo.Questions");
-            DropForeignKey("dbo.Choices", "Question_Id", "dbo.Questions");
+            DropForeignKey("dbo.Choices", "QuestionId", "dbo.Questions");
             DropForeignKey("dbo.Questions", "CategoryId", "dbo.QuestionCategories");
             DropForeignKey("dbo.Answers", "Question_Id", "dbo.Questions");
             DropForeignKey("dbo.Skills", "Candidate_Id", "dbo.Candidates");
@@ -289,7 +288,7 @@ namespace RecruitmentManagementSystem.Data.Migrations
             DropIndex("dbo.AspNetUserRoles", new[] { "RoleId" });
             DropIndex("dbo.AspNetUserRoles", new[] { "UserId" });
             DropIndex("dbo.AspNetRoles", "RoleNameIndex");
-            DropIndex("dbo.Choices", new[] { "Question_Id" });
+            DropIndex("dbo.Choices", new[] { "QuestionId" });
             DropIndex("dbo.Answers", new[] { "Question_Id" });
             DropIndex("dbo.Questions", new[] { "CategoryId" });
             DropIndex("dbo.Skills", new[] { "Candidate_Id" });

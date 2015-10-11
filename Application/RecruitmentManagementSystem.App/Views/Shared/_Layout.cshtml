@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - RMS</title>
+    <title>RMS - @ViewBag.Title</title>
     @Styles.Render("~/Content/css")
 </head>
 <body>
@@ -21,7 +21,7 @@
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
                 </ul>
-                @Html.Partial("_LoginPartial")
+                @Html.Partial("_NavigationPartial")
             </div>
         </div>
     </div>

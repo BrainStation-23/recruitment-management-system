@@ -1,13 +1,13 @@
-﻿@model RecruitmentManagementSystem.App.ViewModels.CandidateViewModel
+﻿@model RecruitmentManagementSystem.App.ViewModels.Candidate.CandidateViewModel
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Candidate Details";
 }
 
-<h2>Details</h2>
+<h3>Candidate Details</h3>
+<hr />
 
 <div>
-	<hr />
     <dl class="dl-horizontal">
         <dt>
             @Html.DisplayNameFor(model => model.FirstName)
@@ -59,7 +59,8 @@
 
     </dl>
 </div>
+
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Edit", "Edit", new {id = Model.Id}) |
     @Html.ActionLink("Back to List", "Index")
 </p>
