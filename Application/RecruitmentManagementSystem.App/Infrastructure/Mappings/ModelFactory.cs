@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using RecruitmentManagementSystem.App.ViewModels.Candidate;
+using RecruitmentManagementSystem.App.ViewModels.Question;
 using RecruitmentManagementSystem.Model;
 
 namespace RecruitmentManagementSystem.App.Infrastructure.Mappings
@@ -10,6 +11,12 @@ namespace RecruitmentManagementSystem.App.Infrastructure.Mappings
         {
             Mapper.CreateMap<Candidate, CandidateViewModel>();
             return Mapper.Map<Candidate, CandidateViewModel>(candidate);
+        }
+
+        public QuestionCategoryViewModel Map(QuestionCategory questionCategory)
+        {
+            Mapper.CreateMap<QuestionCategory, QuestionCategoryViewModel>();
+            return Mapper.Map<QuestionCategory, QuestionCategoryViewModel>(questionCategory);
         }
     }
 }

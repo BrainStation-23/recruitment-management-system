@@ -28,16 +28,6 @@ namespace RecruitmentManagementSystem.App.Controllers
         }
 
         [HttpGet]
-        public ActionResult Details(int? id)
-        {
-            var model = _modelFactory.Map(_candidateRepository.Find(x => x.Id == id));
-
-            if (model == null) return new HttpNotFoundResult();
-
-            return View(model);
-        }
-
-        [HttpGet]
         public ActionResult Create()
         {
             return View();
@@ -65,6 +55,16 @@ namespace RecruitmentManagementSystem.App.Controllers
             _candidateRepository.Save();
 
             return RedirectToAction("Edit", new {id = candidate.Id});
+        }
+
+        [HttpGet]
+        public ActionResult Details(int? id)
+        {
+            var model = _modelFactory.Map(_candidateRepository.Find(x => x.Id == id));
+
+            if (model == null) return new HttpNotFoundResult();
+
+            return View(model);
         }
 
         [HttpGet]

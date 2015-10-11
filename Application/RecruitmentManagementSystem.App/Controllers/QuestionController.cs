@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using System.Web.Mvc;
-using RecruitmentManagementSystem.App.ViewModels;
+using Microsoft.AspNet.Identity;
 using RecruitmentManagementSystem.App.ViewModels.Question;
 using RecruitmentManagementSystem.Data.Interfaces;
 using RecruitmentManagementSystem.Model;
@@ -13,7 +13,8 @@ namespace RecruitmentManagementSystem.App.Controllers
         private readonly IQuestionRepository _questionRepository;
         private readonly IQuestionCategoryRepository _questionCategoryRepository;
 
-        public QuestionController(IQuestionRepository questionRepository, IQuestionCategoryRepository questionCategoryRepository)
+        public QuestionController(IQuestionRepository questionRepository,
+            IQuestionCategoryRepository questionCategoryRepository)
         {
             _questionRepository = questionRepository;
             _questionCategoryRepository = questionCategoryRepository;
@@ -24,16 +25,13 @@ namespace RecruitmentManagementSystem.App.Controllers
             var viewModel = new QuestionViewModel
             {
                 Id = question.Id,
-                Tittle = question.Tittle,
-                Type = question.Type,
-                DisplayType = question.DisplayType,
-                Note = question.Note,
-                CategoryName = question.Category.Name
+                Title = question.Title,
+                QuestionType = question.Type,
+                Notes = question.Notes
             };
             return viewModel;
         }
 
-        // GET: /Question/
         public ActionResult Index()
         {
             var results = _questionRepository.FindAll();
@@ -41,12 +39,10 @@ namespace RecruitmentManagementSystem.App.Controllers
             var resultViewModel = results.ToList().Select(result => new QuestionViewModel
             {
                 Id = result.Id,
-                Tittle = result.Tittle,
-                Type = result.Type,
-                DisplayType = result.DisplayType,
-                Note = result.Note,
+                Title = result.Title,
+                QuestionType = result.Type,
+                Notes = result.Notes,
                 CategoryId = result.CategoryId,
-                CategoryName = _questionCategoryRepository.FindAll().Where(x=>x.Id==result.CategoryId).FirstOrDefault().Name
             }).ToList();
 
             ViewData["QuestionNo"] = resultViewModel.Count;
@@ -64,23 +60,34 @@ namespace RecruitmentManagementSystem.App.Controllers
         public ActionResult Create()
         {
             var categories = _questionCategoryRepository.FindAll();
-            ViewBag.categories = categories;
-            return View();
+            var model = new QuestionCreateViewModel(categories.ToList());
+
+            return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(QuestionViewModel question)
+        public ActionResult Create(QuestionCreateViewModel question)
         {
-            if (!ModelState.IsValid) return View(question);
+            if (!ModelState.IsValid)
+            {
+                var questionViewModel = new QuestionCreateViewModel(_questionCategoryRepository.FindAll().ToList())
+                {
+                    Title = question.Title,
+                    Notes = question.Notes,
+                    CategoryId = question.CategoryId
+                };
+                return View(questionViewModel);
+            }
 
             _questionRepository.Insert(new Question
             {
-                Tittle = question.Tittle,
-                Type = question.Type,
-                DisplayType = question.DisplayType,
-                Note = question.Note,
-                CategoryId = question.CategoryId
+                Title = question.Title,
+                Type = question.QuestionType,
+                Notes = question.Notes,
+                CategoryId = question.CategoryId,
+                CreatedBy = User.Identity.GetUserId(),
+                UpdatedBy = User.Identity.GetUserId()
             });
 
             _questionRepository.Save();
@@ -107,10 +114,9 @@ namespace RecruitmentManagementSystem.App.Controllers
             _questionRepository.Update(new Question
             {
                 Id = question.Id,
-                Tittle = question.Tittle,
-                Type = question.Type,
-                DisplayType = question.DisplayType,
-                Note = question.Note,
+                Title = question.Title,
+                Type = question.QuestionType,
+                Notes = question.Notes,
                 CategoryId = question.CategoryId
             });
 
@@ -134,5 +140,5 @@ namespace RecruitmentManagementSystem.App.Controllers
 
             return RedirectToAction("Index");
         }
-	}
+    }
 }

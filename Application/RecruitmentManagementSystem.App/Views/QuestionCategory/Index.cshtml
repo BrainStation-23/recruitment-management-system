@@ -1,41 +1,35 @@
-﻿@model IEnumerable<RecruitmentManagementSystem.App.ViewModels.Question.QuestionViewModel>
+﻿@model IEnumerable<RecruitmentManagementSystem.App.ViewModels.Question.QuestionCategoryViewModel>
+
 @{
-    ViewBag.Title = "Questions";
+    ViewBag.Title = "Question Categories";
 }
 
-<h3>Questions</h3>
-<hr />
+<h3>Question Categories</h3>
+<hr/>
 
 @if (!Model.Any())
 {
     <div class="alert alert-warning" role="alert">
         <strong>Sorry!</strong>
-        No questions are found.
+        No categories are found.
     </div>
+
     <p>
         @Html.ActionLink("Create New", "Create")
     </p>
 }
-
 else
 {
     <p>
         @Html.ActionLink("Create New", "Create")
     </p>
-
     <table class="table">
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Title)
+                @Html.DisplayNameFor(model => model.Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.QuestionType)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Notes)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Category)
+                @Html.DisplayNameFor(model => model.Description)
             </th>
             <th></th>
         </tr>
@@ -44,16 +38,10 @@ else
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Title)
+                    @Html.DisplayFor(modelItem => item.Name)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.QuestionType)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Notes)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Category)
+                    @Html.DisplayFor(modelItem => item.Description)
                 </td>
                 <td>
                     @Html.ActionLink("Edit", "Edit", new {id = item.Id}) |
@@ -62,5 +50,6 @@ else
                 </td>
             </tr>
         }
+
     </table>
 }

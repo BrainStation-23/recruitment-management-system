@@ -13,7 +13,7 @@ namespace RecruitmentManagementSystem.Data.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "201510091318540_InitialCreate"; }
+            get { return "201510111700239_InitialCreate"; }
         }
         
         string IMigrationMetadata.Source

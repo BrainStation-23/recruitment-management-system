@@ -9,31 +9,26 @@ namespace RecruitmentManagementSystem.Model
         Descriptive = 2
     }
 
-    public enum DisplayType
-    {
-        Radio = 1,
-        ChackBox = 2,
-        TextArea = 3
-    }
-
     public class Question : BaseEntity
     {
         public int Id { get; set; }
 
         [Required]
-        public string Tittle { get; set; }
+        public string Title { get; set; }
 
+        [Required]
         public QuestionType Type { get; set; }
-        public DisplayType DisplayType { get; set; }
 
-        public IList<File> Images { get; set; }
-        public IList<Answer> Answers { get; set; }
-        public IList<Choice> Choices { get; set; }
+        public virtual ICollection<File> Files { get; set; }
+        public virtual ICollection<Answer> Answers { get; set; }
+        public virtual ICollection<Choice> Choices { get; set; }
 
         [StringLength(500, ErrorMessage = "The {0} must be at most {1} characters long.")]
-        public string Note { get; set; }
+        public string Notes { get; set; }
 
+        [Required]
         public int CategoryId { get; set; }
+
         public virtual QuestionCategory Category { get; set; }
     }
 

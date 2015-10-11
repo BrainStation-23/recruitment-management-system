@@ -1,10 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-using RecruitmentManagementSystem.Model;
-
-namespace RecruitmentManagementSystem.App.ViewModels.Question
+﻿namespace RecruitmentManagementSystem.App.ViewModels.Question
 {
-    public class QuestionViewModel:BaseQuestion
+    public class QuestionViewModel : BaseQuestionViewModel
     {
-        
+        public string Category { get; set; }
     }
 }

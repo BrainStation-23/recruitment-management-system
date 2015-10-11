@@ -150,10 +150,9 @@ namespace RecruitmentManagementSystem.Data.Migrations
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        Tittle = c.String(nullable: false),
+                        Title = c.String(nullable: false),
                         Type = c.Int(nullable: false),
-                        DisplayType = c.Int(nullable: false),
-                        Note = c.String(maxLength: 500),
+                        Notes = c.String(maxLength: 500),
                         CategoryId = c.Int(nullable: false),
                         CreatedBy = c.String(),
                         UpdatedBy = c.String(),
