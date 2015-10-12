@@ -1,3 +1,9 @@
 language: csharp
 solution: RecruitmentManagementSystem.sln
 sudo: false
+install:
+  - nuget restore RecruitmentManagementSystem.sln
+  - nuget install xunit.runners -Version 1.9.2 -OutputDirectory testrunner
+script:
+  - xbuild /p:Configuration=Release RecruitmentManagementSystem.sln
+  - mono ./testrunner/xunit.runners.1.9.2/tools/xunit.console.clr4.exe ./RecruitmentManagementSystem.App.Tests/bin/Release/RecruitmentManagementSystem.App.Tests.dll
