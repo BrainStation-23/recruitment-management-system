@@ -12,12 +12,14 @@ namespace RecruitmentManagementSystem.App.Controllers
     {
         private readonly IQuestionRepository _questionRepository;
         private readonly IQuestionCategoryRepository _questionCategoryRepository;
+        private readonly IChoiceRepository _choiceRepository;
 
         public QuestionController(IQuestionRepository questionRepository,
-            IQuestionCategoryRepository questionCategoryRepository)
+            IQuestionCategoryRepository questionCategoryRepository, IChoiceRepository choiceRepository)
         {
             _questionRepository = questionRepository;
             _questionCategoryRepository = questionCategoryRepository;
+            _choiceRepository = choiceRepository;
         }
 
         private QuestionViewModel ViewModelQuestion(Question question)
@@ -66,7 +68,6 @@ namespace RecruitmentManagementSystem.App.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public ActionResult Create(QuestionCreateViewModel question)
         {
             if (!ModelState.IsValid)
@@ -91,6 +92,24 @@ namespace RecruitmentManagementSystem.App.Controllers
             });
 
             _questionRepository.Save();
+
+            foreach (var item in question.Choices)
+            {
+                _choiceRepository.Insert(new Choice
+                {
+                    QuestionId = question.Id,
+                    Text = item
+                });
+            }
+
+            _choiceRepository.Save();
+
+
+            if (Request.IsAjaxRequest())
+            {
+                return Json(new {Sucess = "Question added successfully."});
+            }
+
             return RedirectToAction("Index");
         }
 

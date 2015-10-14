@@ -18,7 +18,7 @@ namespace RecruitmentManagementSystem.App.ViewModels.Question
         public QuestionType QuestionType { get; set; }
 
         [Display(Name = "Choices")]
-        public ICollection<Choice> Choices { get; set; }
+        public ICollection<string> Choices { get; set; }
 
         [StringLength(500, ErrorMessage = "The {0} must be at most {1} characters long.")]
         public string Notes { get; set; }

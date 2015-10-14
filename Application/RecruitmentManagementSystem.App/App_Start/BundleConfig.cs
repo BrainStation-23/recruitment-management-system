@@ -14,6 +14,9 @@ namespace RecruitmentManagementSystem.App
                 "~/Vendors/bower_components/jquery-validation/dist/jquery.validate.js",
                 "~/Vendors/bower_components/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/application").Include(
+                "~/Scripts/Question/create.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                 "~/Vendors/bower_components/bootstrap/dist/js/bootstrap.js"));
 
