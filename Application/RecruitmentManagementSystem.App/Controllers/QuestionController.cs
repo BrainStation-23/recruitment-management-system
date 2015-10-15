@@ -93,21 +93,24 @@ namespace RecruitmentManagementSystem.App.Controllers
 
             _questionRepository.Save();
 
-            foreach (var item in question.Choices)
+            if (question.QuestionType == QuestionType.Mcq)
             {
-                _choiceRepository.Insert(new Choice
+                foreach (var item in question.Choices)
                 {
-                    Text = item
-                });
+                    _choiceRepository.Insert(new Choice
+                    {
+                        Text = item
+                    });
+                }
+
+                _choiceRepository.Save();
+
+
+                //if (Request.IsAjaxRequest())
+                //{
+                //    return Json(new {Sucess = "Question added successfully."});
+                //}
             }
-
-            _choiceRepository.Save();
-
-
-            //if (Request.IsAjaxRequest())
-            //{
-            //    return Json(new {Sucess = "Question added successfully."});
-            //}
 
             return RedirectToAction("Index");
         }

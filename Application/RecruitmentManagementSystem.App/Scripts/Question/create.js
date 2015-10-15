@@ -2,6 +2,14 @@
 
     var choices = [];
 
+    $(document).on("change", "#drop-down-question-type", function() {
+        if ($("#drop-down-question-type").val() === "1") {
+            $("#achr-add-choice").show();
+        } else {
+            $("#achr-add-choice").hide();
+        }
+    });
+
     $(document).on("click", "#btn-add-choice", function() {
         var value = $("#choice").val();
 
@@ -14,7 +22,7 @@
     $(document).on("click", "#btn-add-question", function() {
         var data = {
             Title: "some title",
-            QuestionType: 1,
+            QuestionType: 2,
             Choices: choices,
             Notes: "some notes",
             CategoryId: 1
