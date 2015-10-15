@@ -97,7 +97,6 @@ namespace RecruitmentManagementSystem.App.Controllers
             {
                 _choiceRepository.Insert(new Choice
                 {
-                    QuestionId = question.Id,
                     Text = item
                 });
             }
@@ -105,10 +104,10 @@ namespace RecruitmentManagementSystem.App.Controllers
             _choiceRepository.Save();
 
 
-            if (Request.IsAjaxRequest())
-            {
-                return Json(new {Sucess = "Question added successfully."});
-            }
+            //if (Request.IsAjaxRequest())
+            //{
+            //    return Json(new {Sucess = "Question added successfully."});
+            //}
 
             return RedirectToAction("Index");
         }

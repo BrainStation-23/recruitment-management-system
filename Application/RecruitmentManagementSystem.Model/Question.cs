@@ -48,8 +48,5 @@ namespace RecruitmentManagementSystem.Model
         [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at most {1} characters long.")]
         public string Text { get; set; }
-
-        [Required]
-        public int QuestionId { get; set; }
     }
 }

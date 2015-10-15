@@ -70,6 +70,10 @@
     <Compile Include="Migrations\201510111700239_InitialCreate.Designer.cs">
       <DependentUpon>201510111700239_InitialCreate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201510150838538_RemoveQuestionIdFromChoice.cs" />
+    <Compile Include="Migrations\201510150838538_RemoveQuestionIdFromChoice.Designer.cs">
+      <DependentUpon>201510150838538_RemoveQuestionIdFromChoice.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\BaseRepository.cs" />
@@ -91,6 +95,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201510111700239_InitialCreate.resx">
       <DependentUpon>201510111700239_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201510150838538_RemoveQuestionIdFromChoice.resx">
+      <DependentUpon>201510150838538_RemoveQuestionIdFromChoice.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
