@@ -23,6 +23,9 @@ namespace RecruitmentManagementSystem.App.ViewModels.Question
         [StringLength(500, ErrorMessage = "The {0} must be at most {1} characters long.")]
         public string Notes { get; set; }
 
+        [Display(Name = "Answers")]
+        public virtual ICollection<string> Answers { get; set; }
+
         [Required]
         [Display(Name = "Category")]
         public int CategoryId { get; set; }

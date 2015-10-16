@@ -317,12 +317,6 @@
     <Content Include="Views\QuestionCategory\List.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Question\Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Question\Details.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\Question\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -354,6 +348,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Error\ServerError.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Question\Details.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Question\Edit.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

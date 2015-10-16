@@ -13,13 +13,15 @@ namespace RecruitmentManagementSystem.App.Controllers
         private readonly IQuestionRepository _questionRepository;
         private readonly IQuestionCategoryRepository _questionCategoryRepository;
         private readonly IChoiceRepository _choiceRepository;
+        private readonly IAnswerRepository _answerRepository;
 
         public QuestionController(IQuestionRepository questionRepository,
-            IQuestionCategoryRepository questionCategoryRepository, IChoiceRepository choiceRepository)
+            IQuestionCategoryRepository questionCategoryRepository, IChoiceRepository choiceRepository, IAnswerRepository answerRepository)
         {
             _questionRepository = questionRepository;
             _questionCategoryRepository = questionCategoryRepository;
             _choiceRepository = choiceRepository;
+            _answerRepository = answerRepository;
         }
 
         private QuestionViewModel ViewModelQuestion(Question question)
@@ -111,6 +113,16 @@ namespace RecruitmentManagementSystem.App.Controllers
                 //    return Json(new {Sucess = "Question added successfully."});
                 //}
             }
+
+            foreach (var item in question.Answers)
+            {
+                _answerRepository.Insert(new Answer
+                {
+                    Text = item
+                });
+            }
+
+            _answerRepository.Save();
 
             return RedirectToAction("Index");
         }

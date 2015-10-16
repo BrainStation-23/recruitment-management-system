@@ -6,6 +6,7 @@
 
 <h2>Edit</h2>
 
+
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
@@ -16,42 +17,42 @@
         @Html.HiddenFor(model => model.Id)
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Tittle, new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Title, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Tittle)
-                @Html.ValidationMessageFor(model => model.Tittle)
+                @Html.EditorFor(model => model.Title)
+                @Html.ValidationMessageFor(model => model.Title)
             </div>
         </div>
         
         <div class="form-group">
-            @Html.LabelFor(model => model.Type, new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.QuestionType, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EnumDropDownListFor(model => model.Type)
-                @Html.ValidationMessageFor(model => model.Type)
+                @Html.EditorFor(model => model.QuestionType)
+                @Html.ValidationMessageFor(model => model.QuestionType)
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.DisplayType, new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Notes, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EnumDropDownListFor(model => model.DisplayType)
-                @Html.ValidationMessageFor(model => model.DisplayType)
+                @Html.EditorFor(model => model.Notes)
+                @Html.ValidationMessageFor(model => model.Notes)
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Note, new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.CategoryId, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Note)
-                @Html.ValidationMessageFor(model => model.Note)
+                @Html.EditorFor(model => model.CategoryId)
+                @Html.ValidationMessageFor(model => model.CategoryId)
             </div>
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.CategoryName, new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.Category, new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("categoryId", new SelectList(ViewBag.categories, "Id", "Name"))
-                @Html.ValidationMessageFor(model => model.CategoryName)
+                @Html.EditorFor(model => model.Category)
+                @Html.ValidationMessageFor(model => model.Category)
             </div>
         </div>
 
@@ -66,3 +67,7 @@
 <div>
     @Html.ActionLink("Back to List", "Index")
 </div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

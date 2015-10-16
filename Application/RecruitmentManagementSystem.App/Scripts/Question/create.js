@@ -1,4 +1,8 @@
-﻿(function() {
+﻿(function () {
+    
+    $(document).ready(function () {
+        $("#achr-add-choice").hide();
+    });
 
     var choices = [];
 
@@ -11,21 +15,33 @@
     });
 
     $(document).on("click", "#btn-add-choice", function() {
-        var value = $("#choice").val();
+        var choiceValue = $("#choice").val();
 
-        if (value) {
-            choices.push(value);
+        if (choiceValue) {
+            choices.push(choiceValue);
             $("#choice").val("");
+        }
+    });
+
+    var answers = [];
+
+    $(document).on("click", "#btn-add-answer", function () {
+        var answerValue = $("#answer").val();
+
+        if (answerValue) {
+            answers.push(answerValue);
+            $("#answer").val("");
         }
     });
 
     $(document).on("click", "#btn-add-question", function() {
         var data = {
-            Title: "some title",
-            QuestionType: 2,
+            Title: $("#Title").val(),
+            QuestionType: $("#drop-down-question-type").val(),
             Choices: choices,
-            Notes: "some notes",
-            CategoryId: 1
+            Notes: $("#Notes").val(),
+            Answers: answers,
+            CategoryId: $("#CategoryId").val()
         };
 
         $.ajax({
