@@ -223,6 +223,7 @@
     <Compile Include="ViewModels\Account\ManageViewModels.cs" />
     <Compile Include="ViewModels\Question\BaseQuestionViewModel.cs" />
     <Compile Include="ViewModels\Question\QuestionCreateViewModel.cs" />
+    <Compile Include="ViewModels\Question\QuestionEditViewModel.cs" />
     <Compile Include="ViewModels\Question\QuestionViewModel.cs" />
     <Compile Include="ViewModels\Question\BaseQuestionCategoryViewModel.cs" />
     <Compile Include="ViewModels\Question\QuestionCategoryViewModel.cs" />

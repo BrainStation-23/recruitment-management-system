@@ -31,6 +31,19 @@ namespace RecruitmentManagementSystem.App.Controllers
                 Id = question.Id,
                 Title = question.Title,
                 QuestionType = question.Type,
+                Notes = question.Notes,
+                CategoryName = question.Category.Name
+            };
+            return viewModel;
+        }
+
+        private QuestionEditViewModel ViewModelQuestionEdit(Question question)
+        {
+            var viewModel = new QuestionEditViewModel
+            {
+                Id = question.Id,
+                Title = question.Title,
+                QuestionType = question.Type,
                 Notes = question.Notes
             };
             return viewModel;
@@ -47,6 +60,7 @@ namespace RecruitmentManagementSystem.App.Controllers
                 QuestionType = result.Type,
                 Notes = result.Notes,
                 CategoryId = result.CategoryId,
+                CategoryName = _questionCategoryRepository.FindAll().Where(x => x.Id == result.CategoryId).FirstOrDefault().Name
             }).ToList();
 
             ViewData["QuestionNo"] = resultViewModel.Count;
@@ -106,12 +120,6 @@ namespace RecruitmentManagementSystem.App.Controllers
                 }
 
                 _choiceRepository.Save();
-
-
-                //if (Request.IsAjaxRequest())
-                //{
-                //    return Json(new {Sucess = "Question added successfully."});
-                //}
             }
 
             foreach (var item in question.Answers)
@@ -124,6 +132,11 @@ namespace RecruitmentManagementSystem.App.Controllers
 
             _answerRepository.Save();
 
+            if (Request.IsAjaxRequest())
+            {
+                return Json(new { Sucess = "Question added successfully." });
+            }
+
             return RedirectToAction("Index");
         }
 
@@ -135,7 +148,7 @@ namespace RecruitmentManagementSystem.App.Controllers
             var categories = _questionCategoryRepository.FindAll();
             ViewBag.categories = categories;
 
-            return View(ViewModelQuestion(question));
+            return View(ViewModelQuestionEdit(question));
         }
 
         [HttpPost]

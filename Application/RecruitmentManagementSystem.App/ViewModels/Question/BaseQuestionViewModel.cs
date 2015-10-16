@@ -27,7 +27,9 @@ namespace RecruitmentManagementSystem.App.ViewModels.Question
         public virtual ICollection<string> Answers { get; set; }
 
         [Required]
-        [Display(Name = "Category")]
         public int CategoryId { get; set; }
+
+        [Display(Name = "Category")]
+        public string CategoryName { get; set; }
     }
 }

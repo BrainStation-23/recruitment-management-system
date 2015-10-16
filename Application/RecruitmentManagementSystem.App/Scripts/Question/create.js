@@ -50,7 +50,8 @@
             dataType: "application/json",
             data: data,
             success: function(result) {
-                console.log(result);
+                console.log(result.Success);
+                location.href = "/Question/Index";
             }
         });
     });
