@@ -190,6 +190,7 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\OAuthConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\SeedData.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="App_Start\UnityMvcActivator.cs" />
@@ -206,7 +207,6 @@
     </Compile>
     <Compile Include="Infrastructure\Mappings\IHaveCustomMappings.cs" />
     <Compile Include="Infrastructure\Mappings\IMapFrom.cs" />
-    <Compile Include="Infrastructure\Mappings\ModelFactory.cs" />
     <Compile Include="Infrastructure\Tasks\IRunAfterEachRequest.cs" />
     <Compile Include="Infrastructure\Tasks\IRunAtInit.cs" />
     <Compile Include="Infrastructure\Tasks\IRunAtStartup.cs" />
@@ -223,6 +223,7 @@
     <Compile Include="ViewModels\Account\ManageViewModels.cs" />
     <Compile Include="ViewModels\Question\BaseQuestionViewModel.cs" />
     <Compile Include="ViewModels\Question\QuestionCreateViewModel.cs" />
+    <Compile Include="ViewModels\Question\QuestionEditViewModel.cs" />
     <Compile Include="ViewModels\Question\QuestionViewModel.cs" />
     <Compile Include="ViewModels\Question\BaseQuestionCategoryViewModel.cs" />
     <Compile Include="ViewModels\Question\QuestionCategoryViewModel.cs" />
@@ -231,6 +232,10 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Scripts\core\config\config.js" />
+    <Content Include="Scripts\core\config\init.js" />
+    <Content Include="Scripts\questions\controllers\questions.controller.js" />
+    <Content Include="Scripts\questions\questions.module.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -313,15 +318,6 @@
     <Content Include="Views\Question\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\QuestionCategory\List.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Question\Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Question\Details.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\Question\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -353,6 +349,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Error\ServerError.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Question\Details.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Question\Edit.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -2,7 +2,6 @@
 using System.Web.Mvc;
 using AutoMapper.QueryableExtensions;
 using Microsoft.AspNet.Identity;
-using RecruitmentManagementSystem.App.Infrastructure.Mappings;
 using RecruitmentManagementSystem.App.ViewModels.Question;
 using RecruitmentManagementSystem.Data.Interfaces;
 using RecruitmentManagementSystem.Model;
@@ -12,13 +11,10 @@ namespace RecruitmentManagementSystem.App.Controllers
     [Authorize]
     public class QuestionCategoryController : BaseController
     {
-        private readonly ModelFactory _modelFactory;
         private readonly IQuestionCategoryRepository _questionCategoryRepository;
 
-        public QuestionCategoryController(ModelFactory modelFactory,
-            IQuestionCategoryRepository questionCategoryRepository)
+        public QuestionCategoryController(IQuestionCategoryRepository questionCategoryRepository)
         {
-            _modelFactory = modelFactory;
             _questionCategoryRepository = questionCategoryRepository;
         }
 
@@ -26,6 +22,11 @@ namespace RecruitmentManagementSystem.App.Controllers
         public ActionResult Index()
         {
             var model = _questionCategoryRepository.FindAll().Project().To<QuestionCategoryViewModel>();
+
+            if (Request.IsAjaxRequest())
+            {
+                return Json(model, JsonRequestBehavior.AllowGet);
+            }
             return View(model);
         }
 
@@ -56,7 +57,11 @@ namespace RecruitmentManagementSystem.App.Controllers
         [HttpGet]
         public ActionResult Details(int? id)
         {
-            var model = _modelFactory.Map(_questionCategoryRepository.Find(x => x.Id == id));
+            var model =
+                _questionCategoryRepository.FindAll()
+                    .Project()
+                    .To<QuestionCategoryViewModel>()
+                    .FirstOrDefault(x => x.Id == id);
 
             if (model == null) return new HttpNotFoundResult();
 
@@ -64,22 +69,13 @@ namespace RecruitmentManagementSystem.App.Controllers
         }
 
         [HttpGet]
-        public ActionResult List()
-        {
-            var results = _questionCategoryRepository.FindAll();
-
-            var resultsViewModel = results.Select(result => new QuestionViewModel
-            {
-                Id = result.Id
-            }).ToList();
-
-            return View(resultsViewModel);
-        }
-
-        [HttpGet]
         public ActionResult Edit(int? id)
         {
-            var model = _modelFactory.Map(_questionCategoryRepository.Find(x => x.Id == id));
+            var model =
+                _questionCategoryRepository.FindAll()
+                    .Project()
+                    .To<QuestionCategoryViewModel>()
+                    .FirstOrDefault(x => x.Id == id);
 
             if (model == null) return new HttpNotFoundResult();
 

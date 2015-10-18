@@ -1,7 +1,7 @@
-﻿using System.Web.Mvc;
+﻿using System.Linq;
+using System.Web.Mvc;
 using AutoMapper.QueryableExtensions;
 using Microsoft.AspNet.Identity;
-using RecruitmentManagementSystem.App.Infrastructure.Mappings;
 using RecruitmentManagementSystem.App.ViewModels.Candidate;
 using RecruitmentManagementSystem.Model;
 using RecruitmentManagementSystem.Data.Interfaces;
@@ -11,12 +11,10 @@ namespace RecruitmentManagementSystem.App.Controllers
     [Authorize]
     public class CandidateController : BaseController
     {
-        private readonly ModelFactory _modelFactory;
         private readonly ICandidateRepository _candidateRepository;
 
-        public CandidateController(ModelFactory modelFactory, ICandidateRepository candidateRepository)
+        public CandidateController(ICandidateRepository candidateRepository)
         {
-            _modelFactory = modelFactory;
             _candidateRepository = candidateRepository;
         }
 
@@ -60,7 +58,8 @@ namespace RecruitmentManagementSystem.App.Controllers
         [HttpGet]
         public ActionResult Details(int? id)
         {
-            var model = _modelFactory.Map(_candidateRepository.Find(x => x.Id == id));
+            var model =
+                _candidateRepository.FindAll().Project().To<CandidateViewModel>().SingleOrDefault(x => x.Id == id);
 
             if (model == null) return new HttpNotFoundResult();
 
@@ -70,7 +69,8 @@ namespace RecruitmentManagementSystem.App.Controllers
         [HttpGet]
         public ActionResult Edit(int? id)
         {
-            var model = _modelFactory.Map(_candidateRepository.Find(x => x.Id == id));
+            var model =
+                _candidateRepository.FindAll().Project().To<CandidateViewModel>().SingleOrDefault(x => x.Id == id);
 
             if (model == null) return new HttpNotFoundResult();
 
@@ -101,7 +101,8 @@ namespace RecruitmentManagementSystem.App.Controllers
         [HttpGet]
         public ActionResult Delete(int? id)
         {
-            var model = _modelFactory.Map(_candidateRepository.Find(x => x.Id == id));
+            var model =
+                _candidateRepository.FindAll().Project().To<CandidateViewModel>().SingleOrDefault(x => x.Id == id);
 
             if (model == null) return new HttpNotFoundResult();
 

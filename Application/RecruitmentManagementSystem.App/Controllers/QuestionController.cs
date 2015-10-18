@@ -1,5 +1,7 @@
 ﻿using System.Linq;
+using System.Net;
 using System.Web.Mvc;
+using AutoMapper.QueryableExtensions;
 using Microsoft.AspNet.Identity;
 using RecruitmentManagementSystem.App.ViewModels.Question;
 using RecruitmentManagementSystem.Data.Interfaces;
@@ -11,79 +13,70 @@ namespace RecruitmentManagementSystem.App.Controllers
     public class QuestionController : BaseController
     {
         private readonly IQuestionRepository _questionRepository;
-        private readonly IQuestionCategoryRepository _questionCategoryRepository;
+        private readonly IChoiceRepository _choiceRepository;
 
         public QuestionController(IQuestionRepository questionRepository,
-            IQuestionCategoryRepository questionCategoryRepository)
+            IChoiceRepository choiceRepository)
         {
             _questionRepository = questionRepository;
-            _questionCategoryRepository = questionCategoryRepository;
+            _choiceRepository = choiceRepository;
         }
 
-        private QuestionViewModel ViewModelQuestion(Question question)
+        private static QuestionViewModel ViewModelQuestion(Question question)
         {
             var viewModel = new QuestionViewModel
             {
                 Id = question.Id,
-                Title = question.Title,
-                QuestionType = question.Type,
-                Notes = question.Notes
+                Text = question.Text,
+                QuestionType = question.QuestionType,
+                Notes = question.Notes,
+                CategoryId = question.CategoryId,
+                Category = question.Category.Name
             };
             return viewModel;
         }
 
+        [HttpGet]
         public ActionResult Index()
         {
-            var results = _questionRepository.FindAll();
-
-            var resultViewModel = results.ToList().Select(result => new QuestionViewModel
-            {
-                Id = result.Id,
-                Title = result.Title,
-                QuestionType = result.Type,
-                Notes = result.Notes,
-                CategoryId = result.CategoryId,
-            }).ToList();
-
-            ViewData["QuestionNo"] = resultViewModel.Count;
-
-            return View(resultViewModel);
-        }
-
-        public ActionResult Details(int? id)
-        {
-            var question = _questionRepository.Find(x => x.Id == id);
-            if (question == null) return new HttpNotFoundResult();
-            return View(ViewModelQuestion(question));
-        }
-
-        public ActionResult Create()
-        {
-            var categories = _questionCategoryRepository.FindAll();
-            var model = new QuestionCreateViewModel(categories.ToList());
+            var model = _questionRepository.FindAll().Project().To<QuestionViewModel>();
 
             return View(model);
         }
 
+        [HttpGet]
+        public ActionResult Details(int? id)
+        {
+            var viewModel =
+                _questionRepository.FindAll().Project().To<QuestionViewModel>().SingleOrDefault(x => x.Id == id);
+
+            if (Request.IsAjaxRequest())
+            {
+                return Json(viewModel, JsonRequestBehavior.AllowGet);
+            }
+
+            return View(viewModel);
+        }
+
+        public ActionResult Create()
+        {
+            return View();
+        }
+
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public ActionResult Create(QuestionCreateViewModel question)
         {
             if (!ModelState.IsValid)
             {
-                var questionViewModel = new QuestionCreateViewModel(_questionCategoryRepository.FindAll().ToList())
-                {
-                    Title = question.Title,
-                    Notes = question.Notes,
-                    CategoryId = question.CategoryId
-                };
-                return View(questionViewModel);
+                Response.StatusCode = (int) HttpStatusCode.BadRequest;
+                return Json(ModelState);
             }
 
             _questionRepository.Insert(new Question
             {
-                Title = question.Title,
-                Type = question.QuestionType,
+                Text = question.Text,
+                QuestionType = question.QuestionType,
+                Answer = question.Answer,
                 Notes = question.Notes,
                 CategoryId = question.CategoryId,
                 CreatedBy = User.Identity.GetUserId(),
@@ -91,36 +84,40 @@ namespace RecruitmentManagementSystem.App.Controllers
             });
 
             _questionRepository.Save();
-            return RedirectToAction("Index");
+
+            if (question.QuestionType != QuestionType.MCQ) return Json(null);
+
+            foreach (var item in question.Choices)
+            {
+                _choiceRepository.Insert(new Choice
+                {
+                    Text = item.Text,
+                    IsValid = item.IsValid
+                });
+            }
+
+            _choiceRepository.Save();
+
+            return Json(null);
         }
 
+        [HttpGet]
         public ActionResult Edit(int? id)
         {
-            var question = _questionRepository.Find(x => x.Id == id);
-            if (question == null) return new HttpNotFoundResult();
-
-            var categories = _questionCategoryRepository.FindAll();
-            ViewBag.categories = categories;
-
-            return View(ViewModelQuestion(question));
+            return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(QuestionViewModel question)
+        public ActionResult Edit(QuestionViewModel model)
         {
-            if (!ModelState.IsValid) return View(question);
+            if (!ModelState.IsValid) return View();
 
-            _questionRepository.Update(new Question
-            {
-                Id = question.Id,
-                Title = question.Title,
-                Type = question.QuestionType,
-                Notes = question.Notes,
-                CategoryId = question.CategoryId
-            });
+            var question = _questionRepository.Find(x => x.Id == model.Id);
 
+            _questionRepository.Update(question);
             _questionRepository.Save();
+
             return RedirectToAction("Index");
         }
 
