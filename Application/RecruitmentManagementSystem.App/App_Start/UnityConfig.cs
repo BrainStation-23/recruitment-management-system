@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using Microsoft.Practices.Unity;
 using RecruitmentManagementSystem.App.Controllers;
 using RecruitmentManagementSystem.App.Infrastructure.Tasks;

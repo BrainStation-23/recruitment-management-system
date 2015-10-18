@@ -15,6 +15,8 @@
 * [Toastr](http://codeseven.github.io/toastr/)
 * [Microsoft Unity](http://unity.codeplex.com/)
 * [xUnit](https://xunit.github.io/)
+* [AngularJS](https://angularjs.org/)
+* [UI Bootstrap](http://angular-ui.github.io/bootstrap/)
 
 # Installation
 

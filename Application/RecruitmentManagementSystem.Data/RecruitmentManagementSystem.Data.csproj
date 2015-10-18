@@ -61,7 +61,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DbContext\ApplicationDbContext.cs" />
-    <Compile Include="Interfaces\IAnswerRepository.cs" />
     <Compile Include="Interfaces\ICandidateRepository.cs" />
     <Compile Include="Interfaces\IChoiceRepository.cs" />
     <Compile Include="Interfaces\IQuestionCategoryRepository.cs" />
@@ -75,9 +74,12 @@
     <Compile Include="Migrations\201510150838538_RemoveQuestionIdFromChoice.Designer.cs">
       <DependentUpon>201510150838538_RemoveQuestionIdFromChoice.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201510181048260_UpdateQuestionModel.cs" />
+    <Compile Include="Migrations\201510181048260_UpdateQuestionModel.Designer.cs">
+      <DependentUpon>201510181048260_UpdateQuestionModel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repositories\AnswerRepository.cs" />
     <Compile Include="Repositories\BaseRepository.cs" />
     <Compile Include="Repositories\CandidateRepository.cs" />
     <Compile Include="Repositories\ChoiceRepository.cs" />
@@ -100,6 +102,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201510150838538_RemoveQuestionIdFromChoice.resx">
       <DependentUpon>201510150838538_RemoveQuestionIdFromChoice.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201510181048260_UpdateQuestionModel.resx">
+      <DependentUpon>201510181048260_UpdateQuestionModel.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,67 +1,69 @@
 ﻿@using RecruitmentManagementSystem.Model
-@model RecruitmentManagementSystem.App.ViewModels.Question.QuestionEditViewModel
 
 @{
     ViewBag.Title = "Edit";
 }
 
-<h2>Edit</h2>
+<h2>Edit Question</h2>
+<hr />
 
+<div ng-controller="QuestionsController as ctrl" ng-init="ctrl.findCategories(); ctrl.find()">
+    <form name="ctrl.form" ng-submit="ctrl.update()" novalidate>
 
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
-    
-    <div class="form-horizontal">
-        <hr />
-        @Html.ValidationSummary(true)
-        @Html.HiddenFor(model => model.Id)
+        @Html.AntiForgeryToken()
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Title, new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Title)
-                @Html.ValidationMessageFor(model => model.Title)
+        <div class="form-horizontal">
+
+            <input type="hidden" name="id" ng-model="ctrl.question.Id" />
+
+            <div class="form-group">
+                <label class="control-label col-md-2">Text</label>
+                <div class="col-md-10">
+                    <textarea name="text" ng-model="ctrl.question.Text" required class="form-control" rows="6"></textarea>
+                    <div class="text-danger field-validation-error" ng-messages="ctrl.form.submitted && ctrl.form.text.$error">
+                        <span ng-message="required">This field is required.</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-2">Category</label>
+                <div class="col-md-3">
+                    <select name="category" class="form-control" ng-model="ctrl.question.CategoryId" ng-options="option.Id as option.Name for option in ctrl.categories" required>
+                        <option value="">Select Category</option>
+                    </select>
+                    <div class="text-danger field-validation-error" ng-messages="ctrl.form.submitted && ctrl.form.category.$error">
+                        <span ng-message="required">This field is required.</span>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    @Html.ActionLink("Create new category", "Create", "QuestionCategory")
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-2">Additional Info</label>
+                <div class="col-md-10">
+                    <textarea class="form-control" rows="6" ng-model="ctrl.question.Notes"></textarea>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-md-2">Question Type</label>
+                <div class="col-md-2">
+                    @Html.DropDownList("QuestionType", EnumHelper.GetSelectList(typeof(QuestionType)), "Select Type", new { @class = "form-control", ng_model = "ctrl.question.QuestionType" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Save" class="btn btn-default" />
+                </div>
             </div>
         </div>
-        
-        <div class="form-group">
-            @Html.LabelFor(model => model.QuestionType, new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.QuestionType)
-                @Html.ValidationMessageFor(model => model.QuestionType)
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Notes, new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Notes)
-                @Html.ValidationMessageFor(model => model.Notes)
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.CategoryId, new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownListFor(model => model.CategoryId, Model.Categories, new { @class = "form-control", id = "CategoryId" })
-                @Html.ValidationMessageFor(model => model.CategoryId, "", new { @class = "text-danger" })
-                <div>@Html.ActionLink("Create new category", "Create", "QuestionCategory")</div>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
-            </div>
-        </div>
-    </div>
-}
+    </form>
+</div>
 
 <div>
     @Html.ActionLink("Back to List", "Index")
 </div>
-
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}

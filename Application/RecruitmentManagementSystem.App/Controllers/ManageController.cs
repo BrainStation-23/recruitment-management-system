@@ -5,7 +5,6 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
-using RecruitmentManagementSystem.App.ViewModels;
 using RecruitmentManagementSystem.App.ViewModels.Account;
 
 namespace RecruitmentManagementSystem.App.Controllers
