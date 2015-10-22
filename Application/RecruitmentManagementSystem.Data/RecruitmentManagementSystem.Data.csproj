@@ -63,6 +63,7 @@
     <Compile Include="DbContext\ApplicationDbContext.cs" />
     <Compile Include="Interfaces\ICandidateRepository.cs" />
     <Compile Include="Interfaces\IChoiceRepository.cs" />
+    <Compile Include="Interfaces\IFileRepository.cs" />
     <Compile Include="Interfaces\IQuestionCategoryRepository.cs" />
     <Compile Include="Interfaces\IQuestionRepository.cs" />
     <Compile Include="Interfaces\IRepository.cs" />
@@ -83,6 +84,7 @@
     <Compile Include="Repositories\BaseRepository.cs" />
     <Compile Include="Repositories\CandidateRepository.cs" />
     <Compile Include="Repositories\ChoiceRepository.cs" />
+    <Compile Include="Repositories\FileRepository.cs" />
     <Compile Include="Repositories\QuestionCategoryRepository.cs" />
     <Compile Include="Repositories\QuestionRepository.cs" />
   </ItemGroup>

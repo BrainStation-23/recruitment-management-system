@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Web;
 using System.Web.Mvc;
 using AutoMapper.QueryableExtensions;
 using Microsoft.AspNet.Identity;
@@ -33,9 +34,20 @@ namespace RecruitmentManagementSystem.App.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(CandidateViewModel model)
+        public ActionResult Create(CandidateViewModel model, HttpPostedFileBase upload)
         {
             if (!ModelState.IsValid) return View(model);
+
+            if (upload != null && upload.ContentLength > 0)
+            {
+                var avatar = new File
+                {
+                    Name = System.IO.Path.GetFileName(upload.FileName),
+                    FileType = "Avatar"
+                };
+                //instructor.FilePaths = new List<FilePath>();
+                //instructor.FilePaths.Add(photo);
+            }
 
             var candidate = new Candidate
             {
@@ -45,6 +57,7 @@ namespace RecruitmentManagementSystem.App.Controllers
                 PhoneNumber = model.PhoneNumber,
                 Others = model.Others,
                 Website = model.Website,
+                Avatar = model.Avatar,
                 CreatedBy = User.Identity.GetUserId(),
                 UpdatedBy = User.Identity.GetUserId()
             };
@@ -52,7 +65,11 @@ namespace RecruitmentManagementSystem.App.Controllers
             _candidateRepository.Insert(candidate);
             _candidateRepository.Save();
 
-            return RedirectToAction("Edit", new {id = candidate.Id});
+            
+            //db.Instructors.Add(instructor);
+            //db.SaveChanges();
+
+            return RedirectToAction("Edit", new { id = candidate.Id });
         }
 
         [HttpGet]
