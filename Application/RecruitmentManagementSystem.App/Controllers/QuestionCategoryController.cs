@@ -21,7 +21,7 @@ namespace RecruitmentManagementSystem.App.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-            var model = _questionCategoryRepository.FindAll().Project().To<QuestionCategoryViewModel>();
+            var model = _questionCategoryRepository.FindAll().ProjectTo<QuestionCategoryViewModel>();
 
             if (Request.IsAjaxRequest())
             {
@@ -59,8 +59,7 @@ namespace RecruitmentManagementSystem.App.Controllers
         {
             var model =
                 _questionCategoryRepository.FindAll()
-                    .Project()
-                    .To<QuestionCategoryViewModel>()
+                    .ProjectTo<QuestionCategoryViewModel>()
                     .FirstOrDefault(x => x.Id == id);
 
             if (model == null) return new HttpNotFoundResult();
@@ -73,8 +72,7 @@ namespace RecruitmentManagementSystem.App.Controllers
         {
             var model =
                 _questionCategoryRepository.FindAll()
-                    .Project()
-                    .To<QuestionCategoryViewModel>()
+                    .ProjectTo<QuestionCategoryViewModel>()
                     .FirstOrDefault(x => x.Id == id);
 
             if (model == null) return new HttpNotFoundResult();

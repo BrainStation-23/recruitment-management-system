@@ -1,11 +1,15 @@
-﻿using System.Linq;
-using System.Web;
+﻿using System;
+using System.IO;
+using System.Linq;
 using System.Web.Mvc;
 using AutoMapper.QueryableExtensions;
 using Microsoft.AspNet.Identity;
+using RecruitmentManagementSystem.App.Infrastructure.Constants;
+using RecruitmentManagementSystem.App.Infrastructure.Helpers;
 using RecruitmentManagementSystem.App.ViewModels.Candidate;
 using RecruitmentManagementSystem.Model;
 using RecruitmentManagementSystem.Data.Interfaces;
+using File = RecruitmentManagementSystem.Model.File;
 
 namespace RecruitmentManagementSystem.App.Controllers
 {
@@ -13,15 +17,17 @@ namespace RecruitmentManagementSystem.App.Controllers
     public class CandidateController : BaseController
     {
         private readonly ICandidateRepository _candidateRepository;
+        private readonly IFileRepository _fileRepository;
 
-        public CandidateController(ICandidateRepository candidateRepository)
+        public CandidateController(ICandidateRepository candidateRepository, IFileRepository fileRepository)
         {
             _candidateRepository = candidateRepository;
+            _fileRepository = fileRepository;
         }
 
         public ActionResult Index()
         {
-            var model = _candidateRepository.FindAll().Project().To<CandidateViewModel>();
+            var model = _candidateRepository.FindAll().ProjectTo<CandidateViewModel>();
 
             return View(model);
         }
@@ -34,20 +40,9 @@ namespace RecruitmentManagementSystem.App.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(CandidateViewModel model, HttpPostedFileBase upload)
+        public ActionResult Create(CandidateViewModel model)
         {
             if (!ModelState.IsValid) return View(model);
-
-            if (upload != null && upload.ContentLength > 0)
-            {
-                var avatar = new File
-                {
-                    Name = System.IO.Path.GetFileName(upload.FileName),
-                    FileType = "Avatar"
-                };
-                //instructor.FilePaths = new List<FilePath>();
-                //instructor.FilePaths.Add(photo);
-            }
 
             var candidate = new Candidate
             {
@@ -57,7 +52,6 @@ namespace RecruitmentManagementSystem.App.Controllers
                 PhoneNumber = model.PhoneNumber,
                 Others = model.Others,
                 Website = model.Website,
-                Avatar = model.Avatar,
                 CreatedBy = User.Identity.GetUserId(),
                 UpdatedBy = User.Identity.GetUserId()
             };
@@ -65,18 +59,68 @@ namespace RecruitmentManagementSystem.App.Controllers
             _candidateRepository.Insert(candidate);
             _candidateRepository.Save();
 
-            
-            //db.Instructors.Add(instructor);
-            //db.SaveChanges();
+            if (model.Avatar != null && model.Avatar.ContentLength > 0)
+            {
+                var fileName = string.Format("{0}.{1}", Guid.NewGuid(), Path.GetFileName(model.Avatar.FileName));
 
-            return RedirectToAction("Edit", new { id = candidate.Id });
+                FileHelper.UploadFile(new UploadConfig
+                {
+                    FileBase = model.Avatar,
+                    FileName = fileName,
+                    FilePath = FilePath.AvatarRelativePath
+                });
+
+                var file = new File
+                {
+                    Name = fileName,
+                    MimeType = model.Avatar.ContentType,
+                    Size = model.Avatar.ContentLength,
+                    RelativePath = FilePath.AvatarRelativePath + fileName,
+                    FileType = FileType.Avatar,
+                    CandidateId = candidate.Id,
+                    CreatedBy = User.Identity.GetUserId(),
+                    UpdatedBy = User.Identity.GetUserId()
+                };
+
+                _fileRepository.Insert(file);
+                _fileRepository.Save();
+            }
+
+            if (model.Resume != null && model.Resume.ContentLength > 0)
+            {
+                var fileName = string.Format("{0}.{1}", Guid.NewGuid(), Path.GetFileName(model.Resume.FileName));
+
+                FileHelper.UploadFile(new UploadConfig
+                {
+                    FileBase = model.Resume,
+                    FileName = fileName,
+                    FilePath = FilePath.ResumeRelativePath
+                });
+
+                var file = new File
+                {
+                    Name = fileName,
+                    MimeType = model.Resume.ContentType,
+                    Size = model.Resume.ContentLength,
+                    RelativePath = FilePath.ResumeRelativePath + fileName,
+                    FileType = FileType.Resume,
+                    CandidateId = candidate.Id,
+                    CreatedBy = User.Identity.GetUserId(),
+                    UpdatedBy = User.Identity.GetUserId()
+                };
+
+                _fileRepository.Insert(file);
+                _fileRepository.Save();
+            }
+
+            return RedirectToAction("Details", new {id = candidate.Id});
         }
 
         [HttpGet]
         public ActionResult Details(int? id)
         {
             var model =
-                _candidateRepository.FindAll().Project().To<CandidateViewModel>().SingleOrDefault(x => x.Id == id);
+                _candidateRepository.FindAll().ProjectTo<CandidateViewModel>().SingleOrDefault(x => x.Id == id);
 
             if (model == null) return new HttpNotFoundResult();
 
@@ -87,7 +131,7 @@ namespace RecruitmentManagementSystem.App.Controllers
         public ActionResult Edit(int? id)
         {
             var model =
-                _candidateRepository.FindAll().Project().To<CandidateViewModel>().SingleOrDefault(x => x.Id == id);
+                _candidateRepository.FindAll().ProjectTo<CandidateViewModel>().SingleOrDefault(x => x.Id == id);
 
             if (model == null) return new HttpNotFoundResult();
 
@@ -119,7 +163,7 @@ namespace RecruitmentManagementSystem.App.Controllers
         public ActionResult Delete(int? id)
         {
             var model =
-                _candidateRepository.FindAll().Project().To<CandidateViewModel>().SingleOrDefault(x => x.Id == id);
+                _candidateRepository.FindAll().ProjectTo<CandidateViewModel>().SingleOrDefault(x => x.Id == id);
 
             if (model == null) return new HttpNotFoundResult();
 

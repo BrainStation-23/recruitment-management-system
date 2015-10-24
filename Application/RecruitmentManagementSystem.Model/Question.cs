@@ -22,6 +22,7 @@ namespace RecruitmentManagementSystem.Model
         public QuestionType QuestionType { get; set; }
 
         public virtual ICollection<File> Files { get; set; }
+
         public virtual ICollection<Choice> Choices { get; set; }
 
         [DataType(DataType.MultilineText)]
@@ -47,5 +48,9 @@ namespace RecruitmentManagementSystem.Model
         public string Text { get; set; }
 
         public bool IsValid { get; set; }
+
+        public int QuestionId { get; set; }
+
+        public virtual Question Question { get; set; }
     }
 }

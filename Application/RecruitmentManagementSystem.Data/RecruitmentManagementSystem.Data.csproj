@@ -75,9 +75,9 @@
     <Compile Include="Migrations\201510150838538_RemoveQuestionIdFromChoice.Designer.cs">
       <DependentUpon>201510150838538_RemoveQuestionIdFromChoice.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201510181048260_UpdateQuestionModel.cs" />
-    <Compile Include="Migrations\201510181048260_UpdateQuestionModel.Designer.cs">
-      <DependentUpon>201510181048260_UpdateQuestionModel.cs</DependentUpon>
+    <Compile Include="Migrations\201510232136335_RefactorEntityModels.cs" />
+    <Compile Include="Migrations\201510232136335_RefactorEntityModels.Designer.cs">
+      <DependentUpon>201510232136335_RefactorEntityModels.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -105,8 +105,8 @@
     <EmbeddedResource Include="Migrations\201510150838538_RemoveQuestionIdFromChoice.resx">
       <DependentUpon>201510150838538_RemoveQuestionIdFromChoice.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201510181048260_UpdateQuestionModel.resx">
-      <DependentUpon>201510181048260_UpdateQuestionModel.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201510232136335_RefactorEntityModels.resx">
+      <DependentUpon>201510232136335_RefactorEntityModels.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

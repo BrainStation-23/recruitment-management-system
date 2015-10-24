@@ -2,7 +2,6 @@
 
 [![Build status](https://ci.appveyor.com/api/projects/status/7sa9b0lnwjen7808?svg=true)](https://ci.appveyor.com/project/shibbir/recruitment-management-system-nv0ec)
 [![Dependency Status](https://www.versioneye.com/user/projects/561946aca193340f320004b1/badge.svg?style=flat)](https://www.versioneye.com/user/projects/561946aca193340f320004b1)
-[![Coverage Status](https://coveralls.io/repos/BrainStation-23/recruitment-management-system/badge.svg?branch=master&service=github)](https://coveralls.io/github/BrainStation-23/recruitment-management-system?branch=master)
 [![License](https://img.shields.io/badge/license-MIT-lightgray.svg)](http://opensource.org/licenses/MIT)
 
 # Technologies
@@ -16,7 +15,7 @@
 * [Microsoft Unity](http://unity.codeplex.com/)
 * [xUnit](https://xunit.github.io/)
 * [AngularJS](https://angularjs.org/)
-* [UI Bootstrap](http://angular-ui.github.io/bootstrap/)
+* [Angular UI Bootstrap](http://angular-ui.github.io/bootstrap/)
 
 # Installation
 
