@@ -70,7 +70,9 @@ namespace RecruitmentManagementSystem.App.Controllers
             if (!ModelState.IsValid)
             {
                 Response.StatusCode = (int) HttpStatusCode.BadRequest;
-                return Json(ModelState);
+
+                // TODO: This will be refactored later.
+                return Json(null);
             }
 
             var question = new Question

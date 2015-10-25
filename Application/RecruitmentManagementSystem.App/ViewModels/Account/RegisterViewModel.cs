@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Web;
 
 namespace RecruitmentManagementSystem.App.ViewModels.Account
 {
@@ -34,5 +35,11 @@ namespace RecruitmentManagementSystem.App.ViewModels.Account
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        [Required]
+        public string Role { get; set; }
+
+        [DataType(DataType.Upload)]
+        public HttpPostedFileBase Avatar { get; set; }
     }
 }

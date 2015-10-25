@@ -5,6 +5,17 @@
     <ul class="nav navbar-nav">
         <li class="dropdown" uib-dropdown>
             <a class="dropdown-toggle" uib-dropdown-toggle role="button" aria-haspopup="true" aria-expanded="false">
+                Application User
+                <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+                <li>@Html.ActionLink("Registered Users", "Index", "Candidate")</li>
+                <li>@Html.ActionLink("Register New User", "Register", "Account")</li>
+            </ul>
+        </li>
+
+        <li class="dropdown" uib-dropdown>
+            <a class="dropdown-toggle" uib-dropdown-toggle role="button" aria-haspopup="true" aria-expanded="false">
                 Candidate
                 <span class="caret"></span>
             </a>
@@ -49,7 +60,6 @@
 else
 {
     <ul class="nav navbar-nav navbar-right">
-        <li>@Html.ActionLink("Register", "Register", "Account", null, new {id = "registerLink"})</li>
         <li>@Html.ActionLink("Log in", "Login", "Account", null, new {id = "loginLink"})</li>
     </ul>
 }

@@ -36,14 +36,30 @@ namespace RecruitmentManagementSystem.App
 
         private static void SeedApplicationUser(DbContext dbContext)
         {
-            const string password = "HakunaMatata23";
+            const string email = "admin-rms@bs-23.com";
+            const string password = "HakunaMatata-23";
 
             var userManager = new ApplicationUserManager(new UserStore<ApplicationUser>(dbContext));
 
+            userManager.UserValidator = new UserValidator<ApplicationUser>(userManager)
+            {
+                AllowOnlyAlphanumericUserNames = false,
+                RequireUniqueEmail = true
+            };
+
+            userManager.PasswordValidator = new PasswordValidator
+            {
+                RequiredLength = 6,
+                RequireNonLetterOrDigit = true,
+                RequireDigit = true,
+                RequireLowercase = true,
+                RequireUppercase = true,
+            };
+
             var user = new ApplicationUser
             {
-                Email = "admin-rms@bs-23.com",
-                UserName = "admin-rms@bs-23.com",
+                Email = email,
+                UserName = email,
                 FirstName = "John",
                 LastName = "Doe"
             };
