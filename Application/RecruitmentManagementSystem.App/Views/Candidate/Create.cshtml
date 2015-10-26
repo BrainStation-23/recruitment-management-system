@@ -2,6 +2,8 @@
 
 @{
     ViewBag.Title = "Create New Candidate";
+
+    var ins = new SelectList(ViewBag.Institutions, "Id", "Name");
 }
 
 <h3>Create New Candidate</h3>
@@ -43,6 +45,30 @@
             <div class="col-md-10">
                 @Html.EditorFor(model => model.PhoneNumber, new {htmlAttributes = new {@class = "form-control"}})
                 @Html.ValidationMessageFor(model => model.PhoneNumber, "", new {@class = "text-danger"})
+            </div>
+        </div>
+        
+        <div class="form-group">
+            @Html.LabelFor(model => model.Education.Degree, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Education.Degree, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Education.Degree, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        
+        <div class="form-group">
+            @Html.LabelFor(model => model.Education.FieldOfStudy, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Education.FieldOfStudy, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Education.FieldOfStudy, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        
+        <div class="form-group">
+            @Html.LabelFor(model => model.Education.InstitutionId, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Education.InstitutionId, ins, new { @class = "form-control", id = "CategoryId" })
+                @Html.ValidationMessageFor(model => model.Education.InstitutionId, "", new { @class = "text-danger" })
             </div>
         </div>
 

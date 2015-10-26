@@ -17,12 +17,17 @@ namespace RecruitmentManagementSystem.App.Controllers
     public class CandidateController : BaseController
     {
         private readonly ICandidateRepository _candidateRepository;
+        private readonly IEducationRepository _educationRepository;
         private readonly IFileRepository _fileRepository;
+        private readonly IInstitutionRepository _institutionRepository;
 
-        public CandidateController(ICandidateRepository candidateRepository, IFileRepository fileRepository)
+        public CandidateController(ICandidateRepository candidateRepository, IFileRepository fileRepository,
+            IEducationRepository educationRepository, IInstitutionRepository institutionRepository)
         {
             _candidateRepository = candidateRepository;
             _fileRepository = fileRepository;
+            _educationRepository = educationRepository;
+            _institutionRepository = institutionRepository;
         }
 
         public ActionResult Index()
@@ -35,6 +40,8 @@ namespace RecruitmentManagementSystem.App.Controllers
         [HttpGet]
         public ActionResult Create()
         {
+            ViewBag.Institutions = _institutionRepository.FindAll();
+
             return View();
         }
 
@@ -58,6 +65,21 @@ namespace RecruitmentManagementSystem.App.Controllers
 
             _candidateRepository.Insert(candidate);
             _candidateRepository.Save();
+
+            _educationRepository.Insert(new Education
+            {
+                Degree = model.Education.Degree,
+                FieldOfStudy = model.Education.FieldOfStudy,
+                InstitutionId = model.Education.InstitutionId,
+                CandidateId = candidate.Id
+            });
+
+            _educationRepository.Save();
+
+            //_institutionRepository.Insert(new Institution
+            //{
+            //    Name = model.Education.in
+            //});
 
             if (model.Avatar != null && model.Avatar.ContentLength > 0)
             {
