@@ -3,7 +3,6 @@ using System.IO;
 using System.Linq;
 using System.Web.Mvc;
 using AutoMapper.QueryableExtensions;
-using Microsoft.Ajax.Utilities;
 using Microsoft.AspNet.Identity;
 using RecruitmentManagementSystem.App.Infrastructure.Constants;
 using RecruitmentManagementSystem.App.Infrastructure.Helpers;
@@ -20,7 +19,6 @@ namespace RecruitmentManagementSystem.App.Controllers
         private readonly ICandidateRepository _candidateRepository;
         private readonly IEducationRepository _educationRepository;
         private readonly IFileRepository _fileRepository;
-        //private readonly IInstitutionRepository _institutionRepository;
 
         public CandidateController(ICandidateRepository candidateRepository, IFileRepository fileRepository,
             IEducationRepository educationRepository)
@@ -28,7 +26,6 @@ namespace RecruitmentManagementSystem.App.Controllers
             _candidateRepository = candidateRepository;
             _fileRepository = fileRepository;
             _educationRepository = educationRepository;
-            //_institutionRepository = institutionRepository;
         }
 
         public ActionResult Index()

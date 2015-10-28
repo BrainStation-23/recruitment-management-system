@@ -1,41 +1,13 @@
 ﻿angular.module("candidates").controller("CandidatesController", [
-    "$http", "$uibModal", function ($http, $uibModal) {
+    "$http", "$uibModal", function($http, $uibModal) {
         var vm = this;
-        vm.institutions = [];
-        vm.educations = [
-            {
-                degree: "",
-                fieldOfStudy: "",
-                grade: "",
-                activites: "",
-                description: "",
-                firstYear: "",
-                lastYear: "",
-                institutionId: ""
-            }
-        ];
 
-        vm.addNewEducation = function() {
-            vm.educations.push({
-                degree: "",
-                fieldOfStudy: "",
-                grade: "",
-                activites: "",
-                description: "",
-                firstYear: "",
-                lastYear: "",
-                institutionId: ""
-            });
-        };
+        vm.institutions = [];
+
+        vm.educations = [];
 
         vm.discardEducation = function(index) {
             vm.educations.splice(index, 1);
-        };
-
-        vm.findInstitutions = function() {
-            $http.get("/Institution/").success(function(data) {
-                vm.institutions = data;
-            });
         };
 
         vm.create = function() {
@@ -47,8 +19,8 @@
                 email: vm.email,
                 phoneNumber: vm.phoneNumber,
                 educations: vm.educations,
-                //avatar: vm.avatar,
-                //resume: vm.resume,
+                avatar: vm.avatar,
+                resume: vm.resume,
                 others: vm.others,
                 website: vm.website
             };
@@ -60,42 +32,43 @@
             });
         };
 
-        vm.open = function(size) {
-
+        vm.openEducationModal = function() {
             var modalInstance = $uibModal.open({
-                animation: vm.animationsEnabled,
-                templateUrl: 'myModalContent.html',
-                controllerAs: 'ModalInstanceCtrl',
-                size: size
+                animation: true,
+                backdrop: "static",
+                templateUrl: "EducationModalContent.html",
+                controller: "EducationModalInstanceController",
+                controllerAs: "education"
             });
 
-            modalInstance.result.then(function(selectedItem) {
-                vm.selected = selectedItem;
-            }, function() {
-                console.log('Modal dismissed at: ' + new Date());
+            modalInstance.result.then(function(row) {
+                console.log(row);
+                vm.educations.push(row);
             });
-
-            console.log(modalInstance);
-        };
-
-        vm.toggleAnimation = function() {
-            vm.animationsEnabled = !vm.animationsEnabled;
         };
     }
 ]);
 
-angular.module("candidates").controller("ModalInstanceCtrl", [
-    "$uibModalInstance", function($uibModalInstance) {
+angular.module("candidates").controller("EducationModalInstanceController", [
+    "$http", "$uibModalInstance", function($http, $uibModalInstance) {
         var vm = this;
 
-        console.log($uibModalInstance);
+        vm.institutions = [];
 
-        vm.ok = function() {
-            $uibModalInstance.close(vm.selected.item);
+        $http.get("/Institution/").success(function(data) {
+            vm.institutions = data;
+        });
+
+        vm.add = function() {
+            vm.form.submitted = true;
+
+            if (vm.form.$valid) {
+                $uibModalInstance.close(vm.education);
+            }
         };
 
         vm.cancel = function() {
-            $uibModalInstance.dismiss('cancel');
+            $uibModalInstance.dismiss("cancel");
         };
     }
 ]);

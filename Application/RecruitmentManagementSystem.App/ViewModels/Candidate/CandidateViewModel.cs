@@ -2,7 +2,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.Web;
 using RecruitmentManagementSystem.App.Infrastructure.Mappings;
-using RecruitmentManagementSystem.Model;
 
 namespace RecruitmentManagementSystem.App.ViewModels.Candidate
 {

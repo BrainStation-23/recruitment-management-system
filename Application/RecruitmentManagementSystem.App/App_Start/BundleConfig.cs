@@ -11,7 +11,8 @@ namespace RecruitmentManagementSystem.App
                 "~/Vendors/bower_components/jquery/dist/jquery.js",
                 "~/Vendors/bower_components/angular/angular.js",
                 "~/Vendors/bower_components/angular-messages/angular-messages.js",
-                "~/Vendors/bower_components/angular-bootstrap/ui-bootstrap-tpls.js"));
+                "~/Vendors/bower_components/angular-bootstrap/ui-bootstrap-tpls.js",
+                "~/Vendors/bower_components/ng-file-upload/ng-file-upload.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                 "~/Vendors/bower_components/jquery-validation/dist/jquery.validate.js",
@@ -27,6 +28,7 @@ namespace RecruitmentManagementSystem.App
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                 "~/Vendors/bower_components/bootstrap/dist/css/bootstrap.css",
+                "~/Vendors/bower_components/font-awesome/css/font-awesome.css",
                 "~/Content/site.css"));
         }
     }
