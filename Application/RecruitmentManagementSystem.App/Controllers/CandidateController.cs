@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Web.Mvc;
 using AutoMapper.QueryableExtensions;
+using Microsoft.Ajax.Utilities;
 using Microsoft.AspNet.Identity;
 using RecruitmentManagementSystem.App.Infrastructure.Constants;
 using RecruitmentManagementSystem.App.Infrastructure.Helpers;
@@ -19,15 +20,15 @@ namespace RecruitmentManagementSystem.App.Controllers
         private readonly ICandidateRepository _candidateRepository;
         private readonly IEducationRepository _educationRepository;
         private readonly IFileRepository _fileRepository;
-        private readonly IInstitutionRepository _institutionRepository;
+        //private readonly IInstitutionRepository _institutionRepository;
 
         public CandidateController(ICandidateRepository candidateRepository, IFileRepository fileRepository,
-            IEducationRepository educationRepository, IInstitutionRepository institutionRepository)
+            IEducationRepository educationRepository)
         {
             _candidateRepository = candidateRepository;
             _fileRepository = fileRepository;
             _educationRepository = educationRepository;
-            _institutionRepository = institutionRepository;
+            //_institutionRepository = institutionRepository;
         }
 
         public ActionResult Index()
@@ -40,16 +41,17 @@ namespace RecruitmentManagementSystem.App.Controllers
         [HttpGet]
         public ActionResult Create()
         {
-            ViewBag.Institutions = _institutionRepository.FindAll();
-
             return View();
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public ActionResult Create(CandidateViewModel model)
         {
-            if (!ModelState.IsValid) return View(model);
+            if (!ModelState.IsValid)
+            {
+                return Json(new { Succeeded = false});
+            }
 
             var candidate = new Candidate
             {
@@ -66,20 +68,18 @@ namespace RecruitmentManagementSystem.App.Controllers
             _candidateRepository.Insert(candidate);
             _candidateRepository.Save();
 
-            _educationRepository.Insert(new Education
+            foreach (var item in model.Educations)
             {
-                Degree = model.Education.Degree,
-                FieldOfStudy = model.Education.FieldOfStudy,
-                InstitutionId = model.Education.InstitutionId,
-                CandidateId = candidate.Id
-            });
+                _educationRepository.Insert(new Education
+                {
+                    Degree = item.Degree,
+                    FieldOfStudy = item.FieldOfStudy,
+                    InstitutionId = item.InstitutionId,
+                    CandidateId = candidate.Id
+                });
+            }
 
             _educationRepository.Save();
-
-            //_institutionRepository.Insert(new Institution
-            //{
-            //    Name = model.Education.in
-            //});
 
             if (model.Avatar != null && model.Avatar.ContentLength > 0)
             {
@@ -135,7 +135,7 @@ namespace RecruitmentManagementSystem.App.Controllers
                 _fileRepository.Save();
             }
 
-            return RedirectToAction("Details", new {id = candidate.Id});
+            return Json(new { Succeeded = true });
         }
 
         [HttpGet]

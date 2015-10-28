@@ -40,10 +40,7 @@ else
                 @Html.DisplayNameFor(model => model.PhoneNumber)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Education.Degree)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Education.FieldOfStudy)
+                @Html.DisplayNameFor(model => model.Educations)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Others)
@@ -70,10 +67,7 @@ else
                     @Html.DisplayFor(modelItem => item.PhoneNumber)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Education.Degree)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Education.FieldOfStudy)
+                    @Html.DisplayFor(modelItem => item.Educations)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Others)

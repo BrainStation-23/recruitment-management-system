@@ -199,6 +199,7 @@
     <Compile Include="Controllers\CandidateController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\InstitutionController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\QuestionCategoryController.cs" />
     <Compile Include="Controllers\QuestionController.cs" />
@@ -224,6 +225,7 @@
     <Compile Include="ViewModels\Candidate\CandidateViewModel.cs" />
     <Compile Include="ViewModels\Account\ManageViewModels.cs" />
     <Compile Include="ViewModels\Candidate\EducationViewModel.cs" />
+    <Compile Include="ViewModels\Candidate\InstitutionViewModel.cs" />
     <Compile Include="ViewModels\Question\BaseQuestionViewModel.cs" />
     <Compile Include="ViewModels\Question\QuestionCreateViewModel.cs" />
     <Compile Include="ViewModels\Question\QuestionEditViewModel.cs" />
@@ -235,6 +237,8 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Scripts\candidates\controllers\candidates.controller.js" />
+    <Content Include="Scripts\candidates\candidates.module.js" />
     <Content Include="Scripts\core\config\config.js" />
     <Content Include="Scripts\core\config\init.js" />
     <Content Include="Scripts\questions\controllers\questions.controller.js" />
@@ -275,6 +279,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Institution\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

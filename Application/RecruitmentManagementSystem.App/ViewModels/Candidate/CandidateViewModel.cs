@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Web;
 using RecruitmentManagementSystem.App.Infrastructure.Mappings;
 using RecruitmentManagementSystem.Model;
@@ -43,6 +44,6 @@ namespace RecruitmentManagementSystem.App.ViewModels.Candidate
         [StringLength(50, ErrorMessage = "The {0} must be at most {1} characters long.")]
         public string Website { get; set; }
 
-        public EducationViewModel Education { get; set; }
+        public ICollection<EducationViewModel> Educations { get; set; }
     }
 }
