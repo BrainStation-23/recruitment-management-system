@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Web;
 using RecruitmentManagementSystem.App.Infrastructure.Mappings;
 
@@ -19,6 +20,7 @@ namespace RecruitmentManagementSystem.App.ViewModels.Candidate
         [StringLength(30, ErrorMessage = "The {0} must be at most {1} characters long.")]
         public string LastName { get; set; }
 
+        [Index("EmailIndex", IsUnique = true)] 
         [EmailAddress]
         [Display(Name = "E-mail Address")]
         [StringLength(50, ErrorMessage = "The {0} must be at most {1} characters long.")]

@@ -13,6 +13,11 @@
         vm.create = function() {
             vm.form.submitted = true;
 
+            for (var idx = 0; idx < vm.educations.length; idx++) {
+                vm.educations[idx].institutionId = vm.educations[idx].institution.Id;
+                delete vm.educations[idx].institution;
+            }
+
             var model = {
                 firstName: vm.firstName,
                 lastName: vm.lastName,
@@ -63,10 +68,20 @@ angular.module("candidates").controller("EducationModalInstanceController", [
             vm.form.submitted = true;
 
             if (vm.form.$valid) {
-                $uibModalInstance.close(vm.education);
+                var education = {
+                    degree: vm.degree,
+                    fieldOfStudy: vm.fieldOfStudy,
+                    grade: vm.grade,
+                    institution: vm.institution,
+                    firstYear: vm.firstYear,
+                    lastYear: vm.lastYear,
+                    activites: vm.activites,
+                    description: vm.description
+                };
+                $uibModalInstance.close(education);
             }
         };
-
+        
         vm.cancel = function() {
             $uibModalInstance.dismiss("cancel");
         };
