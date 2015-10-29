@@ -8,11 +8,11 @@ namespace RecruitmentManagementSystem.App.ViewModels.Candidate
         public int Id { get; set; }
 
         [Required]
-        [Display(Name = "Education Degree")]
+        [Display(Name = "Degree")]
         public string Degree { get; set; }
 
         [Required]
-        [Display(Name = "Education Field of Study")]
+        [Display(Name = "Field of Study")]
         public string FieldOfStudy { get; set; }
 
         public double Grade { get; set; }

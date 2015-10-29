@@ -1,5 +1,5 @@
 ﻿angular.module("candidates").controller("CandidatesController", [
-    "$http", "$uibModal", function($http, $uibModal) {
+    "$http", "$uibModal", "$timeout", "fileService", "notifierService", function($http, $uibModal, $timeout, fileService, notifierService) {
         var vm = this;
 
         vm.institutions = [];
@@ -24,17 +24,24 @@
                 email: vm.email,
                 phoneNumber: vm.phoneNumber,
                 educations: vm.educations,
-                avatar: vm.avatar,
-                resume: vm.resume,
                 others: vm.others,
                 website: vm.website
             };
 
-            $http.post("/Candidate/Create", model).success(function(data) {
-                if (data.Succeeded) {
+            var uploadConfig = {
+                url: "/Candidate/Create",
+                file: vm.avatar,
+                data: model
+            };
+
+            if (vm.form.$valid) {
+
+                fileService.postMultipartForm(uploadConfig).progress(function(evt) {
+                    console.log("percent: " + parseInt(100.0 * evt.loaded / evt.total));
+                }).success(function(data) {
                     location.href = "/Candidate";
-                }
-            });
+                });
+            }
         };
 
         vm.openEducationModal = function() {
@@ -47,9 +54,48 @@
             });
 
             modalInstance.result.then(function(row) {
-                console.log(row);
                 vm.educations.push(row);
             });
+        };
+
+        vm.attachPhoto = function(file) {
+            if (!file) {
+                return;
+            }
+
+            var errorMessages = [];
+
+            if (file.size > 1024 * 1024 * 2) {
+                errorMessages.push("File size is too large. Max upload size is 2MB.");
+            }
+
+            if (errorMessages.length) {
+                notifierService.notifyInfo(errorMessages);
+            } else {
+                vm.avatar = file;
+
+                if (fileService.fileReaderSupported && file.type.indexOf("image") > -1) {
+                    var fileReader = new FileReader();
+
+                    fileReader.readAsDataURL(file);
+
+                    (function(fileReader) {
+                        fileReader.onload = function(e) {
+                            $timeout(function() {
+                                vm.avatarPreview = e.target.result;
+                            });
+                        };
+                    })(fileReader);
+                }
+            }
+        };
+
+        vm.attachResume = function(file) {
+            if (!file) {
+                return;
+            }
+
+            vm.resume = file;
         };
     }
 ]);
@@ -81,7 +127,7 @@ angular.module("candidates").controller("EducationModalInstanceController", [
                 $uibModalInstance.close(education);
             }
         };
-        
+
         vm.cancel = function() {
             $uibModalInstance.dismiss("cancel");
         };

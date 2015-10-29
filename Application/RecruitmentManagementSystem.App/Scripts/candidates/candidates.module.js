@@ -1,3 +1,3 @@
 ﻿"use strict";
 
-ApplicationConfiguration.registerModule("candidates");
+ApplicationConfiguration.registerModule("candidates", ["core"]);

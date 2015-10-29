@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Web.Mvc;
 using AutoMapper.QueryableExtensions;
 using Microsoft.AspNet.Identity;
@@ -47,7 +48,8 @@ namespace RecruitmentManagementSystem.App.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return Json(new { Succeeded = false});
+                Response.StatusCode = (int) HttpStatusCode.BadRequest;
+                return Json(null);
             }
 
             var candidate = new Candidate
@@ -65,74 +67,55 @@ namespace RecruitmentManagementSystem.App.Controllers
             _candidateRepository.Insert(candidate);
             _candidateRepository.Save();
 
-            foreach (var item in model.Educations)
+            if (model.Educations != null)
             {
-                _educationRepository.Insert(new Education
+                foreach (var item in model.Educations)
                 {
-                    Degree = item.Degree,
-                    FieldOfStudy = item.FieldOfStudy,
-                    InstitutionId = item.InstitutionId,
-                    CandidateId = candidate.Id
-                });
+                    _educationRepository.Insert(new Education
+                    {
+                        Degree = item.Degree,
+                        FieldOfStudy = item.FieldOfStudy,
+                        InstitutionId = item.InstitutionId,
+                        CandidateId = candidate.Id
+                    });
+                }
+
+                _educationRepository.Save();
             }
 
-            _educationRepository.Save();
-
-            if (model.Avatar != null && model.Avatar.ContentLength > 0)
+            if (Request.Files != null && Request.Files.Count > 0)
             {
-                var fileName = string.Format("{0}.{1}", Guid.NewGuid(), Path.GetFileName(model.Avatar.FileName));
+                var avatar = Request.Files[0];
 
-                FileHelper.UploadFile(new UploadConfig
+                if (avatar != null && avatar.ContentLength > 0)
                 {
-                    FileBase = model.Avatar,
-                    FileName = fileName,
-                    FilePath = FilePath.AvatarRelativePath
-                });
+                    var fileName = string.Format("{0}.{1}", Guid.NewGuid(), Path.GetFileName(avatar.FileName));
 
-                var file = new File
-                {
-                    Name = fileName,
-                    MimeType = model.Avatar.ContentType,
-                    Size = model.Avatar.ContentLength,
-                    RelativePath = FilePath.AvatarRelativePath + fileName,
-                    FileType = FileType.Avatar,
-                    CandidateId = candidate.Id,
-                    CreatedBy = User.Identity.GetUserId(),
-                    UpdatedBy = User.Identity.GetUserId()
-                };
+                    FileHelper.UploadFile(new UploadConfig
+                    {
+                        FileBase = avatar,
+                        FileName = fileName,
+                        FilePath = FilePath.AvatarRelativePath
+                    });
 
-                _fileRepository.Insert(file);
-                _fileRepository.Save();
+                    var file = new File
+                    {
+                        Name = fileName,
+                        MimeType = avatar.ContentType,
+                        Size = avatar.ContentLength,
+                        RelativePath = FilePath.AvatarRelativePath + fileName,
+                        FileType = FileType.Avatar,
+                        CandidateId = candidate.Id,
+                        CreatedBy = User.Identity.GetUserId(),
+                        UpdatedBy = User.Identity.GetUserId()
+                    };
+
+                    _fileRepository.Insert(file);
+                    _fileRepository.Save();
+                }
             }
 
-            if (model.Resume != null && model.Resume.ContentLength > 0)
-            {
-                var fileName = string.Format("{0}.{1}", Guid.NewGuid(), Path.GetFileName(model.Resume.FileName));
-
-                FileHelper.UploadFile(new UploadConfig
-                {
-                    FileBase = model.Resume,
-                    FileName = fileName,
-                    FilePath = FilePath.ResumeRelativePath
-                });
-
-                var file = new File
-                {
-                    Name = fileName,
-                    MimeType = model.Resume.ContentType,
-                    Size = model.Resume.ContentLength,
-                    RelativePath = FilePath.ResumeRelativePath + fileName,
-                    FileType = FileType.Resume,
-                    CandidateId = candidate.Id,
-                    CreatedBy = User.Identity.GetUserId(),
-                    UpdatedBy = User.Identity.GetUserId()
-                };
-
-                _fileRepository.Insert(file);
-                _fileRepository.Save();
-            }
-
-            return Json(new { Succeeded = true });
+            return Json(candidate);
         }
 
         [HttpGet]
@@ -197,6 +180,42 @@ namespace RecruitmentManagementSystem.App.Controllers
             _candidateRepository.Save();
 
             return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public ActionResult UploadResume(CandidateFileUploadViewModel model)
+        {
+            if (model.File == null || model.File.ContentLength < 0)
+            {
+                Response.StatusCode = (int) HttpStatusCode.BadRequest;
+                return Json(null);
+            }
+
+            var fileName = string.Format("{0}.{1}", Guid.NewGuid(), Path.GetFileName(model.File.FileName));
+
+            FileHelper.UploadFile(new UploadConfig
+            {
+                FileBase = model.File,
+                FileName = fileName,
+                FilePath = FilePath.ResumeRelativePath
+            });
+
+            var file = new File
+            {
+                Name = fileName,
+                MimeType = model.File.ContentType,
+                Size = model.File.ContentLength,
+                RelativePath = FilePath.ResumeRelativePath + fileName,
+                FileType = FileType.Resume,
+                CandidateId = model.CandidateId,
+                CreatedBy = User.Identity.GetUserId(),
+                UpdatedBy = User.Identity.GetUserId()
+            };
+
+            _fileRepository.Insert(file);
+            _fileRepository.Save();
+
+            return Json(null);
         }
     }
 }
