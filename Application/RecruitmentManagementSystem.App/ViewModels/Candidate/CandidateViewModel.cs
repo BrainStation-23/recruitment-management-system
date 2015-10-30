@@ -37,5 +37,7 @@ namespace RecruitmentManagementSystem.App.ViewModels.Candidate
         public string Website { get; set; }
 
         public ICollection<EducationViewModel> Educations { get; set; }
+
+        public virtual ICollection<ExperienceViewModel> Experiences { get; set; }
     }
 }

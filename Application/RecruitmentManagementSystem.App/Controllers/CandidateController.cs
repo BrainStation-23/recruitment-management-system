@@ -20,13 +20,15 @@ namespace RecruitmentManagementSystem.App.Controllers
         private readonly ICandidateRepository _candidateRepository;
         private readonly IEducationRepository _educationRepository;
         private readonly IFileRepository _fileRepository;
+        private readonly IExperienceRepository _experienceRepository;
 
         public CandidateController(ICandidateRepository candidateRepository, IFileRepository fileRepository,
-            IEducationRepository educationRepository)
+            IEducationRepository educationRepository, IExperienceRepository experienceRepository)
         {
             _candidateRepository = candidateRepository;
             _fileRepository = fileRepository;
             _educationRepository = educationRepository;
+            _experienceRepository = experienceRepository;
         }
 
         public ActionResult Index()
@@ -81,6 +83,24 @@ namespace RecruitmentManagementSystem.App.Controllers
                 }
 
                 _educationRepository.Save();
+            }
+
+            if (model.Experiences != null)
+            {
+                foreach (var item in model.Experiences)
+                {
+                    _experienceRepository.Insert(new Experience
+                    {
+                        Organization = item.Organization,
+                        JobTitle = item.JobTitle,
+                        From = item.From,
+                        To = item.To,
+                        StillWorking = item.StillWorking,
+                        Description = item.Description,
+                        CandidateId = candidate.Id
+                    });
+                }
+                _experienceRepository.Save();
             }
 
             if (Request.Files != null && Request.Files.Count > 0)

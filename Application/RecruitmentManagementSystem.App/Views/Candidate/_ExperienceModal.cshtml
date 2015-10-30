@@ -1,0 +1,79 @@
+﻿<script type="text/ng-template" id="ExperienceModalContent.html">
+
+    <div class="modal-header">
+        <h3 class="modal-title">Add Experience</h3>
+    </div>
+
+    <div class="modal-body">
+
+        <form name="experience.form" novalidate>
+
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-xs-12 col-md-6">
+                        <div class="form-group">
+                            <label>Company Name</label>
+                            <input type="text" name="organization" ng-model="experience.organization" required class="form-control" />
+                            <div class="text-danger field-validation-error" ng-messages="experience.form.submitted && experience.form.organization.$error">
+                                <span ng-message="required">This field is required.</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-md-6">
+                        <div class="form-group">
+                            <label>Job Tittle</label>
+                            <input type="text" name="jobTitle" ng-model="experience.jobTitle" required class="form-control" />
+                            <div class="text-danger field-validation-error" ng-messages="experience.form.submitted && experience.form.jobTitle.$error">
+                                <span ng-message="required">This field is required.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-12 col-md-4">
+                        <div class="form-group">
+                            <label>From</label>
+                            <input type="date" name="from" ng-model="experience.from" required class="form-control" />
+                            <div class="text-danger field-validation-error" ng-messages="experience.form.submitted && experience.form.from.$error">
+                                <span ng-message="required">This field is required.</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-md-4">
+                        <div class="form-group">
+                            <label>To</label>
+                            <input type="date" name="to" ng-model="experience.to" ng-disabled="experience.stillWorking" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-md-4">
+                        <div class="form-group">
+                            <label class="checkbox" id="stillWorking">
+                                <input type="checkbox" name="stillWorking" value="stillWorking" id="stillWorking" ng-model="experience.stillWorking" class="checkbox">Present
+                            </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-12 col-md-12">
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea class="form-control" ng-model="experience.description" rows="6" ng-maxlength="1000"></textarea>
+                            <div class="text-danger field-validation-error" ng-messages="experience.form.submitted && experience.form.description.$error">
+                                <span ng-message="maxlength">This field length is too large.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="button" ng-click="experience.add()">Add</button>
+        <button class="btn btn-danger" type="button" ng-click="experience.cancel()">Cancel</button>
+    </div>
+
+</script>

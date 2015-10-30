@@ -226,6 +226,7 @@
     <Compile Include="ViewModels\Candidate\CandidateViewModel.cs" />
     <Compile Include="ViewModels\Account\ManageViewModels.cs" />
     <Compile Include="ViewModels\Candidate\EducationViewModel.cs" />
+    <Compile Include="ViewModels\Candidate\ExperienceViewModel.cs" />
     <Compile Include="ViewModels\Candidate\InstitutionViewModel.cs" />
     <Compile Include="ViewModels\Common\FileUploadViewModel.cs" />
     <Compile Include="ViewModels\Question\BaseQuestionViewModel.cs" />
@@ -378,6 +379,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Candidate\_EducationSection.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Candidate\_ExperienceSection.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Candidate\_ExperienceModal.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

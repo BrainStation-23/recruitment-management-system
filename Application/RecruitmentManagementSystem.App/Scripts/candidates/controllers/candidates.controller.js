@@ -6,8 +6,14 @@
 
         vm.educations = [];
 
+        vm.experiences = [];
+
         vm.discardEducation = function(index) {
             vm.educations.splice(index, 1);
+        };
+        
+        vm.discardExperience = function (index) {
+            vm.experiences.splice(index, 1);
         };
 
         vm.create = function() {
@@ -24,6 +30,7 @@
                 email: vm.email,
                 phoneNumber: vm.phoneNumber,
                 educations: vm.educations,
+                experiences: vm.experiences,
                 others: vm.others,
                 website: vm.website
             };
@@ -55,6 +62,20 @@
 
             modalInstance.result.then(function(row) {
                 vm.educations.push(row);
+            });
+        };
+        
+        vm.openExperienceModal = function () {
+            var modalInstance = $uibModal.open({
+                animation: true,
+                backdrop: "static",
+                templateUrl: "ExperienceModalContent.html",
+                controller: "ExperienceModalInstanceController",
+                controllerAs: "experience"
+            });
+
+            modalInstance.result.then(function (row) {
+                vm.experiences.push(row);
             });
         };
 
@@ -129,6 +150,32 @@ angular.module("candidates").controller("EducationModalInstanceController", [
         };
 
         vm.cancel = function() {
+            $uibModalInstance.dismiss("cancel");
+        };
+    }
+]);
+
+angular.module("candidates").controller("ExperienceModalInstanceController", [
+    "$http", "$uibModalInstance", function ($http, $uibModalInstance) {
+        var vm = this;
+
+        vm.add = function () {
+            vm.form.submitted = true;
+
+            if (vm.form.$valid) {
+                var experience = {
+                    organization: vm.organization,
+                    jobTitle: vm.jobTitle,
+                    from: vm.from,
+                    to: vm.to,
+                    stillWorking: vm.stillWorking,
+                    description: vm.description
+                };
+                $uibModalInstance.close(experience);
+            }
+        };
+
+        vm.cancel = function () {
             $uibModalInstance.dismiss("cancel");
         };
     }
