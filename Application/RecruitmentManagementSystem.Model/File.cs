@@ -6,10 +6,7 @@ namespace RecruitmentManagementSystem.Model
     {
         Avatar = 1,
         Resume = 2,
-        Document = 3,
-        Picture = 4,
-        Audio = 5,
-        Video = 6
+        Document = 3
     }
 
     public class File : BaseEntity

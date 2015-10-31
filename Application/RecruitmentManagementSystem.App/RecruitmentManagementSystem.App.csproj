@@ -45,8 +45,8 @@
       <HintPath>..\..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="AutoMapper, Version=4.1.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\AutoMapper.4.1.0\lib\net45\AutoMapper.dll</HintPath>
+    <Reference Include="AutoMapper, Version=4.1.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\AutoMapper.4.1.1\lib\net45\AutoMapper.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
@@ -243,6 +243,7 @@
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\candidates\controllers\candidates.controller.js" />
     <Content Include="Scripts\candidates\candidates.module.js" />
+    <Content Include="Scripts\candidates\controllers\candidates.experience.controller.js" />
     <Content Include="Scripts\core\config\config.js" />
     <Content Include="Scripts\core\config\init.js" />
     <Content Include="Scripts\core\core.module.js" />
@@ -251,6 +252,7 @@
     <Content Include="Scripts\questions\controllers\questions.controller.js" />
     <Content Include="Scripts\questions\questions.module.js" />
     <Content Include="Scripts\_references.js" />
+    <Content Include="Scripts\candidates\templates\experience-modal.html" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -375,16 +377,16 @@
     <Content Include="Views\Account\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Candidate\_EducationModal.cshtml" />
+    <Content Include="Scripts\candidates\templates\education-modal.html" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Candidate\_EducationSection.cshtml" />
+    <Content Include="Views\Candidate\_Education.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Candidate\_ExperienceSection.cshtml" />
+    <Content Include="Views\Candidate\_Experience.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Candidate\_ExperienceModal.cshtml" />
+    <Content Include="Scripts\candidates\controllers\candidates.education.controller.js" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

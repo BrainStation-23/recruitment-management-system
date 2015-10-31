@@ -162,7 +162,7 @@ namespace RecruitmentManagementSystem.App.Controllers
             {
                 var fileName = string.Format("{0}.{1}", Guid.NewGuid(), Path.GetFileName(model.Avatar.FileName));
 
-                FileHelper.UploadFile(new UploadConfig
+                FileHelper.SaveFile(new UploadConfig
                 {
                     FileBase = model.Avatar,
                     FileName = fileName,

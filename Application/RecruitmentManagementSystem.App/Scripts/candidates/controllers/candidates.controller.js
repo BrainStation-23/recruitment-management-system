@@ -11,8 +11,8 @@
         vm.discardEducation = function(index) {
             vm.educations.splice(index, 1);
         };
-        
-        vm.discardExperience = function (index) {
+
+        vm.discardExperience = function(index) {
             vm.experiences.splice(index, 1);
         };
 
@@ -32,18 +32,25 @@
                 educations: vm.educations,
                 experiences: vm.experiences,
                 others: vm.others,
-                website: vm.website
+                website: vm.website,
+                files: []
             };
 
-            var uploadConfig = {
-                url: "/Candidate/Create",
-                file: vm.avatar,
-                data: model
-            };
+            if (vm.avatar) {
+                model.files.push(vm.avatar);
+                model.avatarFileName = vm.avatar.name;
+            }
+
+            if (vm.resume) {
+                model.files.push(vm.resume);
+                model.resumeFileName = vm.resume.name;
+            }
 
             if (vm.form.$valid) {
-
-                fileService.postMultipartForm(uploadConfig).progress(function(evt) {
+                fileService.postMultipartForm({
+                    url: "/Candidate/Create",
+                    data: model
+                }).progress(function(evt) {
                     console.log("percent: " + parseInt(100.0 * evt.loaded / evt.total));
                 }).success(function(data) {
                     location.href = "/Candidate";
@@ -55,7 +62,7 @@
             var modalInstance = $uibModal.open({
                 animation: true,
                 backdrop: "static",
-                templateUrl: "EducationModalContent.html",
+                templateUrl: "/Scripts/candidates/templates/education-modal.html",
                 controller: "EducationModalInstanceController",
                 controllerAs: "education"
             });
@@ -64,22 +71,22 @@
                 vm.educations.push(row);
             });
         };
-        
-        vm.openExperienceModal = function () {
+
+        vm.openExperienceModal = function() {
             var modalInstance = $uibModal.open({
                 animation: true,
                 backdrop: "static",
-                templateUrl: "ExperienceModalContent.html",
+                templateUrl: "/Scripts/candidates/templates/experience-modal.html",
                 controller: "ExperienceModalInstanceController",
                 controllerAs: "experience"
             });
 
-            modalInstance.result.then(function (row) {
+            modalInstance.result.then(function(row) {
                 vm.experiences.push(row);
             });
         };
 
-        vm.attachPhoto = function(file) {
+        vm.renderPreview = function(file) {
             if (!file) {
                 return;
             }
@@ -109,74 +116,6 @@
                     })(fileReader);
                 }
             }
-        };
-
-        vm.attachResume = function(file) {
-            if (!file) {
-                return;
-            }
-
-            vm.resume = file;
-        };
-    }
-]);
-
-angular.module("candidates").controller("EducationModalInstanceController", [
-    "$http", "$uibModalInstance", function($http, $uibModalInstance) {
-        var vm = this;
-
-        vm.institutions = [];
-
-        $http.get("/Institution/").success(function(data) {
-            vm.institutions = data;
-        });
-
-        vm.add = function() {
-            vm.form.submitted = true;
-
-            if (vm.form.$valid) {
-                var education = {
-                    degree: vm.degree,
-                    fieldOfStudy: vm.fieldOfStudy,
-                    grade: vm.grade,
-                    institution: vm.institution,
-                    firstYear: vm.firstYear,
-                    lastYear: vm.lastYear,
-                    activites: vm.activites,
-                    description: vm.description
-                };
-                $uibModalInstance.close(education);
-            }
-        };
-
-        vm.cancel = function() {
-            $uibModalInstance.dismiss("cancel");
-        };
-    }
-]);
-
-angular.module("candidates").controller("ExperienceModalInstanceController", [
-    "$http", "$uibModalInstance", function ($http, $uibModalInstance) {
-        var vm = this;
-
-        vm.add = function () {
-            vm.form.submitted = true;
-
-            if (vm.form.$valid) {
-                var experience = {
-                    organization: vm.organization,
-                    jobTitle: vm.jobTitle,
-                    from: vm.from,
-                    to: vm.to,
-                    stillWorking: vm.stillWorking,
-                    description: vm.description
-                };
-                $uibModalInstance.close(experience);
-            }
-        };
-
-        vm.cancel = function () {
-            $uibModalInstance.dismiss("cancel");
         };
     }
 ]);

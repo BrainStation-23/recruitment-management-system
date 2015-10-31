@@ -6,11 +6,10 @@
 
             var fileReaderSupported = window.FileReader != null && (window.FileAPI == null || FileAPI.html5 != false);
 
-            var postMultipartForm = function (config) {
+            var postMultipartForm = function(config) {
                 return $upload.upload({
                     url: config.url,
                     method: config.method || "POST",
-                    file: config.file,
                     data: config.data
                 });
             };

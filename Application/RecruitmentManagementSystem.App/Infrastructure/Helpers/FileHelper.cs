@@ -14,7 +14,7 @@ namespace RecruitmentManagementSystem.App.Infrastructure.Helpers
 
     public class FileHelper
     {
-        public static void UploadFile(UploadConfig config)
+        public static void SaveFile(UploadConfig config)
         {
             if (string.IsNullOrEmpty(config.FileName))
             {

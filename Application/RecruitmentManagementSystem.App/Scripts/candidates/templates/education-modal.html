@@ -1,0 +1,121 @@
+﻿<div class="modal-header">
+    <h3 class="modal-title">Add Education</h3>
+</div>
+
+<div class="modal-body">
+
+    <form name="education.form" novalidate>
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-xs-12 col-md-6">
+                    <div class="form-group">
+                        <label>Degree</label>
+                        <input type="text" name="degree" ng-model="education.degree" required class="form-control" />
+                        <div class="text-danger field-validation-error" ng-messages="education.form.submitted && education.form.degree.$error">
+                            <span ng-message="required">This field is required.</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-6">
+                    <div class="form-group">
+                        <label>Field of Study</label>
+                        <input type="text" name="fieldOfStudy" ng-model="education.fieldOfStudy" required class="form-control" />
+                        <div class="text-danger field-validation-error" ng-messages="education.form.submitted && education.form.fieldOfStudy.$error">
+                            <span ng-message="required">This field is required.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-12 col-md-9">
+                    <div class="form-group">
+                        <label>Institution</label>
+                        <select name="institution" class="form-control" ng-model="education.institution" ng-options="option.Name for option in education.institutions" required>
+                            <option value="">Select One</option>
+                        </select>
+                        <div class="text-danger field-validation-error" ng-messages="education.form.submitted && education.form.institution.$error">
+                            <span ng-message="required">This field is required.</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-3">
+                    <div class="form-group">
+                        <label>Grade</label>
+                        <input type="text" name="grade" ng-model="education.grade" ng-pattern="/^(?=.+)(?:[1-9]\d*|0)?(?:\.\d+)?$/" class="form-control" />
+                        <div class="text-danger field-validation-error" ng-messages="education.form.submitted && education.form.grade.$error">
+                            <span ng-message="pattern">Please, enter a valid grade!</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-12 col-md-6">
+                    <div class="form-group">
+                        <label>From</label>
+                        <select name="firstYear" class="form-control" ng-model="education.firstYear" required>
+                            <option value="">Select Year</option>
+                            <option value="2005">2005</option>
+                            <option value="2007">2007</option>
+                            <option value="2008">2008</option>
+                            <option value="2009">2009</option>
+                            <option value="2010">2010</option>
+                            <option value="2011">2011</option>
+                        </select>
+                        <div class="text-danger field-validation-error" ng-messages="education.form.submitted && education.form.firstYear.$error">
+                            <span ng-message="required">This field is required.</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-6">
+                    <div class="form-group">
+                        <label>To</label>
+                        <select name="lastYear" class="form-control" ng-model="education.lastYear" required>
+                            <option value="">Select Year</option>
+                            <option value="2015">2015</option>
+                            <option value="2014">2014</option>
+                            <option value="2013">2013</option>
+                            <option value="2012">2012</option>
+                            <option value="2011">2011</option>
+                            <option value="2010">2010</option>
+                        </select>
+                        <div class="text-danger field-validation-error" ng-messages="education.form.submitted && education.form.lastYear.$error">
+                            <span ng-message="required">This field is required.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-12 col-md-12">
+                    <div class="form-group">
+                        <label>Activites (Optional)</label>
+                        <textarea class="form-control" ng-model="education.activites" rows="6" ng-maxlength="1500"></textarea>
+                        <div class="text-danger field-validation-error" ng-messages="education.form.submitted && education.form.activites.$error">
+                            <span ng-message="maxlength">This field length is too large.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-12 col-md-12">
+                    <div class="form-group">
+                        <label>Description (Optional)</label>
+                        <textarea class="form-control" ng-model="education.description" rows="6" ng-maxlength="2000"></textarea>
+                        <div class="text-danger field-validation-error" ng-messages="education.form.submitted && education.form.description.$error">
+                            <span ng-message="maxlength">This field length is too large.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="modal-footer">
+    <button class="btn btn-primary" type="button" ng-click="education.add()">Add</button>
+    <button class="btn btn-danger" type="button" ng-click="education.cancel()">Cancel</button>
+</div>

@@ -85,21 +85,21 @@
                     <div class="form-group">
                         <label class="control-label col-md-2">Resume</label>
                         <div class="col-md-6">
-                            <input type="file" title="Select Resume" ngf-pattern="'.pdf/*'" ngf-select ngf-change="candidate.attachResume($file)" />
+                            <input type="file" title="Select Resume" ng-model="candidate.resume" ngf-select accept=".pdf,.doc,.docx" />
                         </div>
                     </div>
                 </div>
                 <div class="col-xs-12 col-md-2">
                     <img src="~/Content/Images/default-avatar.jpg" ng-src="{{ candidate.avatarPreview }}" alt="default avatar" class="img-thumbnail" style="height: 155px; width: 155px;">
-                    <input type="file" title="Select Photo" ngf-pattern="'image/*'" ngf-select ngf-change="candidate.attachPhoto($file)" />
+                    <input type="file" title="Select Photo" accept="image/*" ngf-fix-orientation="false" ngf-select="candidate.renderPreview($file)" />
                 </div>
             </div>
 
             <hr/>
 
-            @Html.Partial("_EducationSection")
-            
-            @Html.Partial("_ExperienceSection")
+            @Html.Partial("_Education")
+
+            @Html.Partial("_Experience")
 
             <hr/>
 
@@ -111,7 +111,3 @@
         </div>
     </form>
 </div>
-
-@Html.Partial("_EducationModal")
-
-@Html.Partial("_ExperienceModal")

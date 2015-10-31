@@ -28,7 +28,9 @@ namespace RecruitmentManagementSystem.App
                 "~/Scripts/questions/questions.module.js",
                 "~/Scripts/questions/controllers/questions.controller.js",
                 "~/Scripts/candidates/candidates.module.js",
-                "~/Scripts/candidates/controllers/candidates.controller.js"));
+                "~/Scripts/candidates/controllers/candidates.controller.js",
+                "~/Scripts/candidates/controllers/candidates.education.controller.js",
+                "~/Scripts/candidates/controllers/candidates.experience.controller.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                 "~/Vendors/bower_components/bootstrap/dist/css/bootstrap.css",

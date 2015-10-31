@@ -3,7 +3,9 @@
     No education added yet.
 </div>
 
-<button type="button" class="btn btn-default" ng-click="candidate.openEducationModal()">Add Education</button>
+<p>
+    <button type="button" class="btn btn-default" ng-click="candidate.openEducationModal()">Add Education</button>
+</p>
 
 <div class="table-responsive" ng-show="candidate.educations && candidate.educations.length">
     <table class="table">
@@ -34,7 +36,7 @@
                 <div ng-bind="education.description"></div>
             </td>
             <td>
-                <div ng-bind="education.lastYear - education.firstYear" ></div>
+                <div>{{ education.lastYear }} - {{ education.firstYear }}</div>
             </td>
             <td>
                 <div ng-bind="education.institution.Name"></div>
