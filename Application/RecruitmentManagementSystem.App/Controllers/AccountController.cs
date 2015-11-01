@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -6,9 +8,14 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+using RecruitmentManagementSystem.App.Infrastructure.Constants;
+using RecruitmentManagementSystem.App.Infrastructure.Helpers;
 using RecruitmentManagementSystem.App.ViewModels.Account;
 using RecruitmentManagementSystem.Data.DbContext;
+using RecruitmentManagementSystem.Data.Interfaces;
+using RecruitmentManagementSystem.Data.Repositories;
 using RecruitmentManagementSystem.Model;
+using File = RecruitmentManagementSystem.Model.File;
 
 namespace RecruitmentManagementSystem.App.Controllers
 {
@@ -17,15 +24,19 @@ namespace RecruitmentManagementSystem.App.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private readonly IFileRepository _fileRepository;
 
         public AccountController()
         {
+            _fileRepository = new FileRepository();
         }
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager,
+            IFileRepository fileRepository)
         {
             UserManager = userManager;
             SignInManager = signInManager;
+            _fileRepository = fileRepository;
         }
 
         public ApplicationSignInManager SignInManager
@@ -38,6 +49,11 @@ namespace RecruitmentManagementSystem.App.Controllers
         {
             get { return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>(); }
             private set { _userManager = value; }
+        }
+
+        public ActionResult Index()
+        {
+            return View();
         }
 
         //
@@ -127,7 +143,6 @@ namespace RecruitmentManagementSystem.App.Controllers
 
         //
         // GET: /Account/Register
-        [AllowAnonymous]
         public ActionResult Register()
         {
             return View();
@@ -136,11 +151,39 @@ namespace RecruitmentManagementSystem.App.Controllers
         //
         // POST: /Account/Register
         [HttpPost]
-        [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
         {
             if (!ModelState.IsValid) return View(model);
+
+            File file = null;
+
+            if (model.Avatar != null && model.Avatar.ContentLength > 0)
+            {
+                var fileName = string.Format("{0}.{1}", Guid.NewGuid(), Path.GetFileName(model.Avatar.FileName));
+
+                FileHelper.SaveFile(new UploadConfig
+                {
+                    FileBase = model.Avatar,
+                    FileName = fileName,
+                    FilePath = FilePath.AvatarRelativePath
+                });
+
+                file = new File
+                {
+                    Name = fileName,
+                    MimeType = model.Avatar.ContentType,
+                    Size = model.Avatar.ContentLength,
+                    RelativePath = FilePath.AvatarRelativePath + fileName,
+                    FileType = FileType.Avatar,
+                    CreatedBy = User.Identity.GetUserId(),
+                    UpdatedBy = User.Identity.GetUserId()
+                };
+
+                _fileRepository.Insert(file);
+                _fileRepository.Save();
+            }
+
             var user = new ApplicationUser
             {
                 UserName = model.Email,
@@ -149,18 +192,23 @@ namespace RecruitmentManagementSystem.App.Controllers
                 LastName = model.LastName,
                 PhoneNumber = model.PhoneNumber
             };
+
+            if (file != null)
+            {
+                user.AvatarId = file.Id;
+            }
+
             var result = await UserManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
             {
                 var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(new ApplicationDbContext()));
-                var admin = new IdentityRole {Name = "Admin"};
-                if (!roleManager.RoleExists("Admin"))
-                {
-                    roleManager.Create(admin);
-                    UserManager.AddToRole(user.Id, "Admin");
-                }
+                var role = new IdentityRole {Name = model.Role};
 
-                await SignInManager.SignInAsync(user, false, false);
+                if (!roleManager.RoleExists(model.Role))
+                {
+                    roleManager.Create(role);
+                    UserManager.AddToRole(user.Id, model.Role);
+                }
 
                 // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                 // Send an email with this link
@@ -168,7 +216,7 @@ namespace RecruitmentManagementSystem.App.Controllers
                 // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                 // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
                 // if role = canidate view ()
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Account");
             }
             AddErrors(result);
 

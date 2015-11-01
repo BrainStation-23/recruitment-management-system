@@ -39,7 +39,7 @@ namespace RecruitmentManagementSystem.App.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-            var model = _questionRepository.FindAll().Project().To<QuestionViewModel>();
+            var model = _questionRepository.FindAll().ProjectTo<QuestionViewModel>();
 
             return View(model);
         }
@@ -48,7 +48,7 @@ namespace RecruitmentManagementSystem.App.Controllers
         public ActionResult Details(int? id)
         {
             var viewModel =
-                _questionRepository.FindAll().Project().To<QuestionViewModel>().SingleOrDefault(x => x.Id == id);
+                _questionRepository.FindAll().ProjectTo<QuestionViewModel>().SingleOrDefault(x => x.Id == id);
 
             if (Request.IsAjaxRequest())
             {
@@ -58,41 +58,47 @@ namespace RecruitmentManagementSystem.App.Controllers
             return View(viewModel);
         }
 
+        [HttpGet]
         public ActionResult Create()
         {
             return View();
         }
 
         [HttpPost]
-        public ActionResult Create(QuestionCreateViewModel question)
+        public ActionResult Create(QuestionCreateViewModel viewModel)
         {
             if (!ModelState.IsValid)
             {
                 Response.StatusCode = (int) HttpStatusCode.BadRequest;
-                return Json(ModelState);
+
+                // TODO: This will be refactored later.
+                return Json(null);
             }
 
-            _questionRepository.Insert(new Question
+            var question = new Question
             {
-                Text = question.Text,
-                QuestionType = question.QuestionType,
-                Answer = question.Answer,
-                Notes = question.Notes,
-                CategoryId = question.CategoryId,
+                Text = viewModel.Text,
+                QuestionType = viewModel.QuestionType,
+                Answer = viewModel.Answer,
+                Notes = viewModel.Notes,
+                CategoryId = viewModel.CategoryId,
                 CreatedBy = User.Identity.GetUserId(),
                 UpdatedBy = User.Identity.GetUserId()
-            });
+            };
+
+            _questionRepository.Insert(question);
 
             _questionRepository.Save();
 
-            if (question.QuestionType != QuestionType.MCQ) return Json(null);
+            if (viewModel.QuestionType != QuestionType.MCQ) return Json(null);
 
-            foreach (var item in question.Choices)
+            foreach (var item in viewModel.Choices)
             {
                 _choiceRepository.Insert(new Choice
                 {
                     Text = item.Text,
-                    IsValid = item.IsValid
+                    IsValid = item.IsValid,
+                    QuestionId = question.Id
                 });
             }
 
@@ -121,6 +127,7 @@ namespace RecruitmentManagementSystem.App.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpGet]
         public ActionResult Delete(int? id)
         {
             var question = _questionRepository.Find(x => x.Id == id);

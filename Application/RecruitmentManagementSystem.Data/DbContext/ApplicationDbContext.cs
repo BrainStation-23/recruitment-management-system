@@ -10,6 +10,7 @@ namespace RecruitmentManagementSystem.Data.DbContext
         public ApplicationDbContext()
             : base(WebConfigurationManager.ConnectionStrings["DbConnection"].ConnectionString, false)
         {
+            Configuration.LazyLoadingEnabled = false;
         }
 
         public static ApplicationDbContext Create()

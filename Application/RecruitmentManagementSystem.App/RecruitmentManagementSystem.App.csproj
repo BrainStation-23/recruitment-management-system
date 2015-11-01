@@ -45,8 +45,8 @@
       <HintPath>..\..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="AutoMapper, Version=4.0.4.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\AutoMapper.4.0.4\lib\net45\AutoMapper.dll</HintPath>
+    <Reference Include="AutoMapper, Version=4.1.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\AutoMapper.4.1.1\lib\net45\AutoMapper.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
@@ -199,12 +199,15 @@
     <Compile Include="Controllers\CandidateController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\InstitutionController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\QuestionCategoryController.cs" />
     <Compile Include="Controllers\QuestionController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Infrastructure\Constants\FilePath.cs" />
+    <Compile Include="Infrastructure\Helpers\FileHelper.cs" />
     <Compile Include="Infrastructure\Mappings\IHaveCustomMappings.cs" />
     <Compile Include="Infrastructure\Mappings\IMapFrom.cs" />
     <Compile Include="Infrastructure\Tasks\IRunAfterEachRequest.cs" />
@@ -221,6 +224,9 @@
     <Compile Include="ViewModels\Account\ApplicationUserViewModel.cs" />
     <Compile Include="ViewModels\Candidate\CandidateViewModel.cs" />
     <Compile Include="ViewModels\Account\ManageViewModels.cs" />
+    <Compile Include="ViewModels\Candidate\EducationViewModel.cs" />
+    <Compile Include="ViewModels\Candidate\ExperienceViewModel.cs" />
+    <Compile Include="ViewModels\Candidate\InstitutionViewModel.cs" />
     <Compile Include="ViewModels\Question\BaseQuestionViewModel.cs" />
     <Compile Include="ViewModels\Question\QuestionCreateViewModel.cs" />
     <Compile Include="ViewModels\Question\QuestionEditViewModel.cs" />
@@ -229,14 +235,22 @@
     <Compile Include="ViewModels\Question\QuestionCategoryViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Images\default-avatar.jpg" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Scripts\candidates\controllers\candidates.controller.js" />
+    <Content Include="Scripts\candidates\candidates.module.js" />
+    <Content Include="Scripts\candidates\controllers\candidates.experience.controller.js" />
     <Content Include="Scripts\core\config\config.js" />
     <Content Include="Scripts\core\config\init.js" />
+    <Content Include="Scripts\core\core.module.js" />
+    <Content Include="Scripts\core\services\core.file.service.js" />
+    <Content Include="Scripts\core\services\core.notifier.service.js" />
     <Content Include="Scripts\questions\controllers\questions.controller.js" />
     <Content Include="Scripts\questions\questions.module.js" />
     <Content Include="Scripts\_references.js" />
+    <Content Include="Scripts\candidates\templates\experience-modal.html" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -355,6 +369,21 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Question\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Account\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Scripts\candidates\templates\education-modal.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Candidate\_Education.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Candidate\_Experience.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Scripts\candidates\controllers\candidates.education.controller.js" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

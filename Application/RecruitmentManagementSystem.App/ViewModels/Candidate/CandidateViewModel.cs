@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using RecruitmentManagementSystem.App.Infrastructure.Mappings;
-using RecruitmentManagementSystem.Model;
 
 namespace RecruitmentManagementSystem.App.ViewModels.Candidate
 {
@@ -23,13 +23,12 @@ namespace RecruitmentManagementSystem.App.ViewModels.Candidate
         [StringLength(50, ErrorMessage = "The {0} must be at most {1} characters long.")]
         public string Email { get; set; }
 
+        [Required]
         [Display(Name = "Phone Number")]
         public string PhoneNumber { get; set; }
 
-        [Display(Name = "Avatar")]
-        public File Avatar { get; set; }
-
         [Display(Name = "Others")]
+        [DataType(DataType.MultilineText)]
         [StringLength(3000, ErrorMessage = "The {0} must be at most {1} characters long.")]
         public string Others { get; set; }
 
@@ -37,5 +36,15 @@ namespace RecruitmentManagementSystem.App.ViewModels.Candidate
         [Display(Name = "Website")]
         [StringLength(50, ErrorMessage = "The {0} must be at most {1} characters long.")]
         public string Website { get; set; }
+
+        public ICollection<EducationViewModel> Educations { get; set; }
+
+        public virtual ICollection<ExperienceViewModel> Experiences { get; set; }
+
+        public string AvatarFileName { get; set; }
+
+        public string ResumeFileName { get; set; }
+
+        public IList<string> DocumentFileNames { get; set; }
     }
 }

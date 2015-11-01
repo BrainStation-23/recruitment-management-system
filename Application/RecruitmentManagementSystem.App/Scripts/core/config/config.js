@@ -2,7 +2,7 @@
 
 var ApplicationConfiguration = (function() {
     var applicationModuleName = "rms";
-    var applicationModuleVendorDependencies = ["ui.bootstrap", "ngMessages"];
+    var applicationModuleVendorDependencies = ["ui.bootstrap", "ngMessages", "ngFileUpload"];
 
     var registerModule = function(moduleName, dependencies) {
         angular.module(moduleName, dependencies || []);

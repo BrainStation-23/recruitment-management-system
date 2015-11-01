@@ -25,20 +25,41 @@ namespace RecruitmentManagementSystem.App
                     SeedQuestionCategory(dbContext);
                 }
 
+                if (!dbContext.Institutions.Any())
+                {
+                    SeedInstitution(dbContext);
+                }
+
                 dbContext.SaveChanges();
             }
         }
 
         private static void SeedApplicationUser(DbContext dbContext)
         {
-            const string password = "HakunaMatata23";
+            const string email = "admin-rms@bs-23.com";
+            const string password = "HakunaMatata-23";
 
             var userManager = new ApplicationUserManager(new UserStore<ApplicationUser>(dbContext));
 
+            userManager.UserValidator = new UserValidator<ApplicationUser>(userManager)
+            {
+                AllowOnlyAlphanumericUserNames = false,
+                RequireUniqueEmail = true
+            };
+
+            userManager.PasswordValidator = new PasswordValidator
+            {
+                RequiredLength = 6,
+                RequireNonLetterOrDigit = true,
+                RequireDigit = true,
+                RequireLowercase = true,
+                RequireUppercase = true,
+            };
+
             var user = new ApplicationUser
             {
-                Email = "admin-rms@bs-23.com",
-                UserName = "admin-rms@bs-23.com",
+                Email = email,
+                UserName = email,
                 FirstName = "John",
                 LastName = "Doe"
             };
@@ -71,6 +92,68 @@ namespace RecruitmentManagementSystem.App
                     Description = "This section contains questions related to database."
                 }
             }.ForEach(category => dbContext.QuestionCategories.Add(category));
+        }
+
+        private static void SeedInstitution(ApplicationDbContext dbContext)
+        {
+            new List<Institution>
+            {
+                new Institution
+                {
+                    Name = "Ahsanullah University of Science & Technology",
+                    City = "Dhaka"
+                },
+                new Institution
+                {
+                    Name = "American International University Bangladesh",
+                    City = "Dhaka"
+                },
+                new Institution
+                {
+                    Name = "Bangladesh University of Engineering and Technology",
+                    City = "Dhaka",
+                },
+                new Institution
+                {
+                    Name = "BRAC University",
+                    City = "Dhaka"
+                },
+                new Institution
+                {
+                    Name = "Chittagong University of Engineering and Technology",
+                    City = "Chittagong"
+                },
+                new Institution
+                {
+                    Name = "Dhaka University",
+                    City = "Dhaka"
+                },
+                new Institution
+                {
+                    Name = "Dhaka University of Engineering & Technology",
+                    City = "Gazipur"
+                },
+                new Institution
+                {
+                    Name = "East West University",
+                    City = "Dhaka"
+                },
+                new Institution
+                {
+                    Name = "North South University",
+                    City = "Dhaka"
+                },
+                new Institution
+                {
+                    Name = "Shahjalal University of Science & Technology",
+                    City = "Sylhet"
+                },
+                new Institution
+                {
+                    Name = "Stamford University Bangladesh",
+                    City = "Dhaka"
+                }
+            }.ForEach(institution => dbContext.Institutions.Add(institution));
         }
     }
 }
