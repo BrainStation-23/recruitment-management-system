@@ -11,13 +11,12 @@
     <table class="table">
         <tr>
             <th>Company Name</th>
-            <th>Job Tittle</th>
-            <th>From</th>
-            <th>To</th>
+            <th>Job Title</th>
+            <th>Time Duration</th>
             <th>Description</th>
             <th></th>
         </tr>
-        <tr ng-repeat="experience in candidate.experiences track by $index">
+        <tr ng-repeat="experience in candidate.experiences">
             <td>
                 <div ng-bind="experience.organization"></div>
             </td>
@@ -25,16 +24,18 @@
                 <div ng-bind="experience.jobTitle"></div>
             </td>
             <td>
-                <div ng-bind="experience.from | date : format : timezone"></div>
-            </td>
-            <td>
-                <div ng-bind="(experience.stillWorking) ? (experience.to | date : format : timezone) : experience.stillWorking"></div>
+                <div>
+                    {{ experience.startDate | date : 'MMM yyyy' }} - {{ experience.present ? 'Present' : (experience.endDate | date : 'MMM yyyy') }}
+                </div>
             </td>
             <td>
                 <div ng-bind="experience.description"></div>
             <td>
+                <button type="button" class="btn btn-success" ng-click="candidate.openExperienceModal(experience)">
+                    <i class="fa fa-edit fa-lg"></i>
+                </button>
                 <button type="button" class="btn btn-danger" ng-click="candidate.discardExperience($index)">
-                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                    <i class="fa fa-trash fa-lg"></i>
                 </button>
             </td>
         </tr>

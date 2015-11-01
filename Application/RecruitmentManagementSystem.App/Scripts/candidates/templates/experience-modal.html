@@ -19,7 +19,7 @@
                 </div>
                 <div class="col-xs-12 col-md-6">
                     <div class="form-group">
-                        <label>Job Tittle</label>
+                        <label>Job Title</label>
                         <input type="text" name="jobTitle" ng-model="experience.jobTitle" required class="form-control" />
                         <div class="text-danger field-validation-error" ng-messages="experience.form.submitted && experience.form.jobTitle.$error">
                             <span ng-message="required">This field is required.</span>
@@ -29,26 +29,58 @@
             </div>
 
             <div class="row">
-                <div class="col-xs-12 col-md-4">
+                
+                <div class="col-xs-12">
+
                     <div class="form-group">
-                        <label>From</label>
-                        <input type="date" name="from" ng-model="experience.from" required class="form-control" />
-                        <div class="text-danger field-validation-error" ng-messages="experience.form.submitted && experience.form.from.$error">
-                            <span ng-message="required">This field is required.</span>
+                        <label>Time Period</label>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-5">
+                            <div class="input-group">
+                                <input type="date" name="startDate" class="form-control" placeholder="Select date" required
+                                       ng-model="experience.startDate"
+                                       uib-datepicker-popup="dd-MMMM-yyyy"
+                                       is-open="experience.isStartDateCalendarOpened">
+                                <div class="input-group-btn">
+                                    <button type="button" class="btn btn-default" ng-click="experience.isStartDateCalendarOpened = true">
+                                        <i class="fa fa-calendar fa-lg"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="text-danger field-validation-error" ng-messages="experience.form.submitted && experience.form.startDate.$error">
+                                <span ng-message="required">This field is required.</span>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-1">To</div>
+
+                        <div class="col-xs-5">
+                            <div class="input-group">
+                                <input type="date" name="endDate" class="form-control" placeholder="Select date"
+                                       ng-model="experience.endDate"
+                                       ng-disabled="experience.present"
+                                       ng-required="!experience.present"
+                                       uib-datepicker-popup="dd-MMMM-yyyy"
+                                       is-open="experience.isEndDateCalendarOpened">
+                                <div class="input-group-btn">
+                                    <button type="button" class="btn btn-default" ng-click="experience.isEndDateCalendarOpened = true">
+                                        <i class="fa fa-calendar fa-lg"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="text-danger field-validation-error" ng-messages="experience.form.submitted && experience.form.endDate.$error">
+                                <span ng-message="required">This field is required.</span>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-xs-12 col-md-4">
-                    <div class="form-group">
-                        <label>To</label>
-                        <input type="date" name="to" ng-model="experience.to" ng-disabled="experience.stillWorking" class="form-control" />
-                    </div>
-                </div>
-                <div class="col-xs-12 col-md-4">
-                    <div class="form-group">
-                        <label class="checkbox" id="stillWorking">
-                            <input type="checkbox" name="stillWorking" value="stillWorking" id="stillWorking" ng-model="experience.stillWorking" class="checkbox">Present
-                        </label>
+
+                    <div class="row">
+                        <div class="col-xs-offset-6 col-xs-4">
+                            <input type="checkbox" name="present" ng-value="true" ng-model="experience.present" class="checkbox" style="margin-top: 10px; display: inline-block;">
+                            Currently Present
+                        </div>
                     </div>
                 </div>
             </div>
@@ -64,11 +96,23 @@
                     </div>
                 </div>
             </div>
+
+            <div class="row">
+                <div class="col-xs-12 col-md-12">
+                    <div class="form-group">
+                        <label>Notes</label>
+                        <textarea class="form-control" ng-model="experience.notes" rows="6" ng-maxlength="1000"></textarea>
+                        <div class="text-danger field-validation-error" ng-messages="experience.form.submitted && experience.form.notes.$error">
+                            <span ng-message="maxlength">This field length is too large.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </form>
 </div>
 
 <div class="modal-footer">
-    <button class="btn btn-primary" type="button" ng-click="experience.add()">Add</button>
+    <button class="btn btn-primary" type="button" ng-click="experience.save()">Save</button>
     <button class="btn btn-danger" type="button" ng-click="experience.cancel()">Cancel</button>
 </div>

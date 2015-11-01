@@ -45,44 +45,64 @@
                         <label>Grade</label>
                         <input type="text" name="grade" ng-model="education.grade" ng-pattern="/^(?=.+)(?:[1-9]\d*|0)?(?:\.\d+)?$/" class="form-control" />
                         <div class="text-danger field-validation-error" ng-messages="education.form.submitted && education.form.grade.$error">
-                            <span ng-message="pattern">Please, enter a valid grade!</span>
+                            <span ng-message="pattern">This is not a valid grade.</span>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="row">
-                <div class="col-xs-12 col-md-6">
+
+                <div class="col-xs-12">
+
                     <div class="form-group">
-                        <label>From</label>
-                        <select name="firstYear" class="form-control" ng-model="education.firstYear" required>
-                            <option value="">Select Year</option>
-                            <option value="2005">2005</option>
-                            <option value="2007">2007</option>
-                            <option value="2008">2008</option>
-                            <option value="2009">2009</option>
-                            <option value="2010">2010</option>
-                            <option value="2011">2011</option>
-                        </select>
-                        <div class="text-danger field-validation-error" ng-messages="education.form.submitted && education.form.firstYear.$error">
-                            <span ng-message="required">This field is required.</span>
+                        <label>Time Period</label>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-5">
+                            <div class="input-group">
+                                <input type="date" name="startDate" class="form-control" placeholder="Select date" required
+                                       ng-model="education.startDate"
+                                       uib-datepicker-popup="dd-MMMM-yyyy"
+                                       is-open="education.isStartDateCalendarOpened">
+                                <div class="input-group-btn">
+                                    <button type="button" class="btn btn-default" ng-click="education.isStartDateCalendarOpened = true">
+                                        <i class="fa fa-calendar fa-lg"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="text-danger field-validation-error" ng-messages="education.form.submitted && education.form.startDate.$error">
+                                <span ng-message="required">This field is required.</span>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-1">To</div>
+
+                        <div class="col-xs-5">
+                            <div class="input-group">
+                                <input type="date" name="endDate" class="form-control" placeholder="Select date"
+                                       ng-model="education.endDate"
+                                       ng-disabled="education.present"
+                                       ng-required="!education.present"
+                                       uib-datepicker-popup="dd-MMMM-yyyy"
+                                       is-open="education.isEndDateCalendarOpened">
+                                <div class="input-group-btn">
+                                    <button type="button" class="btn btn-default" ng-click="education.isEndDateCalendarOpened = true">
+                                        <i class="fa fa-calendar fa-lg"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="text-danger field-validation-error" ng-messages="education.form.submitted && education.form.endDate.$error">
+                                <span ng-message="required">This field is required.</span>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-xs-12 col-md-6">
-                    <div class="form-group">
-                        <label>To</label>
-                        <select name="lastYear" class="form-control" ng-model="education.lastYear" required>
-                            <option value="">Select Year</option>
-                            <option value="2015">2015</option>
-                            <option value="2014">2014</option>
-                            <option value="2013">2013</option>
-                            <option value="2012">2012</option>
-                            <option value="2011">2011</option>
-                            <option value="2010">2010</option>
-                        </select>
-                        <div class="text-danger field-validation-error" ng-messages="education.form.submitted && education.form.lastYear.$error">
-                            <span ng-message="required">This field is required.</span>
+
+                    <div class="row">
+                        <div class="col-xs-offset-6 col-xs-4">
+                            <input type="checkbox" name="present" ng-value="true" ng-model="education.present" class="checkbox" style="margin-top: 10px; display: inline-block;">
+                            Still Continuing
                         </div>
                     </div>
                 </div>
@@ -103,9 +123,9 @@
             <div class="row">
                 <div class="col-xs-12 col-md-12">
                     <div class="form-group">
-                        <label>Description (Optional)</label>
-                        <textarea class="form-control" ng-model="education.description" rows="6" ng-maxlength="2000"></textarea>
-                        <div class="text-danger field-validation-error" ng-messages="education.form.submitted && education.form.description.$error">
+                        <label>Notes (Optional)</label>
+                        <textarea class="form-control" ng-model="education.notes" rows="6" ng-maxlength="2000"></textarea>
+                        <div class="text-danger field-validation-error" ng-messages="education.form.submitted && education.form.notes.$error">
                             <span ng-message="maxlength">This field length is too large.</span>
                         </div>
                     </div>
@@ -116,6 +136,6 @@
 </div>
 
 <div class="modal-footer">
-    <button class="btn btn-primary" type="button" ng-click="education.add()">Add</button>
+    <button class="btn btn-primary" type="button" ng-click="education.save()">Save</button>
     <button class="btn btn-danger" type="button" ng-click="education.cancel()">Cancel</button>
 </div>

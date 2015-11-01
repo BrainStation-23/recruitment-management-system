@@ -54,8 +54,9 @@
                     <div class="form-group">
                         <label class="control-label col-md-2">Phone Number</label>
                         <div class="col-md-6">
-                            <input type="text" name="phoneNumber" ng-model="candidate.phoneNumber" ng-pattern="/^\(?(\d{3})\)?[ .-]?(\d{3})[ .-]?(\d{4})$/" class="form-control"/>
+                            <input type="text" name="phoneNumber" ng-model="candidate.phoneNumber" ng-pattern="/^\(?(\d{3})\)?[ .-]?(\d{3})[ .-]?(\d{4})$/" required class="form-control"/>
                             <div class="text-danger field-validation-error" ng-messages="candidate.form.submitted && candidate.form.phoneNumber.$error">
+                                <span ng-message="required">This field is required.</span>
                                 <span ng-message="pattern">This is not a valid phone number.</span>
                             </div>
                         </div>
@@ -85,10 +86,11 @@
                     <div class="form-group">
                         <label class="control-label col-md-2">Resume</label>
                         <div class="col-md-6">
-                            <input type="file" title="Select Resume" ng-model="candidate.resume" ngf-select accept=".pdf,.doc,.docx" />
+                            <input type="file" title="Select Resume" ng-model="candidate.resume" ngf-select accept=".pdf,.doc,.docx"/>
                         </div>
                     </div>
                 </div>
+
                 <div class="col-xs-12 col-md-2">
                     <img src="~/Content/Images/default-avatar.jpg" ng-src="{{ candidate.avatarPreview }}" alt="default avatar" class="img-thumbnail" style="height: 155px; width: 155px;">
                     <input type="file" title="Select Photo" accept="image/*" ngf-fix-orientation="false" ngf-select="candidate.renderPreview($file)" />

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using RecruitmentManagementSystem.App.Infrastructure.Mappings;
 
 namespace RecruitmentManagementSystem.App.ViewModels.Candidate
@@ -21,13 +22,15 @@ namespace RecruitmentManagementSystem.App.ViewModels.Candidate
         public string Activites { get; set; }
 
         [StringLength(2000, ErrorMessage = "The {0} must be at most {1} characters long.")]
-        public string Description { get; set; }
+        public string Notes { get; set; }
 
         [Required]
-        public int FirstYear { get; set; }
+        public DateTime StartDate { get; set; }
 
-        [Required]
-        public int LastYear { get; set; }
+        public DateTime? EndDate { get; set; }
+
+        [Display(Name = "Currently Present")]
+        public bool CurrentlyPresent { get; set; }
 
         [Required]
         [Display(Name = "Institution")]

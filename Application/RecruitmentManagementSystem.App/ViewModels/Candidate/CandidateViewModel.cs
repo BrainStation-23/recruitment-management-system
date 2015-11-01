@@ -23,6 +23,7 @@ namespace RecruitmentManagementSystem.App.ViewModels.Candidate
         [StringLength(50, ErrorMessage = "The {0} must be at most {1} characters long.")]
         public string Email { get; set; }
 
+        [Required]
         [Display(Name = "Phone Number")]
         public string PhoneNumber { get; set; }
 

@@ -7,13 +7,13 @@ namespace RecruitmentManagementSystem.Data.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.3-40302")]
-    public sealed partial class RefactorEntityModels : IMigrationMetadata
+    public sealed partial class RefactorDomainModels : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(RefactorEntityModels));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(RefactorDomainModels));
         
         string IMigrationMetadata.Id
         {
-            get { return "201510232136335_RefactorEntityModels"; }
+            get { return "201511011959079_RefactorDomainModels"; }
         }
         
         string IMigrationMetadata.Source

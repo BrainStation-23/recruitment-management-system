@@ -16,11 +16,12 @@ namespace RecruitmentManagementSystem.Model
         [StringLength(30, ErrorMessage = "The {0} must be at most {1} characters long.")]
         public string LastName { get; set; }
 
-        [Index("EmailIndex", IsUnique = true)]
         [EmailAddress]
+        [Index("EmailIndex", IsUnique = true)]
         [StringLength(50, ErrorMessage = "The {0} must be at most {1} characters long.")]
         public string Email { get; set; }
 
+        [Required]
         public string PhoneNumber { get; set; }
 
         [DataType(DataType.MultilineText)]

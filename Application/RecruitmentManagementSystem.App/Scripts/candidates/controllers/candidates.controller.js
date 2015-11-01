@@ -58,31 +58,53 @@
             }
         };
 
-        vm.openEducationModal = function() {
+        vm.openEducationModal = function(data) {
             var modalInstance = $uibModal.open({
                 animation: true,
                 backdrop: "static",
                 templateUrl: "/Scripts/candidates/templates/education-modal.html",
-                controller: "EducationModalInstanceController",
-                controllerAs: "education"
+                controller: "EducationModalController",
+                controllerAs: "education",
+                resolve: {
+                    data: function () {
+                        return data;
+                    }
+                }
             });
 
             modalInstance.result.then(function(row) {
-                vm.educations.push(row);
+                if (row.$$hashKey && _.find(vm.educations, { $$hashKey: row.$$hashKey })) {
+                    $timeout(function () {
+                        _.assign(_.find(vm.educations, { $$hashKey: row.$$hashKey }), row);
+                    });
+                } else {
+                    vm.educations.push(row);
+                }
             });
         };
 
-        vm.openExperienceModal = function() {
+        vm.openExperienceModal = function(data) {
             var modalInstance = $uibModal.open({
                 animation: true,
                 backdrop: "static",
                 templateUrl: "/Scripts/candidates/templates/experience-modal.html",
-                controller: "ExperienceModalInstanceController",
-                controllerAs: "experience"
+                controller: "ExperienceModalController",
+                controllerAs: "experience",
+                resolve: {
+                    data: function() {
+                        return data;
+                    }
+                }
             });
 
             modalInstance.result.then(function(row) {
-                vm.experiences.push(row);
+                if (row.$$hashKey && _.find(vm.experiences, { $$hashKey: row.$$hashKey })) {
+                    $timeout(function() {
+                        _.assign(_.find(vm.experiences, { $$hashKey: row.$$hashKey }), row);
+                    });
+                } else {
+                    vm.experiences.push(row);
+                }
             });
         };
 

@@ -222,13 +222,11 @@
     <Compile Include="ViewModels\Account\AccountViewModels.cs" />
     <Compile Include="ViewModels\Account\RegisterViewModel.cs" />
     <Compile Include="ViewModels\Account\ApplicationUserViewModel.cs" />
-    <Compile Include="ViewModels\Candidate\CandidateFileUploadViewModel.cs" />
     <Compile Include="ViewModels\Candidate\CandidateViewModel.cs" />
     <Compile Include="ViewModels\Account\ManageViewModels.cs" />
     <Compile Include="ViewModels\Candidate\EducationViewModel.cs" />
     <Compile Include="ViewModels\Candidate\ExperienceViewModel.cs" />
     <Compile Include="ViewModels\Candidate\InstitutionViewModel.cs" />
-    <Compile Include="ViewModels\Common\FileUploadViewModel.cs" />
     <Compile Include="ViewModels\Question\BaseQuestionViewModel.cs" />
     <Compile Include="ViewModels\Question\QuestionCreateViewModel.cs" />
     <Compile Include="ViewModels\Question\QuestionEditViewModel.cs" />
@@ -288,7 +286,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Institution\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

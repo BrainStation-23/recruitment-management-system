@@ -3,7 +3,7 @@ namespace RecruitmentManagementSystem.Data.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class RefactorEntityModels : DbMigration
+    public partial class RefactorDomainModels : DbMigration
     {
         public override void Up()
         {
@@ -47,17 +47,27 @@ namespace RecruitmentManagementSystem.Data.Migrations
             AddColumn("dbo.Files", "RelativePath", c => c.String(nullable: false));
             AddColumn("dbo.Files", "MimeType", c => c.String());
             AddColumn("dbo.Files", "Size", c => c.Int(nullable: false));
-            AddColumn("dbo.Institutions", "City", c => c.String());
-            AddColumn("dbo.Questions", "Text", c => c.String(nullable: false, maxLength: 300));
+            AddColumn("dbo.Educations", "Notes", c => c.String(maxLength: 2000));
+            AddColumn("dbo.Educations", "StartDate", c => c.DateTime(nullable: false, precision: 7, storeType: "datetime2"));
+            AddColumn("dbo.Educations", "EndDate", c => c.DateTime(precision: 7, storeType: "datetime2"));
+            AddColumn("dbo.Educations", "Present", c => c.Boolean(nullable: false));
+            AddColumn("dbo.Institutions", "City", c => c.String(maxLength: 20));
+            AddColumn("dbo.Experiences", "StartDate", c => c.DateTime(nullable: false, precision: 7, storeType: "datetime2"));
+            AddColumn("dbo.Experiences", "EndDate", c => c.DateTime(precision: 7, storeType: "datetime2"));
+            AddColumn("dbo.Experiences", "Notes", c => c.String(maxLength: 1000));
+            AddColumn("dbo.Questions", "Text", c => c.String(nullable: false, maxLength: 500));
             AddColumn("dbo.Questions", "QuestionType", c => c.Int(nullable: false));
-            AddColumn("dbo.Questions", "Answer", c => c.String(maxLength: 300));
+            AddColumn("dbo.Questions", "Answer", c => c.String(maxLength: 500));
             AddColumn("dbo.Choices", "IsValid", c => c.Boolean(nullable: false));
             AddColumn("dbo.AspNetUsers", "CandidateId", c => c.Int());
+            AlterColumn("dbo.Candidates", "PhoneNumber", c => c.String(nullable: false));
             AlterColumn("dbo.Files", "Name", c => c.String(nullable: false, maxLength: 255));
             AlterColumn("dbo.Files", "FileType", c => c.Int(nullable: false));
             AlterColumn("dbo.Educations", "CandidateId", c => c.Int(nullable: false));
             AlterColumn("dbo.Experiences", "CandidateId", c => c.Int(nullable: false));
             AlterColumn("dbo.Projects", "CandidateId", c => c.Int(nullable: false));
+            AlterColumn("dbo.Questions", "Notes", c => c.String(maxLength: 1000));
+            AlterColumn("dbo.Choices", "Text", c => c.String(nullable: false, maxLength: 200));
             AlterColumn("dbo.Choices", "QuestionId", c => c.Int(nullable: false));
             CreateIndex("dbo.Candidates", "Email", unique: true, name: "EmailIndex");
             CreateIndex("dbo.Educations", "CandidateId");
@@ -72,6 +82,11 @@ namespace RecruitmentManagementSystem.Data.Migrations
             AddForeignKey("dbo.Choices", "QuestionId", "dbo.Questions", "Id", cascadeDelete: true);
             DropColumn("dbo.Candidates", "Avatar_Id");
             DropColumn("dbo.Files", "Path");
+            DropColumn("dbo.Educations", "Description");
+            DropColumn("dbo.Educations", "FirstYear");
+            DropColumn("dbo.Educations", "LastYear");
+            DropColumn("dbo.Experiences", "From");
+            DropColumn("dbo.Experiences", "To");
             DropColumn("dbo.Skills", "Candidate_Id");
             DropColumn("dbo.Questions", "Title");
             DropColumn("dbo.Questions", "Type");
@@ -95,6 +110,11 @@ namespace RecruitmentManagementSystem.Data.Migrations
             AddColumn("dbo.Questions", "Type", c => c.Int(nullable: false));
             AddColumn("dbo.Questions", "Title", c => c.String(nullable: false));
             AddColumn("dbo.Skills", "Candidate_Id", c => c.Int());
+            AddColumn("dbo.Experiences", "To", c => c.DateTime());
+            AddColumn("dbo.Experiences", "From", c => c.DateTime(nullable: false));
+            AddColumn("dbo.Educations", "LastYear", c => c.Int(nullable: false));
+            AddColumn("dbo.Educations", "FirstYear", c => c.Int(nullable: false));
+            AddColumn("dbo.Educations", "Description", c => c.String(maxLength: 2000));
             AddColumn("dbo.Files", "Path", c => c.String(nullable: false));
             AddColumn("dbo.Candidates", "Avatar_Id", c => c.Int());
             DropForeignKey("dbo.Choices", "QuestionId", "dbo.Questions");
@@ -113,17 +133,27 @@ namespace RecruitmentManagementSystem.Data.Migrations
             DropIndex("dbo.Educations", new[] { "CandidateId" });
             DropIndex("dbo.Candidates", "EmailIndex");
             AlterColumn("dbo.Choices", "QuestionId", c => c.Int());
+            AlterColumn("dbo.Choices", "Text", c => c.String(nullable: false, maxLength: 100));
+            AlterColumn("dbo.Questions", "Notes", c => c.String(maxLength: 500));
             AlterColumn("dbo.Projects", "CandidateId", c => c.Int());
             AlterColumn("dbo.Experiences", "CandidateId", c => c.Int());
             AlterColumn("dbo.Educations", "CandidateId", c => c.Int());
             AlterColumn("dbo.Files", "FileType", c => c.String());
             AlterColumn("dbo.Files", "Name", c => c.String(maxLength: 50));
+            AlterColumn("dbo.Candidates", "PhoneNumber", c => c.String());
             DropColumn("dbo.AspNetUsers", "CandidateId");
             DropColumn("dbo.Choices", "IsValid");
             DropColumn("dbo.Questions", "Answer");
             DropColumn("dbo.Questions", "QuestionType");
             DropColumn("dbo.Questions", "Text");
+            DropColumn("dbo.Experiences", "Notes");
+            DropColumn("dbo.Experiences", "EndDate");
+            DropColumn("dbo.Experiences", "StartDate");
             DropColumn("dbo.Institutions", "City");
+            DropColumn("dbo.Educations", "Present");
+            DropColumn("dbo.Educations", "EndDate");
+            DropColumn("dbo.Educations", "StartDate");
+            DropColumn("dbo.Educations", "Notes");
             DropColumn("dbo.Files", "Size");
             DropColumn("dbo.Files", "MimeType");
             DropColumn("dbo.Files", "RelativePath");

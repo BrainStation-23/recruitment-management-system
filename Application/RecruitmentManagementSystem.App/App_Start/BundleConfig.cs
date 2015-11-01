@@ -13,7 +13,8 @@ namespace RecruitmentManagementSystem.App
                 "~/Vendors/bower_components/angular-messages/angular-messages.js",
                 "~/Vendors/bower_components/angular-bootstrap/ui-bootstrap-tpls.js",
                 "~/Vendors/bower_components/ng-file-upload/ng-file-upload.js",
-                "~/Vendors/bower_components/toastr/toastr.js"));
+                "~/Vendors/bower_components/toastr/toastr.js",
+                "~/Vendors/bower_components/lodash/lodash.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                 "~/Vendors/bower_components/jquery-validation/dist/jquery.validate.js",

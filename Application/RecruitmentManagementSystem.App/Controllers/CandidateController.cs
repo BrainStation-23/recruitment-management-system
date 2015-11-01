@@ -79,6 +79,11 @@ namespace RecruitmentManagementSystem.App.Controllers
                         Degree = item.Degree,
                         FieldOfStudy = item.FieldOfStudy,
                         InstitutionId = item.InstitutionId,
+                        StartDate = item.StartDate,
+                        EndDate = item.EndDate,
+                        Present = item.CurrentlyPresent,
+                        Activites = item.Activites,
+                        Notes = item.Notes,
                         CandidateId = candidate.Id
                     });
                 }
@@ -94,10 +99,11 @@ namespace RecruitmentManagementSystem.App.Controllers
                     {
                         Organization = item.Organization,
                         JobTitle = item.JobTitle,
-                        From = item.From,
-                        To = item.To,
+                        StartDate = item.StartDate,
+                        EndDate = item.EndDate,
                         StillWorking = item.StillWorking,
                         Description = item.Description,
+                        Notes = item.Notes,
                         CandidateId = candidate.Id
                     });
                 }

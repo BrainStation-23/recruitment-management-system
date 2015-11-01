@@ -15,7 +15,7 @@ namespace RecruitmentManagementSystem.Model
 
         [Required]
         [DataType(DataType.MultilineText)]
-        [StringLength(300, ErrorMessage = "The {0} must be at most {1} characters long.")]
+        [StringLength(500, ErrorMessage = "The {0} must be at most {1} characters long.")]
         public string Text { get; set; }
 
         [Required]
@@ -26,11 +26,11 @@ namespace RecruitmentManagementSystem.Model
         public virtual ICollection<Choice> Choices { get; set; }
 
         [DataType(DataType.MultilineText)]
-        [StringLength(500, ErrorMessage = "The {0} must be at most {1} characters long.")]
+        [StringLength(1000, ErrorMessage = "The {0} must be at most {1} characters long.")]
         public string Notes { get; set; }
 
         [DataType(DataType.MultilineText)]
-        [StringLength(300, ErrorMessage = "The {0} must be at most {1} characters long.")]
+        [StringLength(500, ErrorMessage = "The {0} must be at most {1} characters long.")]
         public string Answer { get; set; }
 
         [Required]
@@ -44,7 +44,7 @@ namespace RecruitmentManagementSystem.Model
         public int Id { get; set; }
 
         [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at most {1} characters long.")]
+        [StringLength(200, ErrorMessage = "The {0} must be at most {1} characters long.")]
         public string Text { get; set; }
 
         public bool IsValid { get; set; }

@@ -15,11 +15,11 @@
             <th>Grade</th>
             <th>Activites</th>
             <th>Description</th>
-            <th>Duration</th>
+            <th>Time Duration</th>
             <th>Institution</th>
             <th></th>
         </tr>
-        <tr ng-repeat="education in candidate.educations track by $index">
+        <tr ng-repeat="education in candidate.educations">
             <td>
                 <div ng-bind="education.degree"></div>
             </td>
@@ -36,14 +36,19 @@
                 <div ng-bind="education.description"></div>
             </td>
             <td>
-                <div>{{ education.lastYear }} - {{ education.firstYear }}</div>
+                <div>
+                    {{ education.startDate | date : 'MMM dd, yyyy' }} - {{ education.present ? 'Present' : (education.endDate | date : 'MMM dd, yyyy') }}
+                </div>
             </td>
             <td>
                 <div ng-bind="education.institution.Name"></div>
             </td>
             <td>
+                <button type="button" class="btn btn-success" ng-click="candidate.openEducationModal(education)">
+                    <i class="fa fa-edit fa-lg"></i>
+                </button>
                 <button type="button" class="btn btn-danger" ng-click="candidate.discardEducation($index)">
-                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                    <i class="fa fa-trash fa-lg"></i>
                 </button>
             </td>
         </tr>
