@@ -20,7 +20,7 @@
 
                     <div class="form-group">
                         <label class="control-label col-md-2">First Name</label>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <input type="text" name="firstName" ng-model="candidate.firstName" ng-maxlength="30" required class="form-control"/>
                             <div class="text-danger field-validation-error" ng-messages="candidate.form.submitted && candidate.form.firstName.$error">
                                 <span ng-message="required">This field is required.</span>
@@ -31,7 +31,7 @@
 
                     <div class="form-group">
                         <label class="control-label col-md-2">Last Name</label>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <input type="text" name="lastName" ng-model="candidate.lastName" ng-maxlength="30" required class="form-control"/>
                             <div class="text-danger field-validation-error" ng-messages="candidate.form.submitted && candidate.form.lastName.$error">
                                 <span ng-message="required">This field is required.</span>
@@ -42,7 +42,7 @@
 
                     <div class="form-group">
                         <label class="control-label col-md-2">Email</label>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <input type="email" name="email" ng-model="candidate.email" required class="form-control"/>
                             <div class="text-danger field-validation-error" ng-messages="candidate.form.submitted && candidate.form.email.$error">
                                 <span ng-message="required">This field is required.</span>
@@ -53,7 +53,7 @@
 
                     <div class="form-group">
                         <label class="control-label col-md-2">Phone Number</label>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <input type="text" name="phoneNumber" ng-model="candidate.phoneNumber" ng-pattern="/^\(?(\d{5})\)?[ .-]?(\d{6})$/" required class="form-control" />
                             <div class="text-danger field-validation-error" ng-messages="candidate.form.submitted && candidate.form.phoneNumber.$error">
                                 <span ng-message="required">This field is required.</span>
@@ -74,7 +74,7 @@
 
                     <div class="form-group">
                         <label class="control-label col-md-2">Website</label>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <input type="url" name="website" ng-model="candidate.website" ng-maxlength="50" class="form-control"/>
                             <div class="text-danger field-validation-error" ng-messages="candidate.form.submitted && candidate.form.website.$error">
                                 <span ng-message="maxlength">This field length is too large.</span>

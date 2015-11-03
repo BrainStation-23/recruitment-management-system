@@ -61,6 +61,12 @@
                     console.log("percent: " + parseInt(100.0 * evt.loaded / evt.total));
                 }).success(function(data) {
                     location.href = "/Candidate";
+                }).error(function (response) {
+                    var erroMessages = _.map(response, function (error) {
+                        return error.ErrorMessage;
+                    });
+                    
+                    notifierService.notifyError(erroMessages);
                 });
             }
         };

@@ -53,8 +53,8 @@ namespace RecruitmentManagementSystem.App.Controllers
         {
             if (!ModelState.IsValid)
             {
-                Response.StatusCode = (int) HttpStatusCode.BadRequest;
-                return Json(null);
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json(ModelState.Values.SelectMany(v => v.Errors));
             }
 
             var candidate = new Candidate
