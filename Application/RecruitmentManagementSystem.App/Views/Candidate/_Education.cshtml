@@ -3,9 +3,7 @@
     No education added yet.
 </div>
 
-<p>
-    <button type="button" class="btn btn-default" ng-click="candidate.openEducationModal()">Add Education</button>
-</p>
+
 
 <div class="table-responsive" ng-show="candidate.educations && candidate.educations.length">
     <table class="table">
@@ -13,9 +11,9 @@
             <th>Degree</th>
             <th>Field Of Study</th>
             <th>Grade</th>
-            <th>Activites</th>
-            <th>Description</th>
             <th>Time Duration</th>
+            <th>Activites</th>
+            <th>Notes</th>
             <th>Institution</th>
             <th></th>
         </tr>
@@ -28,17 +26,17 @@
             </td>
             <td>
                 <div ng-bind="education.grade"></div>
+                <td>
+                    <div>
+                        {{ education.startDate | date : 'MMM dd, yyyy' }} - {{ education.present ? 'Present' : (education.endDate | date : 'MMM dd, yyyy') }}
+                    </div>
+                </td>
             </td>
             <td>
                 <div ng-bind="education.activites"></div>
             </td>
             <td>
-                <div ng-bind="education.description"></div>
-            </td>
-            <td>
-                <div>
-                    {{ education.startDate | date : 'MMM dd, yyyy' }} - {{ education.present ? 'Present' : (education.endDate | date : 'MMM dd, yyyy') }}
-                </div>
+                <div ng-bind="education.notes"></div>
             </td>
             <td>
                 <div ng-bind="education.institution.Name"></div>
@@ -53,4 +51,11 @@
             </td>
         </tr>
     </table>
+
+    
+
 </div>
+
+<p>
+    <button type="button" class="btn btn-default" ng-click="candidate.openEducationModal()">Add Education</button>
+</p>

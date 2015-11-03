@@ -3,9 +3,7 @@
     No experience added yet.
 </div>
 
-<p>
-    <button type="button" class="btn btn-default" ng-click="candidate.openExperienceModal()">Add Experience</button>
-</p>
+
 
 <div class="table-responsive" ng-show="candidate.experiences && candidate.experiences.length">
     <table class="table">
@@ -29,7 +27,7 @@
                 </div>
             </td>
             <td>
-                <div ng-bind="experience.description"></div>
+            <div ng-bind="experience.description"></div>
             <td>
                 <button type="button" class="btn btn-success" ng-click="candidate.openExperienceModal(experience)">
                     <i class="fa fa-edit fa-lg"></i>
@@ -40,4 +38,10 @@
             </td>
         </tr>
     </table>
+    
+    
 </div>
+
+<p>
+    <button type="button" class="btn btn-default" ng-click="candidate.openExperienceModal()">Add Experience</button>
+</p>

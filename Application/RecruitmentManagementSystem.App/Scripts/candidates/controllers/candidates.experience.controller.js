@@ -21,11 +21,14 @@
                     organization: vm.organization,
                     jobTitle: vm.jobTitle,
                     startDate: vm.startDate,
-                    endDate: vm.present ? null : vm.endDate,
                     present: vm.present,
                     description: vm.description,
                     notes: vm.notes
                 };
+
+                if (!experience.present) {
+                    experience.endDate = vm.endDate;
+                }
 
                 if (data && data.$$hashKey) {
                     experience.$$hashKey = data.$$hashKey;

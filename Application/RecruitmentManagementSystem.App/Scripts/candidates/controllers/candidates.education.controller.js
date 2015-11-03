@@ -30,11 +30,15 @@
                     grade: vm.grade,
                     institution: vm.institution,
                     startDate: vm.startDate,
-                    endDate: vm.endDate,
                     present: vm.present,
                     activites: vm.activites,
                     notes: vm.notes
                 };
+                
+                if (!education.present) {
+
+                    education.endDate = vm.endDate;
+                }
 
                 if (data && data.$$hashKey) {
                     education.$$hashKey = data.$$hashKey;

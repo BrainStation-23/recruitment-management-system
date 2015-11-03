@@ -227,6 +227,7 @@
     <Compile Include="ViewModels\Candidate\EducationViewModel.cs" />
     <Compile Include="ViewModels\Candidate\ExperienceViewModel.cs" />
     <Compile Include="ViewModels\Candidate\InstitutionViewModel.cs" />
+    <Compile Include="ViewModels\Candidate\ProjectViewModel.cs" />
     <Compile Include="ViewModels\Question\BaseQuestionViewModel.cs" />
     <Compile Include="ViewModels\Question\QuestionCreateViewModel.cs" />
     <Compile Include="ViewModels\Question\QuestionEditViewModel.cs" />
@@ -241,7 +242,9 @@
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\candidates\controllers\candidates.controller.js" />
     <Content Include="Scripts\candidates\candidates.module.js" />
+    <Content Include="Scripts\candidates\controllers\candidates.project.controller.js" />
     <Content Include="Scripts\candidates\controllers\candidates.experience.controller.js" />
+    <Content Include="Scripts\candidates\templates\project-modal.html" />
     <Content Include="Scripts\core\config\config.js" />
     <Content Include="Scripts\core\config\init.js" />
     <Content Include="Scripts\core\core.module.js" />
@@ -384,6 +387,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Scripts\candidates\controllers\candidates.education.controller.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Candidate\_Project.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

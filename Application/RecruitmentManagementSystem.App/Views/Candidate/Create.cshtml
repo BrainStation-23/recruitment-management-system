@@ -54,7 +54,7 @@
                     <div class="form-group">
                         <label class="control-label col-md-2">Phone Number</label>
                         <div class="col-md-6">
-                            <input type="text" name="phoneNumber" ng-model="candidate.phoneNumber" ng-pattern="/^\(?(\d{3})\)?[ .-]?(\d{3})[ .-]?(\d{4})$/" required class="form-control"/>
+                            <input type="text" name="phoneNumber" ng-model="candidate.phoneNumber" ng-pattern="/^\(?(\d{5})\)?[ .-]?(\d{6})$/" required class="form-control" />
                             <div class="text-danger field-validation-error" ng-messages="candidate.form.submitted && candidate.form.phoneNumber.$error">
                                 <span ng-message="required">This field is required.</span>
                                 <span ng-message="pattern">This is not a valid phone number.</span>
@@ -102,6 +102,8 @@
             @Html.Partial("_Education")
 
             @Html.Partial("_Experience")
+            
+            @Html.Partial("_Project")
 
             <hr/>
 

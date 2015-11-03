@@ -8,12 +8,18 @@
 
         vm.experiences = [];
 
+        vm.projects = [];
+
         vm.discardEducation = function(index) {
             vm.educations.splice(index, 1);
         };
 
         vm.discardExperience = function(index) {
             vm.experiences.splice(index, 1);
+        };
+
+        vm.discardProject = function (index) {
+            vm.projects.splice(index, 1);
         };
 
         vm.create = function() {
@@ -31,6 +37,7 @@
                 phoneNumber: vm.phoneNumber,
                 educations: vm.educations,
                 experiences: vm.experiences,
+                projects : vm.projects,
                 others: vm.others,
                 website: vm.website,
                 files: []
@@ -104,6 +111,31 @@
                     });
                 } else {
                     vm.experiences.push(row);
+                }
+            });
+        };
+
+        vm.openProjectModal = function (data) {
+            var modalInstance = $uibModal.open({
+                animation: true,
+                backdrop: "static",
+                templateUrl: "/Scripts/candidates/templates/project-modal.html",
+                controller: "ProjectModalController",
+                controllerAs: "project",
+                resolve: {
+                    data: function () {
+                        return data;
+                    }
+                }
+            });
+
+            modalInstance.result.then(function (row) {
+                if (row.$$hashKey && _.find(vm.projects, { $$hashKey: row.$$hashKey })) {
+                    $timeout(function () {
+                        _.assign(_.find(vm.projects, { $$hashKey: row.$$hashKey }), row);
+                    });
+                } else {
+                    vm.projects.push(row);
                 }
             });
         };

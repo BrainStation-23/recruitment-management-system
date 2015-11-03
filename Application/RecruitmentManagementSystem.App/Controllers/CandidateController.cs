@@ -22,14 +22,16 @@ namespace RecruitmentManagementSystem.App.Controllers
         private readonly IEducationRepository _educationRepository;
         private readonly IFileRepository _fileRepository;
         private readonly IExperienceRepository _experienceRepository;
+        private readonly IProjectRepository _projectRepository;
 
         public CandidateController(ICandidateRepository candidateRepository, IFileRepository fileRepository,
-            IEducationRepository educationRepository, IExperienceRepository experienceRepository)
+            IEducationRepository educationRepository, IExperienceRepository experienceRepository, IProjectRepository projectRepository)
         {
             _candidateRepository = candidateRepository;
             _fileRepository = fileRepository;
             _educationRepository = educationRepository;
             _experienceRepository = experienceRepository;
+            _projectRepository = projectRepository;
         }
 
         public ActionResult Index()
@@ -101,13 +103,28 @@ namespace RecruitmentManagementSystem.App.Controllers
                         JobTitle = item.JobTitle,
                         StartDate = item.StartDate,
                         EndDate = item.EndDate,
-                        StillWorking = item.StillWorking,
+                        StillWorking = item.Present,
                         Description = item.Description,
                         Notes = item.Notes,
                         CandidateId = candidate.Id
                     });
                 }
                 _experienceRepository.Save();
+            }
+
+            if (model.Projects != null)
+            {
+                foreach (var item in model.Projects)
+                {
+                    _projectRepository.Insert(new Project
+                    {
+                        Title = item.Title,
+                        Url = item.Url,
+                        Description = item.Description,
+                        CandidateId = candidate.Id
+                    });
+                }
+                _projectRepository.Save();
             }
 
             ManageFiles(candidate.Id, Request.Files, model);
