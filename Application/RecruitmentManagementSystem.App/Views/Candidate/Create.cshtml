@@ -19,7 +19,7 @@
                 <div class="col-xs-12 col-md-10">
 
                     <div class="form-group">
-                        <label class="control-label col-md-2">First Name</label>
+                        <label class="control-label col-md-2 required">First Name</label>
                         <div class="col-md-4">
                             <input type="text" name="firstName" ng-model="candidate.firstName" ng-maxlength="30" required class="form-control"/>
                             <div class="text-danger field-validation-error" ng-messages="candidate.form.submitted && candidate.form.firstName.$error">
@@ -30,7 +30,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="control-label col-md-2">Last Name</label>
+                        <label class="control-label col-md-2 required">Last Name</label>
                         <div class="col-md-4">
                             <input type="text" name="lastName" ng-model="candidate.lastName" ng-maxlength="30" required class="form-control"/>
                             <div class="text-danger field-validation-error" ng-messages="candidate.form.submitted && candidate.form.lastName.$error">
@@ -41,7 +41,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="control-label col-md-2">Email</label>
+                        <label class="control-label col-md-2 required">Email</label>
                         <div class="col-md-4">
                             <input type="email" name="email" ng-model="candidate.email" required class="form-control"/>
                             <div class="text-danger field-validation-error" ng-messages="candidate.form.submitted && candidate.form.email.$error">
@@ -52,7 +52,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="control-label col-md-2">Phone Number</label>
+                        <label class="control-label col-md-2 required">Phone Number</label>
                         <div class="col-md-4">
                             <input type="text" name="phoneNumber" ng-model="candidate.phoneNumber" ng-pattern="/^\(?(\d{5})\)?[ .-]?(\d{6})$/" required class="form-control" />
                             <div class="text-danger field-validation-error" ng-messages="candidate.form.submitted && candidate.form.phoneNumber.$error">

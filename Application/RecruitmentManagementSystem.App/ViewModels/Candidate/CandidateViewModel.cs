@@ -43,6 +43,8 @@ namespace RecruitmentManagementSystem.App.ViewModels.Candidate
 
         public virtual ICollection<ProjectViewModel> Projects { get; set; }
 
+        public virtual ICollection<string> Skills { get; set; }
+
         public string AvatarFileName { get; set; }
 
         public string ResumeFileName { get; set; }

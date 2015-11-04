@@ -71,6 +71,7 @@
     <Compile Include="Interfaces\IQuestionCategoryRepository.cs" />
     <Compile Include="Interfaces\IQuestionRepository.cs" />
     <Compile Include="Interfaces\IRepository.cs" />
+    <Compile Include="Interfaces\ISkillRepository.cs" />
     <Compile Include="Migrations\201510111700239_InitialCreate.cs" />
     <Compile Include="Migrations\201510111700239_InitialCreate.Designer.cs">
       <DependentUpon>201510111700239_InitialCreate.cs</DependentUpon>
@@ -95,6 +96,7 @@
     <Compile Include="Repositories\ProjectRepository.cs" />
     <Compile Include="Repositories\QuestionCategoryRepository.cs" />
     <Compile Include="Repositories\QuestionRepository.cs" />
+    <Compile Include="Repositories\SkillRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RecruitmentManagementSystem.Model\RecruitmentManagementSystem.Model.csproj">

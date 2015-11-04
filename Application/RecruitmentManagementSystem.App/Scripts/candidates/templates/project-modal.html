@@ -10,7 +10,7 @@
             <div class="row">
                 <div class="col-xs-12">
                     <div class="form-group">
-                        <label>Project Title</label>
+                        <label class="required">Project Title</label>
                         <input type="text" name="title" ng-model="project.title" ng-maxlength="10" required class="form-control" />
                         <div class="text-danger field-validation-error" ng-messages="project.form.submitted && project.form.title.$error">
                             <span ng-message="required">This field is required.</span>
@@ -20,7 +20,7 @@
                 </div>
                 <div class="col-xs-12">
                     <div class="form-group">
-                        <label>Project Url</label>
+                        <label class="required">Project Url</label>
                         <input type="url" name="url" ng-model="project.url" required class="form-control" />
                         <div class="text-danger field-validation-error" ng-messages="project.form.submitted && project.form.url.$error">
                             <span ng-message="url">This is not a valid url.</span>
