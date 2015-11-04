@@ -1,43 +1,47 @@
-﻿<div class="alert alert-info" role="alert" ng-hide="candidate.projects && candidate.projects.length">
-    <i class="fa fa-lg fa-exclamation-triangle"></i>
-    No project added yet.
+﻿<div class="panel panel-success">
+    <div class="panel-heading">
+        <i class="fa fa-terminal fa-lg"></i>
+        Project
+    </div>
+
+    <div class="panel-body">
+        <div ng-hide="candidate.projects && candidate.projects.length">
+            <i class="fa fa-lg fa-exclamation-triangle"></i>
+            No projects are added yet.
+        </div>
+    </div>
+
+    <div class="table-responsive" ng-show="candidate.projects && candidate.projects.length">
+        <table class="table">
+            <tr>
+                <th>Title</th>
+                <th>Url</th>
+                <th>Description</th>
+                <th></th>
+            </tr>
+            <tr ng-repeat="project in candidate.projects">
+                <td>
+                    <div ng-bind="project.title"></div>
+                </td>
+                <td>
+                    <div ng-bind="project.url"></div>
+                </td>
+                <td>
+                    <div ng-bind="project.description"></div>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-success" ng-click="candidate.openProjectModal(project)">
+                        <i class="fa fa-edit fa-lg"></i>
+                    </button>
+                    <button type="button" class="btn btn-danger" ng-click="candidate.discardProject($index)">
+                        <i class="fa fa-trash fa-lg"></i>
+                    </button>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="panel-footer">
+        <button type="button" class="btn btn-default" ng-click="candidate.openProjectModal()">Add Project</button>
+    </div>
 </div>
-
-
-
-<div class="table-responsive" ng-show="candidate.projects && candidate.projects.length">
-    <table class="table">
-        <tr>
-            <th>Title</th>
-            <th>Url</th>
-            <th>Description</th>
-            <th></th>
-        </tr>
-        <tr ng-repeat="project in candidate.projects">
-            <td>
-                <div ng-bind="project.title"></div>
-            </td>
-            <td>
-                <div ng-bind="project.url"></div>
-            </td>
-            <td>
-                <div ng-bind="project.description"></div>
-            </td>
-            <td>
-                <button type="button" class="btn btn-success" ng-click="candidate.openProjectModal(project)">
-                    <i class="fa fa-edit fa-lg"></i>
-                </button>
-                <button type="button" class="btn btn-danger" ng-click="candidate.discardProject($index)">
-                    <i class="fa fa-trash fa-lg"></i>
-                </button>
-            </td>
-        </tr>
-    </table>
-    
-    
-
-</div>
-
-<p>
-    <button type="button" class="btn btn-default" ng-click="candidate.openProjectModal()">Add Project</button>
-</p>

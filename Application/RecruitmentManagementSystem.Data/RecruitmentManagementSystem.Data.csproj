@@ -72,17 +72,9 @@
     <Compile Include="Interfaces\IQuestionRepository.cs" />
     <Compile Include="Interfaces\IRepository.cs" />
     <Compile Include="Interfaces\ISkillRepository.cs" />
-    <Compile Include="Migrations\201510111700239_InitialCreate.cs" />
-    <Compile Include="Migrations\201510111700239_InitialCreate.Designer.cs">
-      <DependentUpon>201510111700239_InitialCreate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201510150838538_RemoveQuestionIdFromChoice.cs" />
-    <Compile Include="Migrations\201510150838538_RemoveQuestionIdFromChoice.Designer.cs">
-      <DependentUpon>201510150838538_RemoveQuestionIdFromChoice.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201511011959079_RefactorDomainModels.cs" />
-    <Compile Include="Migrations\201511011959079_RefactorDomainModels.Designer.cs">
-      <DependentUpon>201511011959079_RefactorDomainModels.cs</DependentUpon>
+    <Compile Include="Migrations\201511042039499_InitialCreate.cs" />
+    <Compile Include="Migrations\201511042039499_InitialCreate.Designer.cs">
+      <DependentUpon>201511042039499_InitialCreate.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -109,14 +101,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201510111700239_InitialCreate.resx">
-      <DependentUpon>201510111700239_InitialCreate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201510150838538_RemoveQuestionIdFromChoice.resx">
-      <DependentUpon>201510150838538_RemoveQuestionIdFromChoice.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201511011959079_RefactorDomainModels.resx">
-      <DependentUpon>201511011959079_RefactorDomainModels.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201511042039499_InitialCreate.resx">
+      <DependentUpon>201511042039499_InitialCreate.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

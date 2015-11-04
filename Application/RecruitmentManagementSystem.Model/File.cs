@@ -33,6 +33,6 @@ namespace RecruitmentManagementSystem.Model
 
         public int? CandidateId { get; set; }
 
-        public virtual Candidate Candidate { get; set; }
+        public Candidate Candidate { get; set; }
     }
 }

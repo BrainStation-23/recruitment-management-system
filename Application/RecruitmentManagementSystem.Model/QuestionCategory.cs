@@ -15,6 +15,6 @@ namespace RecruitmentManagementSystem.Model
         [StringLength(100, ErrorMessage = "The {0} must be at most {1} characters long.")]
         public string Description { get; set; }
 
-        public virtual ICollection<Question> Questions { get; set; }
+        public ICollection<Question> Questions { get; set; }
     }
 }

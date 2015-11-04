@@ -17,6 +17,6 @@
 }
 
 .required::after{
-    content: "*";
-    color: red;
+    content: " *";
+    color: #db2828;
 }

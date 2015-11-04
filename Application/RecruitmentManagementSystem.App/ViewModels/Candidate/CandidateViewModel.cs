@@ -39,11 +39,11 @@ namespace RecruitmentManagementSystem.App.ViewModels.Candidate
 
         public ICollection<EducationViewModel> Educations { get; set; }
 
-        public virtual ICollection<ExperienceViewModel> Experiences { get; set; }
+        public ICollection<ExperienceViewModel> Experiences { get; set; }
 
-        public virtual ICollection<ProjectViewModel> Projects { get; set; }
+        public ICollection<ProjectViewModel> Projects { get; set; }
 
-        public virtual ICollection<string> Skills { get; set; }
+        public ICollection<SkillViewModel> Skills { get; set; }
 
         public string AvatarFileName { get; set; }
 

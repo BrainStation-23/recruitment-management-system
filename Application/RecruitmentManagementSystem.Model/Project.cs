@@ -17,8 +17,12 @@ namespace RecruitmentManagementSystem.Model
         [StringLength(1000, ErrorMessage = "The {0} must be at most {1} characters long.")]
         public string Description { get; set; }
 
+        [DataType(DataType.MultilineText)]
+        [StringLength(1000, ErrorMessage = "The {0} must be at most {1} characters long.")]
+        public string Notes { get; set; }
+
         public int CandidateId { get; set; }
 
-        public virtual Candidate Candidate { get; set; }
+        public Candidate Candidate { get; set; }
     }
 }

@@ -3,12 +3,10 @@
         var vm = this;
 
         vm.institutions = [];
-
         vm.educations = [];
-
         vm.experiences = [];
-
         vm.projects = [];
+        vm.skills = [];
 
         vm.discardEducation = function(index) {
             vm.educations.splice(index, 1);
@@ -18,7 +16,7 @@
             vm.experiences.splice(index, 1);
         };
 
-        vm.discardProject = function (index) {
+        vm.discardProject = function(index) {
             vm.projects.splice(index, 1);
         };
 
@@ -37,9 +35,10 @@
                 phoneNumber: vm.phoneNumber,
                 educations: vm.educations,
                 experiences: vm.experiences,
-                projects : vm.projects,
+                projects: vm.projects,
                 others: vm.others,
                 website: vm.website,
+                skills: vm.skills,
                 files: []
             };
 
@@ -61,11 +60,11 @@
                     console.log("percent: " + parseInt(100.0 * evt.loaded / evt.total));
                 }).success(function(data) {
                     location.href = "/Candidate";
-                }).error(function (response) {
-                    var erroMessages = _.map(response, function (error) {
+                }).error(function(response) {
+                    var erroMessages = _.map(response, function(error) {
                         return error.ErrorMessage;
                     });
-                    
+
                     notifierService.notifyError(erroMessages);
                 });
             }
@@ -79,7 +78,7 @@
                 controller: "EducationModalController",
                 controllerAs: "education",
                 resolve: {
-                    data: function () {
+                    data: function() {
                         return data;
                     }
                 }
@@ -87,7 +86,7 @@
 
             modalInstance.result.then(function(row) {
                 if (row.$$hashKey && _.find(vm.educations, { $$hashKey: row.$$hashKey })) {
-                    $timeout(function () {
+                    $timeout(function() {
                         _.assign(_.find(vm.educations, { $$hashKey: row.$$hashKey }), row);
                     });
                 } else {
@@ -121,7 +120,7 @@
             });
         };
 
-        vm.openProjectModal = function (data) {
+        vm.openProjectModal = function(data) {
             var modalInstance = $uibModal.open({
                 animation: true,
                 backdrop: "static",
@@ -129,15 +128,15 @@
                 controller: "ProjectModalController",
                 controllerAs: "project",
                 resolve: {
-                    data: function () {
+                    data: function() {
                         return data;
                     }
                 }
             });
 
-            modalInstance.result.then(function (row) {
+            modalInstance.result.then(function(row) {
                 if (row.$$hashKey && _.find(vm.projects, { $$hashKey: row.$$hashKey })) {
-                    $timeout(function () {
+                    $timeout(function() {
                         _.assign(_.find(vm.projects, { $$hashKey: row.$$hashKey }), row);
                     });
                 } else {
@@ -146,7 +145,7 @@
             });
         };
 
-        vm.renderPreview = function(file) {
+        vm.renderAvatarPreview = function(file) {
             if (!file) {
                 return;
             }
@@ -176,6 +175,20 @@
                     })(fileReader);
                 }
             }
+        };
+
+        vm.addSkill = function() {
+            if (vm.skill && vm.skills.indexOf(vm.skill) === -1) {
+                vm.skills.push({
+                    name: vm.skill.toLowerCase()
+                });
+
+                vm.skill = "";
+            }
+        };
+
+        vm.discardSkill = function(index) {
+            vm.skills.splice(index, 1);
         };
     }
 ]);
