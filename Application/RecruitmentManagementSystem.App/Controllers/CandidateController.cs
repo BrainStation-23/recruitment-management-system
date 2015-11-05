@@ -84,6 +84,7 @@ namespace RecruitmentManagementSystem.App.Controllers
                         Degree = item.Degree,
                         FieldOfStudy = item.FieldOfStudy,
                         InstitutionId = item.InstitutionId,
+                        Grade = item.Grade,
                         StartDate = item.StartDate,
                         EndDate = item.EndDate,
                         Present = item.CurrentlyPresent,
@@ -140,7 +141,7 @@ namespace RecruitmentManagementSystem.App.Controllers
                         CandidateId = candidate.Id
                     });
                 }
-                _projectRepository.Save();
+                _skillRepository.Save();
             }
 
             ManageFiles(candidate.Id, Request.Files, model);

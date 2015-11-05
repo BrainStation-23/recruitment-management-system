@@ -6,13 +6,16 @@
 
         $http.get("/Institution/").success(function(response) {
             vm.institutions = response;
+
+            if (data) {
+                vm.institution = _.find(vm.institutions, { Id: data.institution.Id });
+            }
         });
 
         if (data) {
             vm.degree = data.degree;
             vm.fieldOfStudy = data.fieldOfStudy;
             vm.grade = data.grade;
-            vm.institution = data.institution;
             vm.startDate = data.startDate;
             vm.endDate = data.endDate;
             vm.present = data.present;

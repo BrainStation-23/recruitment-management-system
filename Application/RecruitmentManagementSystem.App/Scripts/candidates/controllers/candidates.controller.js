@@ -178,11 +178,10 @@
         };
 
         vm.addSkill = function() {
-            if (vm.skill && vm.skills.indexOf(vm.skill) === -1) {
+            if (vm.skill && !_.find(vm.skills, { name: vm.skill})) {
                 vm.skills.push({
                     name: vm.skill.toLowerCase()
                 });
-
                 vm.skill = "";
             }
         };

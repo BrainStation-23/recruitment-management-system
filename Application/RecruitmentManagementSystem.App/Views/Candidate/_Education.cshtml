@@ -32,8 +32,10 @@
                 </td>
                 <td>
                     <div ng-bind="education.grade"></div>
+                </td>
+                <td>
                     <div>
-                        {{ education.startDate | date : 'MMM dd, yyyy' }} - {{ education.present ? 'Present' : (education.endDate | date : 'MMM dd, yyyy') }}
+                        {{ education.startDate | date : 'MMM dd, yyyy' }} to {{ education.present ? 'Present' : (education.endDate | date : 'MMM dd, yyyy') }}
                     </div>
                 </td>
                 <td>
