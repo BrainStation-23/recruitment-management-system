@@ -21,6 +21,9 @@
         <dd>
             @Model.ApplicationUser.PhoneNumber
         </dd>
+        <dd>
+            <img src="@Model.ApplicationUser.AvatarFullPath" class="img-thumbnail" alt="Avatar" />
+        </dd>
     </dl>
 
     @Html.ActionLink("Edit", "EditProfile", "Manage")

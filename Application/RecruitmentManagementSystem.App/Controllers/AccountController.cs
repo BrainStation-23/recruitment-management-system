@@ -207,8 +207,8 @@ namespace RecruitmentManagementSystem.App.Controllers
                 if (!roleManager.RoleExists(model.Role))
                 {
                     roleManager.Create(role);
-                    UserManager.AddToRole(user.Id, model.Role);
                 }
+                UserManager.AddToRole(user.Id, model.Role);
 
                 // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                 // Send an email with this link

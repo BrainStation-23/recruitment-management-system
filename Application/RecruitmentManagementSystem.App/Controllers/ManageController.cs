@@ -6,6 +6,8 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using RecruitmentManagementSystem.App.ViewModels.Account;
+using RecruitmentManagementSystem.Data.Interfaces;
+using RecruitmentManagementSystem.Data.Repositories;
 
 namespace RecruitmentManagementSystem.App.Controllers
 {
@@ -14,9 +16,11 @@ namespace RecruitmentManagementSystem.App.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private readonly IFileRepository _fileRepository;
 
         public ManageController()
         {
+            _fileRepository = new FileRepository();
         }
 
         public ManageController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
@@ -71,7 +75,8 @@ namespace RecruitmentManagementSystem.App.Controllers
                     FirstName = user.FirstName,
                     LastName = user.LastName,
                     Email = user.Email,
-                    PhoneNumber = user.PhoneNumber
+                    PhoneNumber = user.PhoneNumber,
+                    AvatarFullPath = _fileRepository.FindById(user.AvatarId).RelativePath
                 }
             };
             return View(model);

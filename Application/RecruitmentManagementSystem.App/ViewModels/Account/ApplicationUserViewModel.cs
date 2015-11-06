@@ -25,6 +25,7 @@ namespace RecruitmentManagementSystem.App.ViewModels.Account
         [Display(Name = "Email")]
         public string Email { get; set; }
 
-        public File Avatar { get; set; }
+        [Display(Name = "Avatar")]
+        public string AvatarFullPath { get; set; }
     }
 }

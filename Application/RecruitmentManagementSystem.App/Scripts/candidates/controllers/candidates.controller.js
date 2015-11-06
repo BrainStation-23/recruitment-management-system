@@ -8,16 +8,22 @@
         vm.projects = [];
         vm.skills = [];
 
-        vm.discardEducation = function(index) {
-            vm.educations.splice(index, 1);
+        vm.discardEducation = function ($index) {
+            if (confirm("Are you want to delete?")) {
+                vm.educations.splice($index, 1);
+            }        
+        };
+        
+        vm.discardExperience = function (index) {
+            if (confirm("Are you want to delete?")) {
+                vm.experiences.splice(index, 1);
+            }
         };
 
-        vm.discardExperience = function(index) {
-            vm.experiences.splice(index, 1);
-        };
-
-        vm.discardProject = function(index) {
-            vm.projects.splice(index, 1);
+        vm.discardProject = function (index) {
+            if (confirm("Are you want to delete?")) {
+                vm.projects.splice(index, 1);
+            }
         };
 
         vm.create = function() {
