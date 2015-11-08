@@ -249,6 +249,7 @@
     <Content Include="Scripts\core\config\config.js" />
     <Content Include="Scripts\core\config\init.js" />
     <Content Include="Scripts\core\core.module.js" />
+    <Content Include="Scripts\core\directives\core.keyboard.enter.directive.js" />
     <Content Include="Scripts\core\services\core.file.service.js" />
     <Content Include="Scripts\core\services\core.notifier.service.js" />
     <Content Include="Scripts\questions\controllers\questions.controller.js" />

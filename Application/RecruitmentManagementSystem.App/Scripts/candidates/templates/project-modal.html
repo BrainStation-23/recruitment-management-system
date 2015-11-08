@@ -11,7 +11,7 @@
                 <div class="col-xs-12">
                     <div class="form-group">
                         <label class="required">Project Title</label>
-                        <input type="text" name="title" ng-model="project.title" ng-maxlength="10" required class="form-control" />
+                        <input type="text" name="title" ng-model="project.title" ng-maxlength="100" required class="form-control" />
                         <div class="text-danger field-validation-error" ng-messages="project.form.submitted && project.form.title.$error">
                             <span ng-message="required">This field is required.</span>
                             <span ng-message="maxlength">Title is too long</span>
@@ -22,7 +22,7 @@
                 <div class="col-xs-12">
                     <div class="form-group">
                         <label>Project Url</label>
-                        <input type="url" name="url" ng-model="project.url" required class="form-control" />
+                        <input type="url" name="url" ng-model="project.url" class="form-control" />
                         <div class="text-danger field-validation-error" ng-messages="project.form.submitted && project.form.url.$error">
                             <span ng-message="url">This is not a valid url.</span>
                         </div>

@@ -37,6 +37,7 @@ namespace RecruitmentManagementSystem.App.Controllers
             _skillRepository = skillRepository;
         }
 
+        [HttpGet]
         public ActionResult Index()
         {
             var model = _candidateRepository.FindAll().ProjectTo<CandidateViewModel>();

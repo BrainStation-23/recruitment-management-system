@@ -8,7 +8,7 @@
 
         <div class="row">
             <div class="col-sm-4">
-                <input type="text" class="form-control" placeholder="What are the candidate's area of expertise?" ng-model="candidate.skill">
+                <input type="text" class="form-control" placeholder="What are the candidate's area of expertise?" ng-model="candidate.skill" on-enter="candidate.addSkill()">
             </div>
             <div class="col-sm-2">
                 <button type="button" class="btn btn-primary" ng-click="candidate.addSkill()" ng-disabled="!candidate.skill">Add</button>

@@ -76,9 +76,10 @@ namespace RecruitmentManagementSystem.App.Controllers
                     LastName = user.LastName,
                     Email = user.Email,
                     PhoneNumber = user.PhoneNumber,
-                    AvatarFullPath = _fileRepository.FindById(user.AvatarId).RelativePath
+                    Avatar = _fileRepository.FindById(user.AvatarId)
                 }
             };
+
             return View(model);
         }
 

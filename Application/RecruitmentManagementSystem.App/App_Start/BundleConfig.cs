@@ -26,6 +26,7 @@ namespace RecruitmentManagementSystem.App
                 "~/Scripts/core/core.module.js",
                 "~/Scripts/core/services/core.file.service.js",
                 "~/Scripts/core/services/core.notifier.service.js",
+                "~/Scripts/core/directives/core.keyboard.enter.directive.js",
                 "~/Scripts/questions/questions.module.js",
                 "~/Scripts/questions/controllers/questions.controller.js",
                 "~/Scripts/candidates/candidates.module.js",

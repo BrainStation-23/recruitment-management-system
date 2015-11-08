@@ -8,20 +8,20 @@
         vm.projects = [];
         vm.skills = [];
 
-        vm.discardEducation = function ($index) {
-            if (confirm("Are you want to delete?")) {
+        vm.discardEducation = function($index) {
+            if (confirm("Are you sure?")) {
                 vm.educations.splice($index, 1);
-            }        
+            }
         };
-        
-        vm.discardExperience = function (index) {
-            if (confirm("Are you want to delete?")) {
+
+        vm.discardExperience = function(index) {
+            if (confirm("Are you sure?")) {
                 vm.experiences.splice(index, 1);
             }
         };
 
-        vm.discardProject = function (index) {
-            if (confirm("Are you want to delete?")) {
+        vm.discardProject = function(index) {
+            if (confirm("Are you sure?")) {
                 vm.projects.splice(index, 1);
             }
         };
@@ -184,7 +184,13 @@
         };
 
         vm.addSkill = function() {
-            if (vm.skill && !_.find(vm.skills, { name: vm.skill})) {
+            if (_.find(vm.skills, { name: vm.skill })) {
+                notifierService.notifyWarning("Skill already added!");
+
+                return;
+            }
+
+            if (vm.skill) {
                 vm.skills.push({
                     name: vm.skill.toLowerCase()
                 });
