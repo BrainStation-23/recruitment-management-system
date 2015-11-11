@@ -5,12 +5,12 @@
 <h2>Edit Information</h2>
 <hr />
 
-<div ng-controller="AccountsController as account">
+<div ng-controller="AccountsController as account" ng-init="applicationUserInformations()">
 
     <div class="row">
 
         <div class="col-xs-8">
-            <div class="panel panel-success">
+            <div class="panel panel-success userBasicInfoEdit">
                 <div class="panel-heading">
                     <i class="fa fa-info-circle fa-lg"></i>
                     Basic Information
@@ -68,7 +68,7 @@
             </div>
         </div>
         <div class="col-xs-4">
-            <div class="panel panel-success">
+            <div class="panel panel-success userAvatarEdit">
                 <div class="panel-heading">
                     <i class="fa fa-picture-o fa-lg"></i>
                     Change Avatar

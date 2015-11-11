@@ -4,7 +4,7 @@
 <hr />
 
 <div>
-    <dl class="dl-horizontal">
+    <dl class="dl-horizontal col-xs-12 col-md-10">
         <dt>First Name:</dt>
         <dd>
             @Model.ApplicationUser.FirstName
@@ -21,10 +21,14 @@
         <dd>
             @Model.ApplicationUser.PhoneNumber
         </dd>
+    </dl>
+    
+    <dl>
         <dd>
             <img src="@Model.ApplicationUser.Avatar.RelativePath" height="160" width="160" class="img-thumbnail" alt="Avatar" />
         </dd>
     </dl>
+    
 
     @Html.ActionLink("Edit", "EditProfile", "Manage")
 </div>

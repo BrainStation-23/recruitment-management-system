@@ -3,9 +3,11 @@
 
         var vm = this;
 
-        $http.get("/Manage/ApplicationUserInformation/").success(function(response) {
-            vm.applicationUser = response;
-        });
+        vm.applicationUserInformations = function() {
+            $http.get("/Manage/ApplicationUserInformation/").success(function (response) {
+                vm.applicationUser = response;
+            });
+        };
 
         vm.saveBasicInformation = function() {
             vm.form.submitted = true;
@@ -22,6 +24,8 @@
                     method: "POST",
                     url: "/Manage/EditApplicationUserInformation",
                     data: model
+                }).success(function(respomse) {
+                    notifierService.notifySuccess("Basic Informations updated successfully.");
                 }).error(function(response) {
                     var erroMessages = _.map(response, function(error) {
                         return error.ErrorMessage;

@@ -380,59 +380,6 @@ namespace RecruitmentManagementSystem.App.Controllers
             return Json(viewModel, JsonRequestBehavior.AllowGet);
         }
 
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<ActionResult> EditProfile(RegisterViewModel registerViewModel)
-        //{
-        //    if (!ModelState.IsValid) return View(registerViewModel);
-
-        //    var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
-
-        //    File file = null;
-
-        //    if (registerViewModel.Avatar != null && registerViewModel.Avatar.ContentLength > 0)
-        //    {
-        //        var fileName = string.Format("{0}.{1}", Guid.NewGuid(),
-        //            Path.GetFileName(registerViewModel.Avatar.FileName));
-
-        //        FileHelper.SaveFile(new UploadConfig
-        //        {
-        //            FileBase = registerViewModel.Avatar,
-        //            FileName = fileName,
-        //            FilePath = FilePath.AvatarRelativePath
-        //        });
-
-        //        file = new File
-        //        {
-        //            Name = fileName,
-        //            MimeType = registerViewModel.Avatar.ContentType,
-        //            Size = registerViewModel.Avatar.ContentLength,
-        //            RelativePath = FilePath.AvatarRelativePath + fileName,
-        //            FileType = FileType.Avatar,
-        //            CreatedBy = User.Identity.GetUserId(),
-        //            UpdatedBy = User.Identity.GetUserId()
-        //        };
-
-        //        _fileRepository.Insert(file);
-        //        _fileRepository.Save();
-
-        //    }
-
-        //    user.FirstName = registerViewModel.FirstName;
-        //    user.LastName = registerViewModel.LastName;
-        //    user.Email = registerViewModel.Email;
-        //    user.PhoneNumber = registerViewModel.PhoneNumber;
-
-        //    if (file != null)
-        //    {
-        //        user.AvatarId = file.Id;
-        //    }
-
-        //    await UserManager.UpdateAsync(user);
-
-        //    return RedirectToAction("Index");
-        //}
-
         [HttpPost]
         public async Task<ActionResult> EditApplicationUserInformation(
             ApplicationUserInformationViewModel applicationUserInformationViewModel)
