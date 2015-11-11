@@ -1,13 +1,22 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+using RecruitmentManagementSystem.App.Infrastructure.Constants;
+using RecruitmentManagementSystem.App.Infrastructure.Helpers;
 using RecruitmentManagementSystem.App.ViewModels.Account;
 using RecruitmentManagementSystem.Data.Interfaces;
 using RecruitmentManagementSystem.Data.Repositories;
+using RecruitmentManagementSystem.Model;
+using File = RecruitmentManagementSystem.Model.File;
 
 namespace RecruitmentManagementSystem.App.Controllers
 {
@@ -23,10 +32,11 @@ namespace RecruitmentManagementSystem.App.Controllers
             _fileRepository = new FileRepository();
         }
 
-        public ManageController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
+        public ManageController(ApplicationUserManager userManager, ApplicationSignInManager signInManager, IFileRepository fileRepository)
         {
             UserManager = userManager;
             SignInManager = signInManager;
+            _fileRepository = fileRepository;
         }
 
         public ApplicationSignInManager SignInManager
@@ -343,37 +353,174 @@ namespace RecruitmentManagementSystem.App.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> EditProfile()
+        public ActionResult EditProfile()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> ApplicationUserInformation()
         {
             var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
 
             var viewModel = new ApplicationUserViewModel
             {
+                Id = user.Id,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Email = user.Email,
-                PhoneNumber = user.PhoneNumber
+                PhoneNumber = user.PhoneNumber,
+                //Roles = new List<string>
+                //{
+                //    "Admin",
+                //    "HR"
+                //},
+                Avatar = _fileRepository.FindById(user.AvatarId)
             };
 
-            return View(viewModel);
+            return Json(viewModel, JsonRequestBehavior.AllowGet);
         }
 
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<ActionResult> EditProfile(RegisterViewModel registerViewModel)
+        //{
+        //    if (!ModelState.IsValid) return View(registerViewModel);
+
+        //    var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+
+        //    File file = null;
+
+        //    if (registerViewModel.Avatar != null && registerViewModel.Avatar.ContentLength > 0)
+        //    {
+        //        var fileName = string.Format("{0}.{1}", Guid.NewGuid(),
+        //            Path.GetFileName(registerViewModel.Avatar.FileName));
+
+        //        FileHelper.SaveFile(new UploadConfig
+        //        {
+        //            FileBase = registerViewModel.Avatar,
+        //            FileName = fileName,
+        //            FilePath = FilePath.AvatarRelativePath
+        //        });
+
+        //        file = new File
+        //        {
+        //            Name = fileName,
+        //            MimeType = registerViewModel.Avatar.ContentType,
+        //            Size = registerViewModel.Avatar.ContentLength,
+        //            RelativePath = FilePath.AvatarRelativePath + fileName,
+        //            FileType = FileType.Avatar,
+        //            CreatedBy = User.Identity.GetUserId(),
+        //            UpdatedBy = User.Identity.GetUserId()
+        //        };
+
+        //        _fileRepository.Insert(file);
+        //        _fileRepository.Save();
+
+        //    }
+
+        //    user.FirstName = registerViewModel.FirstName;
+        //    user.LastName = registerViewModel.LastName;
+        //    user.Email = registerViewModel.Email;
+        //    user.PhoneNumber = registerViewModel.PhoneNumber;
+
+        //    if (file != null)
+        //    {
+        //        user.AvatarId = file.Id;
+        //    }
+
+        //    await UserManager.UpdateAsync(user);
+
+        //    return RedirectToAction("Index");
+        //}
+
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> EditProfile(ApplicationUserViewModel applicationUserViewModel)
+        public async Task<ActionResult> EditApplicationUserInformation(ApplicationUserInformationViewModel applicationUserInformationViewModel)
         {
-            if (!ModelState.IsValid) return View(applicationUserViewModel);
+            if (!ModelState.IsValid)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json(ModelState.Values.SelectMany(v => v.Errors));
+            }
 
             var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
 
-            user.FirstName = applicationUserViewModel.FirstName;
-            user.LastName = applicationUserViewModel.LastName;
-            user.Email = applicationUserViewModel.Email;
-            user.PhoneNumber = applicationUserViewModel.PhoneNumber;
+            user.FirstName = applicationUserInformationViewModel.FirstName;
+            user.LastName = applicationUserInformationViewModel.LastName;
+            user.Email = applicationUserInformationViewModel.Email;
+            user.PhoneNumber = applicationUserInformationViewModel.PhoneNumber;
 
             await UserManager.UpdateAsync(user);
 
-            return RedirectToAction("Index");
+            return Json(user);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> EditRole(RoleViewModel roleViewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json(ModelState.Values.SelectMany(v => v.Errors));
+            }
+
+            var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+
+            UserManager.AddToRole(user.Id, roleViewModel.Role);
+            await UserManager.UpdateAsync(user);
+
+            return Json(user);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> EditAvatar(AvatarViewModel avatarViewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                return Json(ModelState.Values.SelectMany(v => v.Errors));
+            }
+
+            var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+
+            File file = null;
+
+            if (avatarViewModel.Avatar != null && avatarViewModel.Avatar.ContentLength > 0)
+            {
+                var fileName = string.Format("{0}.{1}", Guid.NewGuid(),
+                    Path.GetFileName(avatarViewModel.Avatar.FileName));
+
+                FileHelper.SaveFile(new UploadConfig
+                {
+                    FileBase = avatarViewModel.Avatar,
+                    FileName = fileName,
+                    FilePath = FilePath.AvatarRelativePath
+                });
+
+                file = new File
+                {
+                    Name = fileName,
+                    MimeType = avatarViewModel.Avatar.ContentType,
+                    Size = avatarViewModel.Avatar.ContentLength,
+                    RelativePath = FilePath.AvatarRelativePath + fileName,
+                    FileType = FileType.Avatar,
+                    CreatedBy = User.Identity.GetUserId(),
+                    UpdatedBy = User.Identity.GetUserId()
+                };
+
+                _fileRepository.Insert(file);
+                _fileRepository.Save();
+
+            }
+
+            if (file != null)
+            {
+                user.AvatarId = file.Id;
+            }
+
+            await UserManager.UpdateAsync(user);
+
+            return Json(user);
         }
 
         protected override void Dispose(bool disposing)

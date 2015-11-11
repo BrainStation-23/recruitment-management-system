@@ -1,65 +1,108 @@
-﻿@model RecruitmentManagementSystem.App.ViewModels.Account.ApplicationUserViewModel
-
-@{
-    ViewBag.Title = "Edit Profile";
+﻿@{
+    ViewBag.Title = "Edit";
 }
 
-<h3>Edit Profile</h3>
+<h2>Edit All Information</h2>
 <hr />
 
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
-
-    <div class="form-horizontal">
+<div ng-controller="AccountsController as account">
+    
+    <div class ="row">
         
-        @Html.ValidationSummary(true, "", new {@class = "text-danger"})
-        @Html.HiddenFor(model => model.Id)
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.FirstName, new {@class = "control-label col-md-2"})
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.FirstName, new {htmlAttributes = new {@class = "form-control"}})
-                @Html.ValidationMessageFor(model => model.FirstName, "", new {@class = "text-danger"})
+        <div class="panel panel-success col-lg-8">
+            <div class="panel-heading">
+                <i class="fa fa-info-circle fa-lg"></i>
+                Basic Information
             </div>
+            <form name="account.form" ng-submit="account.saveBasicInformation()" novalidate>
+                <div class="panel-body form-horizontal">
+
+                    <div class="row">
+                        <div class="col-xs-12 col-md-10">
+
+                            <div class="form-group">
+                                <label class="control-label col-md-2 required">First Name</label>
+                                <div class="col-md-5">
+                                    <input type="text" name="firstName" ng-model="account.applicationUser.FirstName" ng-maxlength="30" required class="form-control" />
+                                    <div class="text-danger field-validation-error" ng-messages="account.form.submitted && account.form.applicationUser.FirstName.$error">
+                                        <span ng-message="required">This field is required.</span>
+                                        <span ng-message="maxlength">This field is too large</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-2 required">Last Name</label>
+                                <div class="col-md-5">
+                                    <input type="text" name="lastName" ng-model="account.applicationUser.LastName" ng-maxlength="30" required class="form-control" />
+                                    <div class="text-danger field-validation-error" ng-messages="account.form.submitted && candidate.form.applicationUser.LastName.$error">
+                                        <span ng-message="required">This field is required.</span>
+                                        <span ng-message="maxlength">This field length is too large.</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="col-xs-12 col-md-10">
+                            
+                            <div class="form-group">
+                                <label class="control-label col-md-2 required">Email</label>
+                                <div class="col-md-5">
+                                    <input type="email" name="email" ng-model="account.applicationUser.Email" required class="form-control" />
+                                    <div class="text-danger field-validation-error" ng-messages="account.form.submitted && account.form.applicationUser.Email.$error">
+                                        <span ng-message="required">This field is required.</span>
+                                        <span ng-message="email">This is not a valid email address.</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-2 required">Phone Number</label>
+                                <div class="col-md-5">
+                                    <input type="tel" name="phoneNumber" ng-model="account.applicationUser.PhoneNumber" ng-pattern="/^\(?(\d{5})\)?[ .-]?(\d{6})$/" class="form-control" />
+                                    <div class="text-danger field-validation-error" ng-messages="account.form.submitted && account.form.applicationUser.PhoneNumber.$error">
+                                        <span ng-message="pattern">This is not a valid phone number.</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="panel-footer">
+                    <input type="submit" value="Save Basic Information" class="btn btn-primary" />
+                </div>
+            </form>
+
         </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.LastName, new {@class = "control-label col-md-2"})
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.LastName, new {htmlAttributes = new {@class = "form-control"}})
-                @Html.ValidationMessageFor(model => model.LastName, "", new {@class = "text-danger"})
+        <div class="panel panel-success col-lg-4">
+            <div class="panel-heading">
+                <i class="fa fa-picture-o fa-lg"></i>
+                Avatar
             </div>
+            <form name="account.form" novalidate>
+                <div class="panel-body form-horizontal">
+
+                    <div class="col-xs-12 col-md-10">
+                        <img ng-src="{{account.applicationUser.Avatar.RelativePath}}" height="160" width="160" class="img-thumbnail" alt="Avatar" />
+                    </div>
+                    
+                    <div class="col-xs-12 col-md-10">
+                        <input id="Avatar" name="Avatar" type="file" value="">
+                    </div>
+
+                </div>
+
+                <div class="panel-footer">
+                    <input type="submit" value="Save Avatar" class="btn btn-primary" />
+                </div>
+            </form>
         </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.PhoneNumber, new {@class = "control-label col-md-2"})
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.PhoneNumber, new {htmlAttributes = new {@class = "form-control"}})
-                @Html.ValidationMessageFor(model => model.PhoneNumber, "", new {@class = "text-danger"})
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Email, new {@class = "control-label col-md-2"})
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Email, new {htmlAttributes = new {@class = "form-control"}})
-                @Html.ValidationMessageFor(model => model.Email, "", new {@class = "text-danger"})
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default"/>
-            </div>
-        </div>
     </div>
-}
 
-<div>
-    @Html.ActionLink("Back", "Index")
 </div>
-
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}

@@ -1,13 +1,9 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using RecruitmentManagementSystem.Model;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace RecruitmentManagementSystem.App.ViewModels.Account
 {
-    public class ApplicationUserViewModel
+    public class ApplicationUserInformationViewModel
     {
-        public string Id { get; set; }
-
         [Required]
         [Display(Name = "First Name")]
         [StringLength(30, ErrorMessage = "The {0} must be at least {2} characters long.")]
@@ -25,10 +21,5 @@ namespace RecruitmentManagementSystem.App.ViewModels.Account
         [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; }
-
-        public IList<string> Roles { get; set; }
-
-        [Display(Name = "Avatar")]
-        public File Avatar { get; set; }
     }
 }
