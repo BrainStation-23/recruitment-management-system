@@ -1,13 +1,13 @@
 ﻿angular.module("accounts").controller("AccountsController", [
-    "$http", "notifierService", function ($http, notifierService) {
+    "$http", "notifierService", "fileService", function($http, notifierService, fileService) {
 
         var vm = this;
-        
-        $http.get("/Manage/ApplicationUserInformation/").success(function (response) {
+
+        $http.get("/Manage/ApplicationUserInformation/").success(function(response) {
             vm.applicationUser = response;
         });
-        
-        vm.saveBasicInformation = function () {
+
+        vm.saveBasicInformation = function() {
             vm.form.submitted = true;
 
             var model = {
@@ -19,11 +19,11 @@
 
             if (vm.form.$valid) {
                 $http({
-                    method: 'POST',
-                    url: '/Manage/EditApplicationUserInformation',
+                    method: "POST",
+                    url: "/Manage/EditApplicationUserInformation",
                     data: model
-                }).error(function (response) {
-                    var erroMessages = _.map(response, function (error) {
+                }).error(function(response) {
+                    var erroMessages = _.map(response, function(error) {
                         return error.ErrorMessage;
                     });
 
@@ -31,30 +31,39 @@
                 });
             }
         };
-        
-        //vm.saveAvatar = function () {
-        //    vm.form.submitted = true;
 
-        //    var model = {
-        //        avatar: vm.avatar
-        //    };
+        vm.uploadAvatar = function(file) {
+            if (!file) {
+                return;
+            }
 
-        //    if (vm.form.$valid) {
-        //        fileService.postMultipartForm({
-        //            url: "/Manage/EditAvatar",
-        //            data: model
-        //        }).progress(function (evt) {
-        //            console.log("percent: " + parseInt(100.0 * evt.loaded / evt.total));
-        //        }).success(function (data) {
-        //            location.href = "/Manage";
-        //        }).error(function (response) {
-        //            var erroMessages = _.map(response, function (error) {
-        //                return error.ErrorMessage;
-        //            });
+            var errorMessages = [];
 
-        //            notifierService.notifyError(erroMessages);
-        //        });
-        //    }
-        //};
+            if (file.size > 1024 * 1024 * 2) {
+                errorMessages.push("File size is too large. Max upload size is 2MB.");
+            }
+
+            if (errorMessages.length) {
+                notifierService.notifyInfo(errorMessages);
+            } else {
+                fileService.postMultipartForm({
+                    url: "/Manage/EditAvatar",
+                    data: {
+                        file: file
+                    }
+                }).progress(function(evt) {
+                    console.log("percent: " + parseInt(100.0 * evt.loaded / evt.total));
+                }).success(function(avatar) {
+                    vm.applicationUser.Avatar = avatar;
+                    notifierService.notifySuccess("Avatar updated successfully.");
+                }).error(function(response) {
+                    var erroMessages = _.map(response, function(error) {
+                        return error.ErrorMessage;
+                    });
+
+                    notifierService.notifyError(erroMessages);
+                });
+            }
+        };
     }
 ]);

@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using System.Web.Security;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
@@ -32,7 +30,8 @@ namespace RecruitmentManagementSystem.App.Controllers
             _fileRepository = new FileRepository();
         }
 
-        public ManageController(ApplicationUserManager userManager, ApplicationSignInManager signInManager, IFileRepository fileRepository)
+        public ManageController(ApplicationUserManager userManager, ApplicationSignInManager signInManager,
+            IFileRepository fileRepository)
         {
             UserManager = userManager;
             SignInManager = signInManager;
@@ -435,11 +434,12 @@ namespace RecruitmentManagementSystem.App.Controllers
         //}
 
         [HttpPost]
-        public async Task<ActionResult> EditApplicationUserInformation(ApplicationUserInformationViewModel applicationUserInformationViewModel)
+        public async Task<ActionResult> EditApplicationUserInformation(
+            ApplicationUserInformationViewModel applicationUserInformationViewModel)
         {
             if (!ModelState.IsValid)
             {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                Response.StatusCode = (int) HttpStatusCode.BadRequest;
                 return Json(ModelState.Values.SelectMany(v => v.Errors));
             }
 
@@ -460,7 +460,7 @@ namespace RecruitmentManagementSystem.App.Controllers
         {
             if (!ModelState.IsValid)
             {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                Response.StatusCode = (int) HttpStatusCode.BadRequest;
                 return Json(ModelState.Values.SelectMany(v => v.Errors));
             }
 
@@ -473,54 +473,48 @@ namespace RecruitmentManagementSystem.App.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> EditAvatar(AvatarViewModel avatarViewModel)
+        public async Task<ActionResult> EditAvatar()
         {
-            if (!ModelState.IsValid)
+            if (Request.Files == null || Request.Files.Count <= 0 || Request.Files[0] == null ||
+                Request.Files[0].ContentLength <= 0)
             {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                ModelState.AddModelError("", "Invalid file for avatar");
+
+                Response.StatusCode = (int) HttpStatusCode.BadRequest;
                 return Json(ModelState.Values.SelectMany(v => v.Errors));
             }
 
+            var fileBase = Request.Files[0];
+
+            var fileName = string.Format("{0}.{1}", Guid.NewGuid(),
+                Path.GetFileName(fileBase.FileName));
+
+            FileHelper.SaveFile(new UploadConfig
+            {
+                FileBase = fileBase,
+                FileName = fileName,
+                FilePath = FilePath.AvatarRelativePath
+            });
+
+            var file = new File
+            {
+                Name = fileName,
+                MimeType = fileBase.ContentType,
+                Size = fileBase.ContentLength,
+                RelativePath = FilePath.AvatarRelativePath + fileName,
+                FileType = FileType.Avatar,
+                CreatedBy = User.Identity.GetUserId(),
+                UpdatedBy = User.Identity.GetUserId()
+            };
+
+            _fileRepository.Insert(file);
+            _fileRepository.Save();
+
             var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
-
-            File file = null;
-
-            if (avatarViewModel.Avatar != null && avatarViewModel.Avatar.ContentLength > 0)
-            {
-                var fileName = string.Format("{0}.{1}", Guid.NewGuid(),
-                    Path.GetFileName(avatarViewModel.Avatar.FileName));
-
-                FileHelper.SaveFile(new UploadConfig
-                {
-                    FileBase = avatarViewModel.Avatar,
-                    FileName = fileName,
-                    FilePath = FilePath.AvatarRelativePath
-                });
-
-                file = new File
-                {
-                    Name = fileName,
-                    MimeType = avatarViewModel.Avatar.ContentType,
-                    Size = avatarViewModel.Avatar.ContentLength,
-                    RelativePath = FilePath.AvatarRelativePath + fileName,
-                    FileType = FileType.Avatar,
-                    CreatedBy = User.Identity.GetUserId(),
-                    UpdatedBy = User.Identity.GetUserId()
-                };
-
-                _fileRepository.Insert(file);
-                _fileRepository.Save();
-
-            }
-
-            if (file != null)
-            {
-                user.AvatarId = file.Id;
-            }
-
+            user.AvatarId = file.Id;
             await UserManager.UpdateAsync(user);
 
-            return Json(user);
+            return Json(file);
         }
 
         protected override void Dispose(bool disposing)

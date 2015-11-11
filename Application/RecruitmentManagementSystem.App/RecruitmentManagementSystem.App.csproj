@@ -221,7 +221,6 @@
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\Account\AccountViewModels.cs" />
     <Compile Include="ViewModels\Account\ApplicationUserInformationViewModel.cs" />
-    <Compile Include="ViewModels\Account\AvatarViewModel.cs" />
     <Compile Include="ViewModels\Account\RegisterViewModel.cs" />
     <Compile Include="ViewModels\Account\ApplicationUserViewModel.cs" />
     <Compile Include="ViewModels\Account\RoleViewModel.cs" />
