@@ -1,0 +1,21 @@
+{
+  "name": "RecruitmentManagementSystem",
+  "version": "1.0.0",
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:BrainStation-23/recruitment-management-system.git"
+  },
+  "author": [
+    "Adnan <adnan.faiz@bs-23.com>",
+    "Shibbir <shibbir@bs-23.com>"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "bower": "^1.6.5",
+    "gulp": "^3.9.0",
+    "gulp-bower": "0.0.11"
+  }
+}

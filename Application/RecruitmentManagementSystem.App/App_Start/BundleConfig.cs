@@ -38,10 +38,10 @@ namespace RecruitmentManagementSystem.App
                 "~/Scripts/accounts/controllers/accounts.controller.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                "~/Vendors/bower_components/bootstrap/dist/css/bootstrap.css",
+                "~/Content/Themes/Superhero/bootstrap.css",
                 "~/Vendors/bower_components/toastr/toastr.css",
                 "~/Vendors/bower_components/font-awesome/css/font-awesome.css",
-                "~/Content/site.css"));
+                "~/Content/Main.css"));
         }
     }
 }

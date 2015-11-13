@@ -16,11 +16,18 @@
     white-space: normal;
 }
 
-.required::after{
+.required::after {
     content: " *";
     color: #db2828;
 }
 
 .userBasicInfoEdit, .userAvatarEdit {
     min-height: 303px;
+}
+
+.text-danger, .text-danger:hover {
+    color: #d9534f;
+    font-size: 12px;
+    font-weight: bold;
+    line-height: 2.5em;
 }

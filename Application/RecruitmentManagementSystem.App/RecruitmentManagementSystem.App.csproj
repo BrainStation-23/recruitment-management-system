@@ -240,9 +240,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Images\default-avatar.jpg" />
+    <Content Include="Content\Themes\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
-    <Content Include="Content\Site.css" />
     <Content Include="Scripts\accounts\accounts.module.js" />
     <Content Include="Scripts\accounts\controllers\accounts.controller.js" />
     <Content Include="Scripts\candidates\controllers\candidates.controller.js" />
@@ -294,6 +294,7 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_NavigationPartial.cshtml" />
+    <Content Include="Content\Main.scss" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -402,6 +403,18 @@
   <ItemGroup>
     <Content Include="Views\Candidate\_Skill.cshtml" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Themes\Superhero\bootstrap.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Themes\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\Themes\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\Themes\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Content\Themes\fonts\glyphicons-halflings-regular.woff2" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="package.json" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
@@ -437,6 +450,9 @@
     </PropertyGroup>
     <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
   </Target>
+  <PropertyGroup>
+    <PreBuildEvent>npm install</PreBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
