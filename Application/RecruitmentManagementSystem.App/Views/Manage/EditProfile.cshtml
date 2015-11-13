@@ -5,7 +5,7 @@
 <h2>Edit Information</h2>
 <hr />
 
-<div ng-controller="AccountsController as account" ng-init="applicationUserInformations()">
+<div ng-controller="AccountsController as account" ng-init="account.applicationUserInformations()">
 
     <div class="row">
 
@@ -23,7 +23,7 @@
                             <label class="control-label col-sm-2 required">First Name</label>
                             <div class="col-sm-6">
                                 <input type="text" name="firstName" ng-model="account.applicationUser.FirstName" ng-maxlength="30" required class="form-control" />
-                                <div class="text-danger field-validation-error" ng-messages="account.form.submitted && account.form.applicationUser.FirstName.$error">
+                                <div class="text-danger field-validation-error" ng-messages="account.form.submitted && account.form.firstName.$error">
                                     <span ng-message="required">This field is required.</span>
                                     <span ng-message="maxlength">This field is too large</span>
                                 </div>
@@ -34,7 +34,7 @@
                             <label class="control-label col-sm-2 required">Last Name</label>
                             <div class="col-sm-6">
                                 <input type="text" name="lastName" ng-model="account.applicationUser.LastName" ng-maxlength="30" required class="form-control" />
-                                <div class="text-danger field-validation-error" ng-messages="account.form.submitted && candidate.form.applicationUser.LastName.$error">
+                                <div class="text-danger field-validation-error" ng-messages="account.form.submitted && account.form.lastName.$error">
                                     <span ng-message="required">This field is required.</span>
                                     <span ng-message="maxlength">This field length is too large.</span>
                                 </div>
@@ -45,7 +45,7 @@
                             <label class="control-label col-sm-2 required">Email</label>
                             <div class="col-sm-6">
                                 <input type="email" name="email" ng-model="account.applicationUser.Email" required class="form-control" />
-                                <div class="text-danger field-validation-error" ng-messages="account.form.submitted && account.form.applicationUser.Email.$error">
+                                <div class="text-danger field-validation-error" ng-messages="account.form.submitted && account.form.email.$error">
                                     <span ng-message="required">This field is required.</span>
                                     <span ng-message="email">This is not a valid email address.</span>
                                 </div>
@@ -56,7 +56,7 @@
                             <label class="control-label col-sm-2 required">Mobile</label>
                             <div class="col-sm-6">
                                 <input type="tel" name="phoneNumber" ng-model="account.applicationUser.PhoneNumber" ng-pattern="/^\(?(\d{5})\)?[ .-]?(\d{6})$/" class="form-control" />
-                                <div class="text-danger field-validation-error" ng-messages="account.form.submitted && account.form.applicationUser.PhoneNumber.$error">
+                                <div class="text-danger field-validation-error" ng-messages="account.form.submitted && account.form.phoneNumber.$error">
                                     <span ng-message="pattern">This is not a valid phone number.</span>
                                 </div>
                             </div>
@@ -67,16 +67,23 @@
                 </div>
             </div>
         </div>
+
         <div class="col-xs-4">
             <div class="panel panel-success userAvatarEdit">
                 <div class="panel-heading">
                     <i class="fa fa-picture-o fa-lg"></i>
                     Change Avatar
                 </div>
-                <form name="account.form" novalidate>
+                <form novalidate>
                     <div class="panel-body">
                         <img src="~/Content/Images/default-avatar.jpg" ng-src="{{ account.applicationUser.Avatar.RelativePath }}" alt="default avatar" class="img-thumbnail" style="height: 155px; width: 155px;">
-                        <input type="file" title="Select Photo" accept="image/*" ngf-fix-orientation="false" ngf-select="account.uploadAvatar($file)" />
+                        <input type="file" name="avatar" title="Select Photo" accept="image/*" ngf-fix-orientation="false" ngf-select="account.uploadAvatar($file)" />
+                        <br />
+                        <button type="button" class="btn btn-danger"
+                                ng-click="account.removeAvatar()"
+                                ng-hide="!account.applicationUser.Avatar">
+                            Remove Avatar
+                        </button>
                     </div>
                 </form>
             </div>

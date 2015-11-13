@@ -464,6 +464,40 @@ namespace RecruitmentManagementSystem.App.Controllers
             return Json(file);
         }
 
+        [HttpPost]
+        public async Task<ActionResult> RemoveAvatar()
+        {
+            var userId = User.Identity.GetUserId();
+            var user = await UserManager.FindByIdAsync(userId);
+
+            var file = _fileRepository.FindById(user.AvatarId);
+
+            if (user.AvatarId == null || file == null)
+            {
+                Response.StatusCode = (int) HttpStatusCode.BadRequest;
+                ModelState.AddModelError("", "Invalid arguments.");
+                return Json(ModelState.Values.SelectMany(v => v.Errors));
+            }
+
+            var fullPath = Request.MapPath(file.RelativePath);
+
+            try
+            {
+                if (System.IO.File.Exists(fullPath))
+                {
+                    System.IO.File.Delete(fullPath);
+                }
+            }
+            catch (Exception)
+            {
+                return Json(null);
+            }
+
+            _fileRepository.Delete(user.AvatarId);
+            _fileRepository.Save();
+            return Json(null);
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing && _userManager != null)

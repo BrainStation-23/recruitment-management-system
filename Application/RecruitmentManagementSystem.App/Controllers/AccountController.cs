@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using AutoMapper.QueryableExtensions;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
@@ -53,7 +54,7 @@ namespace RecruitmentManagementSystem.App.Controllers
 
         public ActionResult Index()
         {
-            return View();
+            return View(UserManager.Users.ToList());
         }
 
         //

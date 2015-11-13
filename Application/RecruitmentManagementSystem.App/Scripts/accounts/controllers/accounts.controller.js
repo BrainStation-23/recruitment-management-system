@@ -4,7 +4,7 @@
         var vm = this;
 
         vm.applicationUserInformations = function() {
-            $http.get("/Manage/ApplicationUserInformation/").success(function (response) {
+            $http.get("/Manage/ApplicationUserInformation/").success(function(response) {
                 vm.applicationUser = response;
             });
         };
@@ -24,7 +24,7 @@
                     method: "POST",
                     url: "/Manage/EditApplicationUserInformation",
                     data: model
-                }).success(function(respomse) {
+                }).success(function() {
                     notifierService.notifySuccess("Basic Informations updated successfully.");
                 }).error(function(response) {
                     var erroMessages = _.map(response, function(error) {
@@ -68,6 +68,19 @@
                     notifierService.notifyError(erroMessages);
                 });
             }
+        };
+
+        vm.removeAvatar = function() {
+            $http.post("/Manage/RemoveAvatar").success(function() {
+                //vm.applicationUser.Avatar = null;
+                notifierService.notifySuccess("Avatar removed successfully.");
+            }).error(function(response) {
+                var erroMessages = _.map(response, function(error) {
+                    return error.ErrorMessage;
+                });
+
+                notifierService.notifyError(erroMessages);
+            });
         };
     }
 ]);
