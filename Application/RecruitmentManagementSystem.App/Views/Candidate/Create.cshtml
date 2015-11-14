@@ -19,8 +19,8 @@
                 <div class="col-xs-12 col-md-10">
 
                     <div class="form-group">
-                        <label class="control-label col-md-2">First Name</label>
-                        <div class="col-md-6">
+                        <label class="control-label col-md-2 required">First Name</label>
+                        <div class="col-md-5">
                             <input type="text" name="firstName" ng-model="candidate.firstName" ng-maxlength="30" required class="form-control"/>
                             <div class="text-danger field-validation-error" ng-messages="candidate.form.submitted && candidate.form.firstName.$error">
                                 <span ng-message="required">This field is required.</span>
@@ -30,8 +30,8 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="control-label col-md-2">Last Name</label>
-                        <div class="col-md-6">
+                        <label class="control-label col-md-2 required">Last Name</label>
+                        <div class="col-md-5">
                             <input type="text" name="lastName" ng-model="candidate.lastName" ng-maxlength="30" required class="form-control"/>
                             <div class="text-danger field-validation-error" ng-messages="candidate.form.submitted && candidate.form.lastName.$error">
                                 <span ng-message="required">This field is required.</span>
@@ -41,8 +41,8 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="control-label col-md-2">Email</label>
-                        <div class="col-md-6">
+                        <label class="control-label col-md-2 required">Email</label>
+                        <div class="col-md-5">
                             <input type="email" name="email" ng-model="candidate.email" required class="form-control"/>
                             <div class="text-danger field-validation-error" ng-messages="candidate.form.submitted && candidate.form.email.$error">
                                 <span ng-message="required">This field is required.</span>
@@ -52,9 +52,9 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="control-label col-md-2">Phone Number</label>
-                        <div class="col-md-6">
-                            <input type="text" name="phoneNumber" ng-model="candidate.phoneNumber" ng-pattern="/^\(?(\d{3})\)?[ .-]?(\d{3})[ .-]?(\d{4})$/" required class="form-control"/>
+                        <label class="control-label col-md-2 required">Phone Number</label>
+                        <div class="col-md-5">
+                            <input type="tel" name="phoneNumber" ng-model="candidate.phoneNumber" ng-pattern="/^\(?(\d{5})\)?[ .-]?(\d{6})$/" required class="form-control" />
                             <div class="text-danger field-validation-error" ng-messages="candidate.form.submitted && candidate.form.phoneNumber.$error">
                                 <span ng-message="required">This field is required.</span>
                                 <span ng-message="pattern">This is not a valid phone number.</span>
@@ -64,7 +64,7 @@
 
                     <div class="form-group">
                         <label class="control-label col-md-2">Others</label>
-                        <div class="col-md-6">
+                        <div class="col-md-5">
                             <textarea name="others" ng-model="candidate.others" class="form-control" rows="6" ng-maxlength="3000"></textarea>
                             <div class="text-danger field-validation-error" ng-messages="candidate.form.submitted && candidate.form.others.$error">
                                 <span ng-message="maxlength">This field length is too large.</span>
@@ -74,7 +74,7 @@
 
                     <div class="form-group">
                         <label class="control-label col-md-2">Website</label>
-                        <div class="col-md-6">
+                        <div class="col-md-5">
                             <input type="url" name="website" ng-model="candidate.website" ng-maxlength="50" class="form-control"/>
                             <div class="text-danger field-validation-error" ng-messages="candidate.form.submitted && candidate.form.website.$error">
                                 <span ng-message="maxlength">This field length is too large.</span>
@@ -85,7 +85,7 @@
 
                     <div class="form-group">
                         <label class="control-label col-md-2">Resume</label>
-                        <div class="col-md-6">
+                        <div class="col-md-5">
                             <input type="file" title="Select Resume" ng-model="candidate.resume" ngf-select accept=".pdf,.doc,.docx"/>
                         </div>
                     </div>
@@ -93,7 +93,7 @@
 
                 <div class="col-xs-12 col-md-2">
                     <img src="~/Content/Images/default-avatar.jpg" ng-src="{{ candidate.avatarPreview }}" alt="default avatar" class="img-thumbnail" style="height: 155px; width: 155px;">
-                    <input type="file" title="Select Photo" accept="image/*" ngf-fix-orientation="false" ngf-select="candidate.renderPreview($file)" />
+                    <input type="file" title="Select Photo" accept="image/*" ngf-fix-orientation="false" ngf-select="candidate.renderAvatarPreview($file)" />
                 </div>
             </div>
 
@@ -102,12 +102,16 @@
             @Html.Partial("_Education")
 
             @Html.Partial("_Experience")
+            
+            @Html.Partial("_Project")
+
+            @Html.Partial("_Skill")
 
             <hr/>
 
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Save Candidate" class="btn btn-primary"/>
+                    <input type="submit" value="Save Candidate" class="btn btn-success"/>
                 </div>
             </div>
         </div>

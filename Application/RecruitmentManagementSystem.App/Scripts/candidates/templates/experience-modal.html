@@ -10,7 +10,7 @@
             <div class="row">
                 <div class="col-xs-12 col-md-6">
                     <div class="form-group">
-                        <label>Company Name</label>
+                        <label class="required">Company Name</label>
                         <input type="text" name="organization" ng-model="experience.organization" required class="form-control" />
                         <div class="text-danger field-validation-error" ng-messages="experience.form.submitted && experience.form.organization.$error">
                             <span ng-message="required">This field is required.</span>
@@ -19,7 +19,7 @@
                 </div>
                 <div class="col-xs-12 col-md-6">
                     <div class="form-group">
-                        <label>Job Title</label>
+                        <label class="required">Job Title</label>
                         <input type="text" name="jobTitle" ng-model="experience.jobTitle" required class="form-control" />
                         <div class="text-danger field-validation-error" ng-messages="experience.form.submitted && experience.form.jobTitle.$error">
                             <span ng-message="required">This field is required.</span>
@@ -33,13 +33,14 @@
                 <div class="col-xs-12">
 
                     <div class="form-group">
-                        <label>Time Period</label>
+                        <label class="required">Time Period</label>
                     </div>
 
                     <div class="row">
+                        <div class="col-xs-1">From</div>
                         <div class="col-xs-5">
                             <div class="input-group">
-                                <input type="date" name="startDate" class="form-control" placeholder="Select date" required
+                                <input type="date" name="startDate" class="form-control" placeholder="Select date" required disabled
                                        ng-model="experience.startDate"
                                        uib-datepicker-popup="dd-MMMM-yyyy"
                                        is-open="experience.isStartDateCalendarOpened">
@@ -58,9 +59,8 @@
 
                         <div class="col-xs-5">
                             <div class="input-group">
-                                <input type="date" name="endDate" class="form-control" placeholder="Select date"
+                                <input type="date" name="endDate" class="form-control" placeholder="Select date" disabled
                                        ng-model="experience.endDate"
-                                       ng-disabled="experience.present"
                                        ng-required="!experience.present"
                                        uib-datepicker-popup="dd-MMMM-yyyy"
                                        is-open="experience.isEndDateCalendarOpened">
@@ -77,9 +77,13 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-xs-offset-6 col-xs-4">
-                            <input type="checkbox" name="present" ng-value="true" ng-model="experience.present" class="checkbox" style="margin-top: 10px; display: inline-block;">
-                            Currently Present
+                        <div class="col-xs-offset-7 col-xs-4">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="present" ng-value="true" ng-model="experience.present" class="checkbox">
+                                    Currently Present
+                                </label>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -113,6 +117,6 @@
 </div>
 
 <div class="modal-footer">
-    <button class="btn btn-primary" type="button" ng-click="experience.save()">Save</button>
+    <button class="btn btn-success" type="button" ng-click="experience.save()">Save</button>
     <button class="btn btn-danger" type="button" ng-click="experience.cancel()">Cancel</button>
 </div>

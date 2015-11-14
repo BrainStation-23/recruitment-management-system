@@ -4,8 +4,6 @@
     app.factory("fileService", [
         "Upload", function($upload) {
 
-            var fileReaderSupported = window.FileReader != null && (window.FileAPI == null || FileAPI.html5 != false);
-
             var postMultipartForm = function(config) {
                 return $upload.upload({
                     url: config.url,
@@ -15,8 +13,7 @@
             };
 
             return {
-                postMultipartForm: postMultipartForm,
-                fileReaderSupported: fileReaderSupported
+                postMultipartForm: postMultipartForm
             };
         }
     ]);

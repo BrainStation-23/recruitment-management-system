@@ -22,16 +22,22 @@ namespace RecruitmentManagementSystem.App.Controllers
         private readonly IEducationRepository _educationRepository;
         private readonly IFileRepository _fileRepository;
         private readonly IExperienceRepository _experienceRepository;
+        private readonly IProjectRepository _projectRepository;
+        private readonly ISkillRepository _skillRepository;
 
         public CandidateController(ICandidateRepository candidateRepository, IFileRepository fileRepository,
-            IEducationRepository educationRepository, IExperienceRepository experienceRepository)
+            IEducationRepository educationRepository, IExperienceRepository experienceRepository,
+            IProjectRepository projectRepository, ISkillRepository skillRepository)
         {
             _candidateRepository = candidateRepository;
             _fileRepository = fileRepository;
             _educationRepository = educationRepository;
             _experienceRepository = experienceRepository;
+            _projectRepository = projectRepository;
+            _skillRepository = skillRepository;
         }
 
+        [HttpGet]
         public ActionResult Index()
         {
             var model = _candidateRepository.FindAll().ProjectTo<CandidateViewModel>();
@@ -52,7 +58,7 @@ namespace RecruitmentManagementSystem.App.Controllers
             if (!ModelState.IsValid)
             {
                 Response.StatusCode = (int) HttpStatusCode.BadRequest;
-                return Json(null);
+                return Json(ModelState.Values.SelectMany(v => v.Errors));
             }
 
             var candidate = new Candidate
@@ -79,6 +85,7 @@ namespace RecruitmentManagementSystem.App.Controllers
                         Degree = item.Degree,
                         FieldOfStudy = item.FieldOfStudy,
                         InstitutionId = item.InstitutionId,
+                        Grade = item.Grade,
                         StartDate = item.StartDate,
                         EndDate = item.EndDate,
                         Present = item.CurrentlyPresent,
@@ -101,13 +108,41 @@ namespace RecruitmentManagementSystem.App.Controllers
                         JobTitle = item.JobTitle,
                         StartDate = item.StartDate,
                         EndDate = item.EndDate,
-                        StillWorking = item.StillWorking,
+                        Present = item.Present,
                         Description = item.Description,
                         Notes = item.Notes,
                         CandidateId = candidate.Id
                     });
                 }
                 _experienceRepository.Save();
+            }
+
+            if (model.Projects != null)
+            {
+                foreach (var item in model.Projects)
+                {
+                    _projectRepository.Insert(new Project
+                    {
+                        Title = item.Title,
+                        Url = item.Url,
+                        Description = item.Description,
+                        CandidateId = candidate.Id
+                    });
+                }
+                _projectRepository.Save();
+            }
+
+            if (model.Skills != null)
+            {
+                foreach (var item in model.Skills)
+                {
+                    _skillRepository.Insert(new Skill
+                    {
+                        Name = item.Name,
+                        CandidateId = candidate.Id
+                    });
+                }
+                _skillRepository.Save();
             }
 
             ManageFiles(candidate.Id, Request.Files, model);
@@ -209,7 +244,7 @@ namespace RecruitmentManagementSystem.App.Controllers
         {
             if (fileBase == null || fileBase.ContentLength <= 0) return;
 
-            var fileName = string.Format("{0}.{1}", Guid.NewGuid(), Path.GetFileName(fileBase.FileName));
+            var fileName = $"{Guid.NewGuid()}.{Path.GetFileName(fileBase.FileName)}";
 
             var filePath = string.Empty;
 

@@ -1,51 +1,62 @@
-﻿angular.module("candidates").controller("EducationModalController", [
-    "$http", "$uibModalInstance", "data", function($http, $uibModalInstance, data) {
-        var vm = this;
+﻿(function(app) {
+    "use strict";
 
-        vm.institutions = [];
+    app.controller("EducationModalController", [
+        "$http", "$uibModalInstance", "data", function($http, $uibModalInstance, data) {
+            var vm = this;
 
-        $http.get("/Institution/").success(function(response) {
-            vm.institutions = response;
-        });
+            vm.institutions = [];
 
-        if (data) {
-            vm.degree = data.degree;
-            vm.fieldOfStudy = data.fieldOfStudy;
-            vm.grade = data.grade;
-            vm.institution = data.institution;
-            vm.startDate = data.startDate;
-            vm.endDate = data.endDate;
-            vm.present = data.present;
-            vm.activites = data.activites;
-            vm.notes = data.notes;
-        }
+            $http.get("/Institution/").success(function(response) {
+                vm.institutions = response;
 
-        vm.save = function() {
-            vm.form.submitted = true;
-
-            if (vm.form.$valid) {
-                var education = {
-                    degree: vm.degree,
-                    fieldOfStudy: vm.fieldOfStudy,
-                    grade: vm.grade,
-                    institution: vm.institution,
-                    startDate: vm.startDate,
-                    endDate: vm.endDate,
-                    present: vm.present,
-                    activites: vm.activites,
-                    notes: vm.notes
-                };
-
-                if (data && data.$$hashKey) {
-                    education.$$hashKey = data.$$hashKey;
+                if (data) {
+                    vm.institution = _.find(vm.institutions, { Id: data.institution.Id });
                 }
+            });
 
-                $uibModalInstance.close(education);
+            if (data) {
+                vm.degree = data.degree;
+                vm.fieldOfStudy = data.fieldOfStudy;
+                vm.grade = data.grade;
+                vm.startDate = data.startDate;
+                vm.endDate = data.endDate;
+                vm.present = data.present;
+                vm.activites = data.activites;
+                vm.notes = data.notes;
             }
-        };
 
-        vm.cancel = function() {
-            $uibModalInstance.dismiss("cancel");
-        };
-    }
-]);
+            vm.save = function() {
+                vm.form.submitted = true;
+
+                if (vm.form.$valid) {
+                    var education = {
+                        degree: vm.degree,
+                        fieldOfStudy: vm.fieldOfStudy,
+                        grade: vm.grade,
+                        institution: vm.institution,
+                        startDate: vm.startDate,
+                        present: vm.present,
+                        activites: vm.activites,
+                        notes: vm.notes
+                    };
+
+                    if (!education.present) {
+
+                        education.endDate = vm.endDate;
+                    }
+
+                    if (data && data.$$hashKey) {
+                        education.$$hashKey = data.$$hashKey;
+                    }
+
+                    $uibModalInstance.close(education);
+                }
+            };
+
+            vm.cancel = function() {
+                $uibModalInstance.dismiss("cancel");
+            };
+        }
+    ]);
+})(angular.module("candidates"));

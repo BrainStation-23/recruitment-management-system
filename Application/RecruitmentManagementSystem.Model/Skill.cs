@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace RecruitmentManagementSystem.Model
 {
@@ -11,10 +10,8 @@ namespace RecruitmentManagementSystem.Model
         [StringLength(50, ErrorMessage = "The {0} must be at most {1} characters long.")]
         public string Name { get; set; }
 
-        [DataType(DataType.MultilineText)]
-        [StringLength(500, ErrorMessage = "The {0} must be at most {1} characters long.")]
-        public string Description { get; set; }
+        public int CandidateId { get; set; }
 
-        public virtual ICollection<Candidate> Candidates { get; set; }
+        public Candidate Candidate { get; set; }
     }
 }

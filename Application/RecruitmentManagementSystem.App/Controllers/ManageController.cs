@@ -1,11 +1,21 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+using RecruitmentManagementSystem.App.Infrastructure.Constants;
+using RecruitmentManagementSystem.App.Infrastructure.Helpers;
 using RecruitmentManagementSystem.App.ViewModels.Account;
+using RecruitmentManagementSystem.Data.Interfaces;
+using RecruitmentManagementSystem.Data.Repositories;
+using RecruitmentManagementSystem.Model;
+using File = RecruitmentManagementSystem.Model.File;
 
 namespace RecruitmentManagementSystem.App.Controllers
 {
@@ -14,15 +24,19 @@ namespace RecruitmentManagementSystem.App.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private readonly IFileRepository _fileRepository;
 
         public ManageController()
         {
+            _fileRepository = new FileRepository();
         }
 
-        public ManageController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
+        public ManageController(ApplicationUserManager userManager, ApplicationSignInManager signInManager,
+            IFileRepository fileRepository)
         {
             UserManager = userManager;
             SignInManager = signInManager;
+            _fileRepository = fileRepository;
         }
 
         public ApplicationSignInManager SignInManager
@@ -71,9 +85,11 @@ namespace RecruitmentManagementSystem.App.Controllers
                     FirstName = user.FirstName,
                     LastName = user.LastName,
                     Email = user.Email,
-                    PhoneNumber = user.PhoneNumber
+                    PhoneNumber = user.PhoneNumber,
+                    Avatar = _fileRepository.Find(x => x.ApplicationUserId == user.Id)
                 }
             };
+
             return View(model);
         }
 
@@ -337,37 +353,151 @@ namespace RecruitmentManagementSystem.App.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> EditProfile()
+        public ActionResult EditProfile()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> ApplicationUserInformation()
         {
             var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
 
             var viewModel = new ApplicationUserViewModel
             {
+                Id = user.Id,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Email = user.Email,
-                PhoneNumber = user.PhoneNumber
+                PhoneNumber = user.PhoneNumber,
+                Roles = new List<string>
+                {
+                    "Admin",
+                    "HR"
+                },
+                Avatar = _fileRepository.Find(x => x.ApplicationUserId == user.Id)
             };
 
-            return View(viewModel);
+            return Json(viewModel, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> EditProfile(ApplicationUserViewModel applicationUserViewModel)
+        public async Task<ActionResult> EditApplicationUserInformation(
+            ApplicationUserInformationViewModel applicationUserInformationViewModel)
         {
-            if (!ModelState.IsValid) return View(applicationUserViewModel);
+            if (!ModelState.IsValid)
+            {
+                Response.StatusCode = (int) HttpStatusCode.BadRequest;
+                return Json(ModelState.Values.SelectMany(v => v.Errors));
+            }
 
             var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
 
-            user.FirstName = applicationUserViewModel.FirstName;
-            user.LastName = applicationUserViewModel.LastName;
-            user.Email = applicationUserViewModel.Email;
-            user.PhoneNumber = applicationUserViewModel.PhoneNumber;
+            user.FirstName = applicationUserInformationViewModel.FirstName;
+            user.LastName = applicationUserInformationViewModel.LastName;
+            user.Email = applicationUserInformationViewModel.Email;
+            user.PhoneNumber = applicationUserInformationViewModel.PhoneNumber;
 
             await UserManager.UpdateAsync(user);
 
-            return RedirectToAction("Index");
+            return Json(user);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> EditRole(RoleViewModel roleViewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                Response.StatusCode = (int) HttpStatusCode.BadRequest;
+                return Json(ModelState.Values.SelectMany(v => v.Errors));
+            }
+
+            var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+
+            UserManager.AddToRole(user.Id, roleViewModel.Role);
+            await UserManager.UpdateAsync(user);
+
+            return Json(user);
+        }
+
+        [HttpPost]
+        public ActionResult UploadAvatar()
+        {
+            if (Request.Files == null || Request.Files.Count <= 0 || Request.Files[0] == null ||
+                Request.Files[0].ContentLength <= 0)
+            {
+                ModelState.AddModelError("", "Invalid file for avatar");
+
+                Response.StatusCode = (int) HttpStatusCode.BadRequest;
+                return Json(ModelState.Values.SelectMany(v => v.Errors));
+            }
+
+            var fileBase = Request.Files[0];
+
+            var fileName = $"{Guid.NewGuid()}.{Path.GetFileName(fileBase.FileName)}";
+
+            FileHelper.SaveFile(new UploadConfig
+            {
+                FileBase = fileBase,
+                FileName = fileName,
+                FilePath = FilePath.AvatarRelativePath
+            });
+
+            var userId = User.Identity.GetUserId();
+            var previousFile = _fileRepository.Find(x => x.ApplicationUserId == userId);
+            if (previousFile != null)
+            {
+                _fileRepository.Delete(_fileRepository.Find(x => x.ApplicationUserId == userId));
+
+                var fullPath = Request.MapPath(previousFile.RelativePath);
+
+                if (System.IO.File.Exists(fullPath))
+                {
+                    System.IO.File.Delete(fullPath);
+                }
+            }
+
+            var file = new File
+            {
+                Name = fileName,
+                MimeType = fileBase.ContentType,
+                Size = fileBase.ContentLength,
+                RelativePath = FilePath.AvatarRelativePath + fileName,
+                FileType = FileType.Avatar,
+                ApplicationUserId = User.Identity.GetUserId(),
+                CreatedBy = User.Identity.GetUserId(),
+                UpdatedBy = User.Identity.GetUserId()
+            };
+
+            _fileRepository.Insert(file);
+            _fileRepository.Save();
+
+            return Json(file);
+        }
+
+        [HttpPost]
+        public ActionResult RemoveAvatar()
+        {
+            var userId = User.Identity.GetUserId();
+            var file = _fileRepository.Find(x => x.ApplicationUserId == userId);
+
+            if (file == null)
+            {
+                Response.StatusCode = (int) HttpStatusCode.BadRequest;
+                ModelState.AddModelError("", "Invalid arguments.");
+                return Json(ModelState.Values.SelectMany(v => v.Errors));
+            }
+
+            var fullPath = Request.MapPath(file.RelativePath);
+
+            if (System.IO.File.Exists(fullPath))
+            {
+                System.IO.File.Delete(fullPath);
+            }
+
+            _fileRepository.Delete(file);
+            _fileRepository.Save();
+            return Json(null);
         }
 
         protected override void Dispose(bool disposing)

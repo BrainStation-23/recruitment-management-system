@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using RecruitmentManagementSystem.Model;
 
 namespace RecruitmentManagementSystem.App.ViewModels.Account
@@ -25,6 +26,9 @@ namespace RecruitmentManagementSystem.App.ViewModels.Account
         [Display(Name = "Email")]
         public string Email { get; set; }
 
+        public IList<string> Roles { get; set; }
+
+        [Display(Name = "Avatar")]
         public File Avatar { get; set; }
     }
 }

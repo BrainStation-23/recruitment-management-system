@@ -1,43 +1,52 @@
-﻿<div class="alert alert-info" role="alert" ng-hide="candidate.experiences && candidate.experiences.length">
-    <i class="fa fa-lg fa-exclamation-triangle"></i>
-    No experience added yet.
-</div>
+﻿<div class="panel panel-success">
+    <div class="panel-heading">
+        <i class="fa fa-certificate fa-lg"></i>
+        Experience
+    </div>
 
-<p>
-    <button type="button" class="btn btn-default" ng-click="candidate.openExperienceModal()">Add Experience</button>
-</p>
+    <div class="panel-body">
+        <div ng-hide="candidate.experiences && candidate.experiences.length">
+            <i class="fa fa-lg fa-exclamation-triangle"></i>
+            No experiences are added yet.
+        </div>
+    </div>
 
-<div class="table-responsive" ng-show="candidate.experiences && candidate.experiences.length">
-    <table class="table">
-        <tr>
-            <th>Company Name</th>
-            <th>Job Title</th>
-            <th>Time Duration</th>
-            <th>Description</th>
-            <th></th>
-        </tr>
-        <tr ng-repeat="experience in candidate.experiences">
-            <td>
-                <div ng-bind="experience.organization"></div>
-            </td>
-            <td>
-                <div ng-bind="experience.jobTitle"></div>
-            </td>
-            <td>
-                <div>
-                    {{ experience.startDate | date : 'MMM yyyy' }} - {{ experience.present ? 'Present' : (experience.endDate | date : 'MMM yyyy') }}
-                </div>
-            </td>
-            <td>
+    <div class="table-responsive" ng-show="candidate.experiences && candidate.experiences.length">
+        <table class="table">
+            <tr>
+                <th>Company Name</th>
+                <th>Job Title</th>
+                <th>Time Duration</th>
+                <th>Description</th>
+                <th></th>
+            </tr>
+            <tr ng-repeat="experience in candidate.experiences">
+                <td>
+                    <div ng-bind="experience.organization"></div>
+                </td>
+                <td>
+                    <div ng-bind="experience.jobTitle"></div>
+                </td>
+                <td>
+                    <div>
+                        {{ experience.startDate | date : 'MMM yyyy' }} - {{ experience.present ? 'Present' : (experience.endDate | date : 'MMM yyyy') }}
+                    </div>
+                </td>
+                <td>
                 <div ng-bind="experience.description"></div>
-            <td>
-                <button type="button" class="btn btn-success" ng-click="candidate.openExperienceModal(experience)">
-                    <i class="fa fa-edit fa-lg"></i>
-                </button>
-                <button type="button" class="btn btn-danger" ng-click="candidate.discardExperience($index)">
-                    <i class="fa fa-trash fa-lg"></i>
-                </button>
-            </td>
-        </tr>
-    </table>
+                <td>
+                    <button type="button" class="btn btn-success" ng-click="candidate.openExperienceModal(experience)">
+                        <i class="fa fa-edit fa-lg"></i>
+                    </button>
+                    <button type="button" class="btn btn-danger" ng-click="candidate.discardExperience($index)">
+                        <i class="fa fa-trash fa-lg"></i>
+                    </button>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="panel-footer">
+        <button type="button" class="btn btn-primary" ng-click="candidate.openExperienceModal()">Add Experience</button>
+    </div>
 </div>

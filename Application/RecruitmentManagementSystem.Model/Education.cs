@@ -34,10 +34,10 @@ namespace RecruitmentManagementSystem.Model
 
         public int InstitutionId { get; set; }
 
-        public virtual Institution Institution { get; set; }
+        public Institution Institution { get; set; }
 
         public int CandidateId { get; set; }
 
-        public virtual Candidate Candidate { get; set; }
+        public Candidate Candidate { get; set; }
     }
 }

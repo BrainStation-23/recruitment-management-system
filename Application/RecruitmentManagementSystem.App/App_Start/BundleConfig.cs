@@ -26,18 +26,22 @@ namespace RecruitmentManagementSystem.App
                 "~/Scripts/core/core.module.js",
                 "~/Scripts/core/services/core.file.service.js",
                 "~/Scripts/core/services/core.notifier.service.js",
+                "~/Scripts/core/directives/core.keyboard.enter.directive.js",
                 "~/Scripts/questions/questions.module.js",
                 "~/Scripts/questions/controllers/questions.controller.js",
                 "~/Scripts/candidates/candidates.module.js",
                 "~/Scripts/candidates/controllers/candidates.controller.js",
                 "~/Scripts/candidates/controllers/candidates.education.controller.js",
-                "~/Scripts/candidates/controllers/candidates.experience.controller.js"));
+                "~/Scripts/candidates/controllers/candidates.experience.controller.js",
+                "~/Scripts/candidates/controllers/candidates.project.controller.js",
+                "~/Scripts/accounts/accounts.module.js",
+                "~/Scripts/accounts/controllers/accounts.controller.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                "~/Vendors/bower_components/bootstrap/dist/css/bootstrap.css",
+                "~/Content/Themes/Superhero/bootstrap.css",
                 "~/Vendors/bower_components/toastr/toastr.css",
                 "~/Vendors/bower_components/font-awesome/css/font-awesome.css",
-                "~/Content/site.css"));
+                "~/Content/Styles/main.css"));
         }
     }
 }

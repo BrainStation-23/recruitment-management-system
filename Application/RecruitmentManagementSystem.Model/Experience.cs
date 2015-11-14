@@ -20,7 +20,7 @@ namespace RecruitmentManagementSystem.Model
         [Column(TypeName = "DateTime2")]
         public DateTime? EndDate { get; set; }
 
-        public bool StillWorking { get; set; }
+        public bool Present { get; set; }
 
         [DataType(DataType.MultilineText)]
         [StringLength(1000, ErrorMessage = "The {0} must be at most {1} characters long.")]
@@ -33,6 +33,6 @@ namespace RecruitmentManagementSystem.Model
         [Required]
         public int CandidateId { get; set; }
 
-        public virtual Candidate Candidate { get; set; }
+        public Candidate Candidate { get; set; }
     }
 }

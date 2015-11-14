@@ -21,9 +21,9 @@ namespace RecruitmentManagementSystem.Model
         [Required]
         public QuestionType QuestionType { get; set; }
 
-        public virtual ICollection<File> Files { get; set; }
+        public ICollection<File> Files { get; set; }
 
-        public virtual ICollection<Choice> Choices { get; set; }
+        public ICollection<Choice> Choices { get; set; }
 
         [DataType(DataType.MultilineText)]
         [StringLength(1000, ErrorMessage = "The {0} must be at most {1} characters long.")]
@@ -36,7 +36,7 @@ namespace RecruitmentManagementSystem.Model
         [Required]
         public int CategoryId { get; set; }
 
-        public virtual QuestionCategory Category { get; set; }
+        public QuestionCategory Category { get; set; }
     }
 
     public class Choice
@@ -51,6 +51,6 @@ namespace RecruitmentManagementSystem.Model
 
         public int QuestionId { get; set; }
 
-        public virtual Question Question { get; set; }
+        public Question Question { get; set; }
     }
 }

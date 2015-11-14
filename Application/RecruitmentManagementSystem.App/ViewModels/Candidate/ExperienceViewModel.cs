@@ -19,7 +19,7 @@ namespace RecruitmentManagementSystem.App.ViewModels.Candidate
 
         public DateTime? EndDate { get; set; }
 
-        public bool StillWorking { get; set; }
+        public bool Present { get; set; }
 
         [DataType(DataType.MultilineText)]
         [StringLength(1000, ErrorMessage = "The {0} must be at most {1} characters long.")]

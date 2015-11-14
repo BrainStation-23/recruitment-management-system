@@ -67,20 +67,18 @@
     <Compile Include="Interfaces\IExperienceRepository.cs" />
     <Compile Include="Interfaces\IFileRepository.cs" />
     <Compile Include="Interfaces\IInstitutionRepository.cs" />
+    <Compile Include="Interfaces\IProjectRepository.cs" />
     <Compile Include="Interfaces\IQuestionCategoryRepository.cs" />
     <Compile Include="Interfaces\IQuestionRepository.cs" />
     <Compile Include="Interfaces\IRepository.cs" />
-    <Compile Include="Migrations\201510111700239_InitialCreate.cs" />
-    <Compile Include="Migrations\201510111700239_InitialCreate.Designer.cs">
-      <DependentUpon>201510111700239_InitialCreate.cs</DependentUpon>
+    <Compile Include="Interfaces\ISkillRepository.cs" />
+    <Compile Include="Migrations\201511042039499_InitialCreate.cs" />
+    <Compile Include="Migrations\201511042039499_InitialCreate.Designer.cs">
+      <DependentUpon>201511042039499_InitialCreate.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201510150838538_RemoveQuestionIdFromChoice.cs" />
-    <Compile Include="Migrations\201510150838538_RemoveQuestionIdFromChoice.Designer.cs">
-      <DependentUpon>201510150838538_RemoveQuestionIdFromChoice.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201511011959079_RefactorDomainModels.cs" />
-    <Compile Include="Migrations\201511011959079_RefactorDomainModels.Designer.cs">
-      <DependentUpon>201511011959079_RefactorDomainModels.cs</DependentUpon>
+    <Compile Include="Migrations\201511141746435_UpdateFileEntity.cs" />
+    <Compile Include="Migrations\201511141746435_UpdateFileEntity.Designer.cs">
+      <DependentUpon>201511141746435_UpdateFileEntity.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -91,8 +89,10 @@
     <Compile Include="Repositories\ExperienceRepository.cs" />
     <Compile Include="Repositories\FileRepository.cs" />
     <Compile Include="Repositories\InstitutionRepository.cs" />
+    <Compile Include="Repositories\ProjectRepository.cs" />
     <Compile Include="Repositories\QuestionCategoryRepository.cs" />
     <Compile Include="Repositories\QuestionRepository.cs" />
+    <Compile Include="Repositories\SkillRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RecruitmentManagementSystem.Model\RecruitmentManagementSystem.Model.csproj">
@@ -105,14 +105,11 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201510111700239_InitialCreate.resx">
-      <DependentUpon>201510111700239_InitialCreate.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201511042039499_InitialCreate.resx">
+      <DependentUpon>201511042039499_InitialCreate.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201510150838538_RemoveQuestionIdFromChoice.resx">
-      <DependentUpon>201510150838538_RemoveQuestionIdFromChoice.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201511011959079_RefactorDomainModels.resx">
-      <DependentUpon>201511011959079_RefactorDomainModels.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201511141746435_UpdateFileEntity.resx">
+      <DependentUpon>201511141746435_UpdateFileEntity.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

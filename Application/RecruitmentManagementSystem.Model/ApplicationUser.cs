@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using System.ComponentModel.DataAnnotations;
@@ -25,12 +26,10 @@ namespace RecruitmentManagementSystem.Model
         [StringLength(30, ErrorMessage = "The {0} must be at most {1} characters long.")]
         public string LastName { get; set; }
 
-        public int? AvatarId { get; set; }
-
-        public virtual File Avatar { get; set; }
+        public ICollection<File> Files { get; set; }
 
         public int? CandidateId { get; set; }
 
-        public virtual Candidate Candidate { get; set; }
+        public Candidate Candidate { get; set; }
     }
 }

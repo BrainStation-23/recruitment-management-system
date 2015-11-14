@@ -3,7 +3,6 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin;
 using Microsoft.Owin.Security.Cookies;
-using Microsoft.Owin.Security.Google;
 using Owin;
 using RecruitmentManagementSystem.Data.DbContext;
 using RecruitmentManagementSystem.Model;
@@ -56,15 +55,17 @@ namespace RecruitmentManagementSystem.App
             //    consumerKey: "",
             //    consumerSecret: "");
 
-            app.UseFacebookAuthentication(
-                appId: OAuthConfig.FacebookAppId,
-                appSecret: OAuthConfig.FacebookAppSecret);
+            //app.UseFacebookAuthentication(
+            //    appId: OAuthConfig.FacebookAppId,
+            //    appSecret: OAuthConfig.FacebookAppSecret);
 
-            app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
-            {
-                ClientId = OAuthConfig.GoogleClientId,
-                ClientSecret = OAuthConfig.GoogleClientSecret
-            });
+            //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions()
+            //{
+            //    ClientId = OAuthConfig.GoogleClientId,
+            //    ClientSecret = OAuthConfig.GoogleClientSecret
+            //});
+
+            //app.CreatePerOwinContext<ApplicationRoleManager>(ApplicationRoleManager.Create);
         }
     }
 }

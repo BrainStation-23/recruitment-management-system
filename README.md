@@ -16,23 +16,33 @@
 * [xUnit](https://xunit.github.io/)
 * [AngularJS](https://angularjs.org/)
 * [Angular UI Bootstrap](http://angular-ui.github.io/bootstrap/)
+* [Gulp.js](http://gulpjs.com/)
 
 # Installation
 
 Cloning the repository:
 
 ```bash
+# HTTPS clone URL
 $ git clone https://github.com/BrainStation-23/recruitment-management-system.git
+
+# SSH clone URL
+$ git clone git@github.com:BrainStation-23/recruitment-management-system.git
 ```
 
-You need to have [Node.js](https://nodejs.org/en/) installed on your machine before running the followings:
+You need to have [Git](https://git-scm.com/) and [Node.js](https://nodejs.org/en/) installed on your machine before running the followings:
 
 ```bash
 $ npm install -g bower
+# Then build the solution. That will trigger "npm install and also bower install"
+
+# This project also includes SASS support.
+# To enable real time sass compilation please do install gulp
+$ npm install -g gulp
 $ cd /path/to/RecruitmentManagementSystem.App
-$ bower install
+$ gulp
 ```
-For more information please visit [bower.io](http://bower.io/)
+For more information please visit [bower.io](http://bower.io/) and [gulp.js](http://gulpjs.com/)
 
 # License
 
