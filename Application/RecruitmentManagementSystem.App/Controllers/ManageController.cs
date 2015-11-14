@@ -434,7 +434,7 @@ namespace RecruitmentManagementSystem.App.Controllers
 
             var fileBase = Request.Files[0];
 
-            var fileName = $"{Guid.NewGuid()}.{Path.GetFileName(fileBase.FileName)}";
+            var fileName = string.Format("{0}.{1}", Guid.NewGuid(), Path.GetFileName(fileBase.FileName));
 
             FileHelper.SaveFile(new UploadConfig
             {
