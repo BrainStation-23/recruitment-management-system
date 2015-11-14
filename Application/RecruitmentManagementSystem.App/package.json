@@ -8,14 +8,14 @@
     "type": "git",
     "url": "git@github.com:BrainStation-23/recruitment-management-system.git"
   },
-  "author": [
-    "Adnan <adnan.faiz@bs-23.com>",
-    "Shibbir <shibbir@bs-23.com>"
-  ],
+  "author": "BrainStation 23 Ltd",
   "license": "MIT",
   "devDependencies": {
     "bower": "^1.6.5",
     "gulp": "^3.9.0",
-    "gulp-bower": "0.0.11"
+    "gulp-jshint": "^1.12.0",
+    "gulp-load-plugins": "^1.1.0",
+    "gulp-sass": "^2.1.0",
+    "run-sequence": "^1.1.4"
   }
 }

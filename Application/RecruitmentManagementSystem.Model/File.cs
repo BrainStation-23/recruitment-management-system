@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace RecruitmentManagementSystem.Model
 {
@@ -29,10 +30,8 @@ namespace RecruitmentManagementSystem.Model
 
         public int? QuestionId { get; set; }
 
-        public virtual Question Question { get; set; }
-
         public int? CandidateId { get; set; }
 
-        public Candidate Candidate { get; set; }
+        public string ApplicationUserId { get; set; }
     }
 }

@@ -244,7 +244,7 @@ namespace RecruitmentManagementSystem.App.Controllers
         {
             if (fileBase == null || fileBase.ContentLength <= 0) return;
 
-            var fileName = string.Format("{0}.{1}", Guid.NewGuid(), Path.GetFileName(fileBase.FileName));
+            var fileName = $"{Guid.NewGuid()}.{Path.GetFileName(fileBase.FileName)}";
 
             var filePath = string.Empty;
 

@@ -41,7 +41,7 @@ namespace RecruitmentManagementSystem.App
                 "~/Content/Themes/Superhero/bootstrap.css",
                 "~/Vendors/bower_components/toastr/toastr.css",
                 "~/Vendors/bower_components/font-awesome/css/font-awesome.css",
-                "~/Content/Main.css"));
+                "~/Content/Styles/main.css"));
         }
     }
 }

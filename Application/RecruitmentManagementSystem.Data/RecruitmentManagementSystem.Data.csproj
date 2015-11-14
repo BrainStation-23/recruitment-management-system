@@ -76,6 +76,10 @@
     <Compile Include="Migrations\201511042039499_InitialCreate.Designer.cs">
       <DependentUpon>201511042039499_InitialCreate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201511141746435_UpdateFileEntity.cs" />
+    <Compile Include="Migrations\201511141746435_UpdateFileEntity.Designer.cs">
+      <DependentUpon>201511141746435_UpdateFileEntity.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\BaseRepository.cs" />
@@ -103,6 +107,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201511042039499_InitialCreate.resx">
       <DependentUpon>201511042039499_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201511141746435_UpdateFileEntity.resx">
+      <DependentUpon>201511141746435_UpdateFileEntity.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

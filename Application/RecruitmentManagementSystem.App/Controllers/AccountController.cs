@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using AutoMapper.QueryableExtensions;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
@@ -159,31 +158,7 @@ namespace RecruitmentManagementSystem.App.Controllers
 
             File file = null;
 
-            if (model.Avatar != null && model.Avatar.ContentLength > 0)
-            {
-                var fileName = string.Format("{0}.{1}", Guid.NewGuid(), Path.GetFileName(model.Avatar.FileName));
-
-                FileHelper.SaveFile(new UploadConfig
-                {
-                    FileBase = model.Avatar,
-                    FileName = fileName,
-                    FilePath = FilePath.AvatarRelativePath
-                });
-
-                file = new File
-                {
-                    Name = fileName,
-                    MimeType = model.Avatar.ContentType,
-                    Size = model.Avatar.ContentLength,
-                    RelativePath = FilePath.AvatarRelativePath + fileName,
-                    FileType = FileType.Avatar,
-                    CreatedBy = User.Identity.GetUserId(),
-                    UpdatedBy = User.Identity.GetUserId()
-                };
-
-                _fileRepository.Insert(file);
-                _fileRepository.Save();
-            }
+            
 
             var user = new ApplicationUser
             {
@@ -193,11 +168,6 @@ namespace RecruitmentManagementSystem.App.Controllers
                 LastName = model.LastName,
                 PhoneNumber = model.PhoneNumber
             };
-
-            if (file != null)
-            {
-                user.AvatarId = file.Id;
-            }
 
             var result = await UserManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
@@ -210,6 +180,33 @@ namespace RecruitmentManagementSystem.App.Controllers
                     roleManager.Create(role);
                 }
                 UserManager.AddToRole(user.Id, model.Role);
+
+                if (model.Avatar != null && model.Avatar.ContentLength > 0)
+                {
+                    var fileName = $"{Guid.NewGuid()}.{Path.GetFileName(model.Avatar.FileName)}";
+
+                    FileHelper.SaveFile(new UploadConfig
+                    {
+                        FileBase = model.Avatar,
+                        FileName = fileName,
+                        FilePath = FilePath.AvatarRelativePath
+                    });
+
+                    file = new File
+                    {
+                        Name = fileName,
+                        MimeType = model.Avatar.ContentType,
+                        Size = model.Avatar.ContentLength,
+                        RelativePath = FilePath.AvatarRelativePath + fileName,
+                        FileType = FileType.Avatar,
+                        ApplicationUserId = user.Id,
+                        CreatedBy = User.Identity.GetUserId(),
+                        UpdatedBy = User.Identity.GetUserId()
+                    };
+
+                    _fileRepository.Insert(file);
+                    _fileRepository.Save();
+                }
 
                 // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                 // Send an email with this link

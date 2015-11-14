@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Edit";
+    ViewBag.Title = "Edit Profile";
 }
 
 <h2>Edit Information</h2>
@@ -25,7 +25,7 @@
                                 <input type="text" name="firstName" ng-model="account.applicationUser.FirstName" ng-maxlength="30" required class="form-control" />
                                 <div class="text-danger field-validation-error" ng-messages="account.form.submitted && account.form.firstName.$error">
                                     <span ng-message="required">This field is required.</span>
-                                    <span ng-message="maxlength">This field is too large</span>
+                                    <span ng-message="maxlength">The field length is too large</span>
                                 </div>
                             </div>
                         </div>
@@ -36,7 +36,7 @@
                                 <input type="text" name="lastName" ng-model="account.applicationUser.LastName" ng-maxlength="30" required class="form-control" />
                                 <div class="text-danger field-validation-error" ng-messages="account.form.submitted && account.form.lastName.$error">
                                     <span ng-message="required">This field is required.</span>
-                                    <span ng-message="maxlength">This field length is too large.</span>
+                                    <span ng-message="maxlength">The field length is too large.</span>
                                 </div>
                             </div>
                         </div>
@@ -44,16 +44,17 @@
                         <div class="form-group">
                             <label class="control-label col-sm-2 required">Email</label>
                             <div class="col-sm-6">
-                                <input type="email" name="email" ng-model="account.applicationUser.Email" required class="form-control" />
+                                <input type="email" name="email" ng-model="account.applicationUser.Email" ng-maxlength="50" required class="form-control" />
                                 <div class="text-danger field-validation-error" ng-messages="account.form.submitted && account.form.email.$error">
                                     <span ng-message="required">This field is required.</span>
                                     <span ng-message="email">This is not a valid email address.</span>
+                                    <span ng-message="maxlength">The field length is too large.</span>
                                 </div>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label class="control-label col-sm-2 required">Mobile</label>
+                            <label class="control-label col-sm-2">Mobile</label>
                             <div class="col-sm-6">
                                 <input type="tel" name="phoneNumber" ng-model="account.applicationUser.PhoneNumber" ng-pattern="/^\(?(\d{5})\)?[ .-]?(\d{6})$/" class="form-control" />
                                 <div class="text-danger field-validation-error" ng-messages="account.form.submitted && account.form.phoneNumber.$error">
