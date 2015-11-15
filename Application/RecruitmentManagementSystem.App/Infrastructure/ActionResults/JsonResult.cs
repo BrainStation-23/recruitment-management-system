@@ -26,7 +26,7 @@ namespace RecruitmentManagementSystem.App.Infrastructure.ActionResults
         {
             if (context == null)
             {
-                throw new ArgumentNullException(nameof(context));
+                throw new ArgumentNullException("context");
             }
 
             if (JsonRequestBehavior == JsonRequestBehavior.DenyGet &&
