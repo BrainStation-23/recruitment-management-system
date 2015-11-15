@@ -2,7 +2,8 @@
   "name": "RecruitmentManagementSystem",
   "version": "1.0.0",
   "scripts": {
-    "test": "npm test"
+    "test": "gulp test",
+    "postinstall": "bower install --config.interactive=false"
   },
   "repository": {
     "type": "git",

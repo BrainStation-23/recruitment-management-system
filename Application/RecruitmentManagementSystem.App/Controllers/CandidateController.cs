@@ -12,6 +12,7 @@ using RecruitmentManagementSystem.App.ViewModels.Candidate;
 using RecruitmentManagementSystem.Model;
 using RecruitmentManagementSystem.Data.Interfaces;
 using File = RecruitmentManagementSystem.Model.File;
+using JsonResult = RecruitmentManagementSystem.App.Infrastructure.ActionResults.JsonResult;
 
 namespace RecruitmentManagementSystem.App.Controllers
 {
@@ -58,7 +59,7 @@ namespace RecruitmentManagementSystem.App.Controllers
             if (!ModelState.IsValid)
             {
                 Response.StatusCode = (int) HttpStatusCode.BadRequest;
-                return Json(ModelState.Values.SelectMany(v => v.Errors));
+                return new JsonResult(ModelState.Values.SelectMany(v => v.Errors));
             }
 
             var candidate = new Candidate
@@ -147,7 +148,7 @@ namespace RecruitmentManagementSystem.App.Controllers
 
             ManageFiles(candidate.Id, Request.Files, model);
 
-            return Json(candidate);
+            return new JsonResult(candidate);
         }
 
         [HttpGet]

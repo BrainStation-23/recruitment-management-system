@@ -11,7 +11,7 @@
                 vm.institutions = response;
 
                 if (data) {
-                    vm.institution = _.find(vm.institutions, { Id: data.institution.Id });
+                    vm.institution = _.find(vm.institutions, { id: data.institution.id });
                 }
             });
 

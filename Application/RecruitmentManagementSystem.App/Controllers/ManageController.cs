@@ -16,6 +16,7 @@ using RecruitmentManagementSystem.Data.Interfaces;
 using RecruitmentManagementSystem.Data.Repositories;
 using RecruitmentManagementSystem.Model;
 using File = RecruitmentManagementSystem.Model.File;
+using JsonResult = RecruitmentManagementSystem.App.Infrastructure.ActionResults.JsonResult;
 
 namespace RecruitmentManagementSystem.App.Controllers
 {
@@ -378,7 +379,7 @@ namespace RecruitmentManagementSystem.App.Controllers
                 Avatar = _fileRepository.Find(x => x.ApplicationUserId == user.Id)
             };
 
-            return Json(viewModel, JsonRequestBehavior.AllowGet);
+            return new JsonResult(viewModel, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -388,7 +389,7 @@ namespace RecruitmentManagementSystem.App.Controllers
             if (!ModelState.IsValid)
             {
                 Response.StatusCode = (int) HttpStatusCode.BadRequest;
-                return Json(ModelState.Values.SelectMany(v => v.Errors));
+                return new JsonResult(ModelState.Values.SelectMany(v => v.Errors));
             }
 
             var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
@@ -400,7 +401,7 @@ namespace RecruitmentManagementSystem.App.Controllers
 
             await UserManager.UpdateAsync(user);
 
-            return Json(user);
+            return new JsonResult(user);
         }
 
         [HttpPost]
@@ -417,7 +418,7 @@ namespace RecruitmentManagementSystem.App.Controllers
             UserManager.AddToRole(user.Id, roleViewModel.Role);
             await UserManager.UpdateAsync(user);
 
-            return Json(user);
+            return new JsonResult(user);
         }
 
         [HttpPost]
@@ -429,7 +430,7 @@ namespace RecruitmentManagementSystem.App.Controllers
                 ModelState.AddModelError("", "Invalid file for avatar");
 
                 Response.StatusCode = (int) HttpStatusCode.BadRequest;
-                return Json(ModelState.Values.SelectMany(v => v.Errors));
+                return new JsonResult(ModelState.Values.SelectMany(v => v.Errors));
             }
 
             var fileBase = Request.Files[0];
@@ -472,7 +473,7 @@ namespace RecruitmentManagementSystem.App.Controllers
             _fileRepository.Insert(file);
             _fileRepository.Save();
 
-            return Json(file);
+            return new JsonResult(file);
         }
 
         [HttpPost]
