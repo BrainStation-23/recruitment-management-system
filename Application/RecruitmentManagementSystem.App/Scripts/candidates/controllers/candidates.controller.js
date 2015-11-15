@@ -33,7 +33,7 @@
                 vm.form.submitted = true;
 
                 for (var idx = 0; idx < vm.educations.length; idx++) {
-                    vm.educations[idx].institutionId = vm.educations[idx].institution.Id;
+                    vm.educations[idx].institutionId = vm.educations[idx].institution.id;
                     delete vm.educations[idx].institution;
                 }
 

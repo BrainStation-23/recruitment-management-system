@@ -156,10 +156,6 @@ namespace RecruitmentManagementSystem.App.Controllers
         {
             if (!ModelState.IsValid) return View(model);
 
-            File file = null;
-
-            
-
             var user = new ApplicationUser
             {
                 UserName = model.Email,
@@ -192,7 +188,7 @@ namespace RecruitmentManagementSystem.App.Controllers
                         FilePath = FilePath.AvatarRelativePath
                     });
 
-                    file = new File
+                    var file = new File
                     {
                         Name = fileName,
                         MimeType = model.Avatar.ContentType,
