@@ -300,6 +300,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Content\Sass\responsive\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -419,6 +420,15 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include=".jshintrc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Sass\variables\variable.scss" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Sass\mixins\mixins.scss" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Sass\modules\login.scss" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
