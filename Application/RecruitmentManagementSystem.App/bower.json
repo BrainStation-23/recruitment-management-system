@@ -3,10 +3,12 @@
   "version": "1.0.0",
   "authors": [
     "Adnan <adnan.faiz@bs-23.com>",
+    "Ruhul <ruhul.amin@bs-23.com>",
     "Shibbir <shibbir@bs-23.com>"
   ],
   "keywords": [
-    "asp.net mvc"
+    "asp.net mvc",
+    "angular.js"
   ],
   "license": "MIT",
   "ignore": [

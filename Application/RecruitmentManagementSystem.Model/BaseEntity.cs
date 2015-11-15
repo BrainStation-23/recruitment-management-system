@@ -12,6 +12,7 @@ namespace RecruitmentManagementSystem.Model
         }
 
         public string CreatedBy { get; set; }
+
         public string UpdatedBy { get; set; }
 
         [Column(TypeName = "DateTime2")]
