@@ -48,7 +48,8 @@
                     others: vm.others,
                     website: vm.website,
                     skills: vm.skills,
-                    files: []
+                    files: [],
+                    __RequestVerificationToken: angular.element(":input:hidden[name*='RequestVerificationToken']").val()
                 };
 
                 if (vm.avatar) {

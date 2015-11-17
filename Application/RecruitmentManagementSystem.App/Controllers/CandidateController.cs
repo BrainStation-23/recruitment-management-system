@@ -53,7 +53,7 @@ namespace RecruitmentManagementSystem.App.Controllers
         }
 
         [HttpPost]
-        //[ValidateAntiForgeryToken]
+        [ValidateAntiForgeryToken]
         public ActionResult Create(CandidateViewModel model)
         {
             if (!ModelState.IsValid)

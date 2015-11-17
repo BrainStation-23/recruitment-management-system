@@ -383,6 +383,7 @@ namespace RecruitmentManagementSystem.App.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> EditApplicationUserInformation(
             ApplicationUserInformationViewModel applicationUserInformationViewModel)
         {
@@ -405,6 +406,7 @@ namespace RecruitmentManagementSystem.App.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> EditRole(RoleViewModel roleViewModel)
         {
             if (!ModelState.IsValid)
@@ -422,6 +424,7 @@ namespace RecruitmentManagementSystem.App.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult UploadAvatar()
         {
             if (Request.Files == null || Request.Files.Count <= 0 || Request.Files[0] == null ||
@@ -477,6 +480,7 @@ namespace RecruitmentManagementSystem.App.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult RemoveAvatar()
         {
             var userId = User.Identity.GetUserId();

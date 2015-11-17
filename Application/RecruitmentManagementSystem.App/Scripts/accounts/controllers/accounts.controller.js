@@ -19,7 +19,8 @@
                     firstName: vm.applicationUser.firstName,
                     lastName: vm.applicationUser.lastName,
                     email: vm.applicationUser.email,
-                    phoneNumber: vm.applicationUser.phoneNumber
+                    phoneNumber: vm.applicationUser.phoneNumber,
+                    __RequestVerificationToken: angular.element(":input:hidden[name*='RequestVerificationToken']").val()
                 };
 
                 if (vm.form.$valid) {
@@ -58,7 +59,8 @@
                     fileService.postMultipartForm({
                         url: "/Manage/UploadAvatar",
                         data: {
-                            file: file
+                            file: file,
+                            __RequestVerificationToken: angular.element(":input:hidden[name*='RequestVerificationToken']").val()
                         }
                     }).progress(function(evt) {
                         console.log("percent: " + parseInt(100.0 * evt.loaded / evt.total));
@@ -82,7 +84,9 @@
             };
 
             vm.removeAvatar = function() {
-                $http.post("/Manage/RemoveAvatar").success(function() {
+                $http.post("/Manage/RemoveAvatar", {
+                    __RequestVerificationToken: angular.element(":input:hidden[name*='RequestVerificationToken']").val()
+                }).success(function() {
                     vm.applicationUser.avatar = null;
                     notifierService.notifySuccess("Avatar removed successfully.");
                 }).error(function(response) {

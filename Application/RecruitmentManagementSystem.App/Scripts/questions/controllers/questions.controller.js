@@ -26,7 +26,8 @@
                     choices: vm.choices,
                     notes: vm.notes,
                     answer: vm.answer,
-                    categoryId: vm.categoryId
+                    categoryId: vm.categoryId,
+                    __RequestVerificationToken: angular.element(":input:hidden[name*='RequestVerificationToken']").val()
                 };
 
                 $http.post("/Question/Create", model).success(function() {

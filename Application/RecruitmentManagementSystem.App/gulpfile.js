@@ -3,7 +3,7 @@
     runSequence = require("run-sequence");
 
 var assets = {
-    sass: "./Content/Sass/**/*.scss",
+    sass: "./Content/Sass/main.scss",
     js: "./Scripts/**/*.js"
 };
 
