@@ -30,17 +30,18 @@ $ git clone https://github.com/BrainStation-23/recruitment-management-system.git
 $ git clone git@github.com:BrainStation-23/recruitment-management-system.git
 ```
 
-You need to have [Git](https://git-scm.com/) and [Node.js](https://nodejs.org/en/) installed on your machine before running the followings:
+You need to have [Git](https://git-scm.com/), [Node.js](https://nodejs.org/en/) and [Ruby](http://rubyinstaller.org/) installed on your machine before running the followings:
 
 ```bash
 $ npm install -g bower
-# Then build the solution. That will trigger "npm install and also bower install"
-
-# This project also includes SASS support.
-# To enable real time sass compilation please do install gulp
 $ npm install -g gulp
+$ gem install scss_lint
+
 $ cd /path/to/RecruitmentManagementSystem.App
+$ npm install # this will also run "bower install" automatically
 $ gulp
+
+# Build and run the solution
 ```
 For more information please visit [bower.io](http://bower.io/) and [gulp.js](http://gulpjs.com/)
 

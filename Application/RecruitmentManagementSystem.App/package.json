@@ -2,7 +2,8 @@
   "name": "RecruitmentManagementSystem",
   "version": "1.0.0",
   "scripts": {
-    "test": "npm test"
+    "test": "gulp test",
+    "postinstall": "bower install --config.interactive=false"
   },
   "repository": {
     "type": "git",
@@ -13,9 +14,14 @@
   "devDependencies": {
     "bower": "^1.6.5",
     "gulp": "^3.9.0",
+    "gulp-jscs": "^3.0.2",
     "gulp-jshint": "^1.12.0",
     "gulp-load-plugins": "^1.1.0",
+    "gulp-notify": "^2.2.0",
+    "gulp-print": "^2.0.1",
     "gulp-sass": "^2.1.0",
+    "gulp-scss-lint": "^0.3.8",
+    "jshint-stylish": "^2.1.0",
     "run-sequence": "^1.1.4"
   }
 }

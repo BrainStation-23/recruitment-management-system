@@ -207,6 +207,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Infrastructure\ActionResults\JsonResult.cs" />
     <Compile Include="Infrastructure\Constants\FilePath.cs" />
     <Compile Include="Infrastructure\Helpers\FileHelper.cs" />
     <Compile Include="Infrastructure\Mappings\IHaveCustomMappings.cs" />
@@ -419,6 +420,21 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include=".jshintrc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Sass\variables\variable.scss" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Sass\mixins\mixins.scss" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Sass\modules\login.scss" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include=".jscsrc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="scss-lint.yml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

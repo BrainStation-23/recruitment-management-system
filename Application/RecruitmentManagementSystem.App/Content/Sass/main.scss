@@ -1,32 +1,39 @@
-﻿body {
+﻿@import 'variables/variable';
+
+@import 'mixins/mixins';
+
+@import 'modules/login';
+
+body {
     padding-top: 50px;
     padding-bottom: 20px;
 }
 
-/* Set padding to keep content from hitting the edges */
+// Set padding to keep content from hitting the edges
 .body-content {
     padding-left: 15px;
     padding-right: 15px;
 }
 
-/* Override the default bootstrap behavior where horizontal description lists 
-   will truncate terms that are too long to fit in the left column 
-*/
+// Override the default bootstrap behavior where horizontal description lists
+// will truncate terms that are too long to fit in the left column
 .dl-horizontal dt {
     white-space: normal;
 }
 
 .required::after {
-    content: " *";
-    color: #db2828;
+    color: $required-color;
+    content: ' *';
 }
 
-.userBasicInfoEdit, .userAvatarEdit {
+.user-info-edit-panel,
+.user-avatar-edit-panel {
     min-height: 303px;
 }
 
-.text-danger, .text-danger:hover {
-    color: #d9534f;
+.text-danger,
+.text-danger:hover {
+    color: $text-danger-color;
     font-size: 12px;
     font-weight: bold;
     line-height: 2.5em;

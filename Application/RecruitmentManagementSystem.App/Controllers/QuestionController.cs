@@ -65,6 +65,7 @@ namespace RecruitmentManagementSystem.App.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Create(QuestionCreateViewModel viewModel)
         {
             if (!ModelState.IsValid)

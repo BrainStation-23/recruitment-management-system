@@ -6,7 +6,7 @@
 
             var vm = this;
 
-            vm.applicationUserInformations = function() {
+            vm.getProfileData = function () {
                 $http.get("/Manage/ApplicationUserInformation/").success(function(response) {
                     vm.applicationUser = response;
                 });
@@ -16,10 +16,11 @@
                 vm.form.submitted = true;
 
                 var model = {
-                    firstName: vm.applicationUser.FirstName,
-                    lastName: vm.applicationUser.LastName,
-                    email: vm.applicationUser.Email,
-                    phoneNumber: vm.applicationUser.PhoneNumber
+                    firstName: vm.applicationUser.firstName,
+                    lastName: vm.applicationUser.lastName,
+                    email: vm.applicationUser.email,
+                    phoneNumber: vm.applicationUser.phoneNumber,
+                    __RequestVerificationToken: angular.element(":input:hidden[name*='RequestVerificationToken']").val()
                 };
 
                 if (vm.form.$valid) {
@@ -30,7 +31,7 @@
 
                         if (Object.prototype.toString.call(response) === "[object Array]") {
                             erroMessages = _.map(response, function(error) {
-                                return error.ErrorMessage;
+                                return error.errorMessage;
                             });
                         } else {
                             erroMessages.push("Something happened! Please try again.");
@@ -58,19 +59,20 @@
                     fileService.postMultipartForm({
                         url: "/Manage/UploadAvatar",
                         data: {
-                            file: file
+                            file: file,
+                            __RequestVerificationToken: angular.element(":input:hidden[name*='RequestVerificationToken']").val()
                         }
                     }).progress(function(evt) {
                         console.log("percent: " + parseInt(100.0 * evt.loaded / evt.total));
                     }).success(function(avatar) {
-                        vm.applicationUser.Avatar = avatar;
+                        vm.applicationUser.avatar = avatar;
                         notifierService.notifySuccess("Avatar updated successfully.");
                     }).error(function(response) {
                         var erroMessages = [];
 
                         if (Object.prototype.toString.call(response) === "[object Array]") {
                             erroMessages = _.map(response, function(error) {
-                                return error.ErrorMessage;
+                                return error.errorMessage;
                             });
                         } else {
                             erroMessages.push("Something happened! Please try again.");
@@ -82,15 +84,17 @@
             };
 
             vm.removeAvatar = function() {
-                $http.post("/Manage/RemoveAvatar").success(function() {
-                    vm.applicationUser.Avatar = null;
+                $http.post("/Manage/RemoveAvatar", {
+                    __RequestVerificationToken: angular.element(":input:hidden[name*='RequestVerificationToken']").val()
+                }).success(function() {
+                    vm.applicationUser.avatar = null;
                     notifierService.notifySuccess("Avatar removed successfully.");
                 }).error(function(response) {
                     var erroMessages = [];
 
                     if (Object.prototype.toString.call(response) === "[object Array]") {
                         erroMessages = _.map(response, function(error) {
-                            return error.ErrorMessage;
+                            return error.errorMessage;
                         });
                     } else {
                         erroMessages.push("Something happened! Please try again.");

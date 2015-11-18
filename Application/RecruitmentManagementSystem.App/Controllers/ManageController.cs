@@ -16,6 +16,7 @@ using RecruitmentManagementSystem.Data.Interfaces;
 using RecruitmentManagementSystem.Data.Repositories;
 using RecruitmentManagementSystem.Model;
 using File = RecruitmentManagementSystem.Model.File;
+using JsonResult = RecruitmentManagementSystem.App.Infrastructure.ActionResults.JsonResult;
 
 namespace RecruitmentManagementSystem.App.Controllers
 {
@@ -378,17 +379,18 @@ namespace RecruitmentManagementSystem.App.Controllers
                 Avatar = _fileRepository.Find(x => x.ApplicationUserId == user.Id)
             };
 
-            return Json(viewModel, JsonRequestBehavior.AllowGet);
+            return new JsonResult(viewModel, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> EditApplicationUserInformation(
             ApplicationUserInformationViewModel applicationUserInformationViewModel)
         {
             if (!ModelState.IsValid)
             {
                 Response.StatusCode = (int) HttpStatusCode.BadRequest;
-                return Json(ModelState.Values.SelectMany(v => v.Errors));
+                return new JsonResult(ModelState.Values.SelectMany(v => v.Errors));
             }
 
             var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
@@ -400,10 +402,11 @@ namespace RecruitmentManagementSystem.App.Controllers
 
             await UserManager.UpdateAsync(user);
 
-            return Json(user);
+            return new JsonResult(user);
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> EditRole(RoleViewModel roleViewModel)
         {
             if (!ModelState.IsValid)
@@ -417,10 +420,11 @@ namespace RecruitmentManagementSystem.App.Controllers
             UserManager.AddToRole(user.Id, roleViewModel.Role);
             await UserManager.UpdateAsync(user);
 
-            return Json(user);
+            return new JsonResult(user);
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult UploadAvatar()
         {
             if (Request.Files == null || Request.Files.Count <= 0 || Request.Files[0] == null ||
@@ -429,12 +433,12 @@ namespace RecruitmentManagementSystem.App.Controllers
                 ModelState.AddModelError("", "Invalid file for avatar");
 
                 Response.StatusCode = (int) HttpStatusCode.BadRequest;
-                return Json(ModelState.Values.SelectMany(v => v.Errors));
+                return new JsonResult(ModelState.Values.SelectMany(v => v.Errors));
             }
 
             var fileBase = Request.Files[0];
 
-            var fileName = $"{Guid.NewGuid()}.{Path.GetFileName(fileBase.FileName)}";
+            var fileName = string.Format("{0}.{1}", Guid.NewGuid(), Path.GetFileName(fileBase.FileName));
 
             FileHelper.SaveFile(new UploadConfig
             {
@@ -472,10 +476,11 @@ namespace RecruitmentManagementSystem.App.Controllers
             _fileRepository.Insert(file);
             _fileRepository.Save();
 
-            return Json(file);
+            return new JsonResult(file);
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult RemoveAvatar()
         {
             var userId = User.Identity.GetUserId();

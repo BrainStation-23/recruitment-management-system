@@ -2,6 +2,7 @@
 using AutoMapper.QueryableExtensions;
 using RecruitmentManagementSystem.App.ViewModels.Candidate;
 using RecruitmentManagementSystem.Data.Interfaces;
+using JsonResult = RecruitmentManagementSystem.App.Infrastructure.ActionResults.JsonResult;
 
 namespace RecruitmentManagementSystem.App.Controllers
 {
@@ -20,7 +21,7 @@ namespace RecruitmentManagementSystem.App.Controllers
         {
             var model = _institutionRepository.FindAll().ProjectTo<InstitutionViewModel>();
 
-            return Json(model, JsonRequestBehavior.AllowGet);
+            return new JsonResult(model, JsonRequestBehavior.AllowGet);
         }
     }
 }

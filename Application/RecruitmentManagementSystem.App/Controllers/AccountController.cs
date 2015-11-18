@@ -156,10 +156,6 @@ namespace RecruitmentManagementSystem.App.Controllers
         {
             if (!ModelState.IsValid) return View(model);
 
-            File file = null;
-
-            
-
             var user = new ApplicationUser
             {
                 UserName = model.Email,
@@ -183,7 +179,7 @@ namespace RecruitmentManagementSystem.App.Controllers
 
                 if (model.Avatar != null && model.Avatar.ContentLength > 0)
                 {
-                    var fileName = $"{Guid.NewGuid()}.{Path.GetFileName(model.Avatar.FileName)}";
+                    var fileName = string.Format("{0}.{1}", Guid.NewGuid(), Path.GetFileName(model.Avatar.FileName));
 
                     FileHelper.SaveFile(new UploadConfig
                     {
@@ -192,7 +188,7 @@ namespace RecruitmentManagementSystem.App.Controllers
                         FilePath = FilePath.AvatarRelativePath
                     });
 
-                    file = new File
+                    var file = new File
                     {
                         Name = fileName,
                         MimeType = model.Avatar.ContentType,
