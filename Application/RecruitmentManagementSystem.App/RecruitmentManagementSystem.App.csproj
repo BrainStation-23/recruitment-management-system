@@ -430,6 +430,12 @@
   <ItemGroup>
     <Content Include="Content\Sass\modules\login.scss" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include=".jscsrc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="scss-lint.yml" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
