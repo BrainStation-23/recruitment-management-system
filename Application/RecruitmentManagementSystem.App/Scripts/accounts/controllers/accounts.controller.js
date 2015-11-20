@@ -2,44 +2,14 @@
     "use strict";
 
     app.controller("AccountsController", [
-        "$http", "notifierService", "fileService", function($http, notifierService, fileService) {
+        "$http", "notifierService", "fileService", "$uibModal", function($http, notifierService, fileService, $uibModal) {
 
             var vm = this;
 
-            vm.getProfileData = function () {
-                $http.get("/Manage/ApplicationUserInformation/").success(function(response) {
-                    vm.applicationUser = response;
+            vm.getAccountDetails = function() {
+                $http.get("/Manage/AccountDetails/").success(function(response) {
+                    vm.profile = response;
                 });
-            };
-
-            vm.saveBasicInformation = function() {
-                vm.form.submitted = true;
-
-                var model = {
-                    firstName: vm.applicationUser.firstName,
-                    lastName: vm.applicationUser.lastName,
-                    email: vm.applicationUser.email,
-                    phoneNumber: vm.applicationUser.phoneNumber,
-                    __RequestVerificationToken: angular.element(":input:hidden[name*='RequestVerificationToken']").val()
-                };
-
-                if (vm.form.$valid) {
-                    $http.post("/Manage/EditApplicationUserInformation", model).success(function() {
-                        notifierService.notifySuccess("Basic Informations updated successfully.");
-                    }).error(function(response) {
-                        var erroMessages = [];
-
-                        if (Object.prototype.toString.call(response) === "[object Array]") {
-                            erroMessages = _.map(response, function(error) {
-                                return error.errorMessage;
-                            });
-                        } else {
-                            erroMessages.push("Something happened! Please try again.");
-                        }
-
-                        notifierService.notifyError(erroMessages);
-                    });
-                }
             };
 
             vm.uploadAvatar = function(file) {
@@ -65,7 +35,7 @@
                     }).progress(function(evt) {
                         console.log("percent: " + parseInt(100.0 * evt.loaded / evt.total));
                     }).success(function(avatar) {
-                        vm.applicationUser.avatar = avatar;
+                        vm.profile.avatar = avatar;
                         notifierService.notifySuccess("Avatar updated successfully.");
                     }).error(function(response) {
                         var erroMessages = [];
@@ -101,6 +71,25 @@
                     }
 
                     notifierService.notifyError(erroMessages);
+                });
+            };
+
+            vm.openAccountDetailsModal = function(data) {
+                var modalInstance = $uibModal.open({
+                    animation: true,
+                    backdrop: "static",
+                    templateUrl: "/Scripts/accounts/templates/account-modal.html",
+                    controller: "AccountModalController",
+                    controllerAs: "account",
+                    resolve: {
+                        data: function() {
+                            return data;
+                        }
+                    }
+                });
+
+                modalInstance.result.then(function(profile) {
+                    vm.profile = profile;
                 });
             };
         }

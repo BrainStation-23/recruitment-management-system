@@ -15,6 +15,11 @@ namespace RecruitmentManagementSystem.App
         {
             using (var dbContext = new ApplicationDbContext())
             {
+                if (!dbContext.Roles.Any())
+                {
+                    SeedApplicaionRole(dbContext);
+                }
+
                 if (!dbContext.Users.Any())
                 {
                     SeedApplicationUser(dbContext);
@@ -32,6 +37,16 @@ namespace RecruitmentManagementSystem.App
 
                 dbContext.SaveChanges();
             }
+        }
+
+        private static void SeedApplicaionRole(DbContext dbContext)
+        {
+            var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(dbContext));
+
+            roleManager.Create(new IdentityRole {Name = "Admin"});
+            roleManager.Create(new IdentityRole {Name = "HR Admin"});
+            roleManager.Create(new IdentityRole {Name = "HR"});
+            roleManager.Create(new IdentityRole {Name = "Candidate"});
         }
 
         private static void SeedApplicationUser(DbContext dbContext)
@@ -68,12 +83,6 @@ namespace RecruitmentManagementSystem.App
 
             if (!result.Succeeded) return;
 
-            var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(dbContext));
-            var admin = new IdentityRole {Name = "Admin"};
-
-            if (roleManager.RoleExists("Admin")) return;
-
-            roleManager.Create(admin);
             userManager.AddToRole(user.Id, "Admin");
         }
 

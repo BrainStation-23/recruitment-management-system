@@ -13,11 +13,6 @@
         <dd>
             [@(Model.HasPassword ? Html.ActionLink("Change your password", "ChangePassword") : Html.ActionLink("Create", "SetPassword"))]
         </dd>
-        <dt>External Logins:</dt>
-        <dd>
-            @Model.Logins.Count [
-            @Html.ActionLink("Manage", "ManageLogins") ]
-        </dd>
         @*
             Phone Numbers can used as a second factor of verification in a two-factor authentication system.
              
@@ -26,7 +21,7 @@
              
              Uncomment the following block after you have set up two-factor authentication
         *@
-        @*  
+          
             <dt>Phone Number:</dt>
             <dd>
                 @(Model.PhoneNumber ?? "None") [
@@ -42,7 +37,7 @@
                 }
                 ]
             </dd>
-        *@
+        
         <dt>Two-Factor Authentication:</dt>
         <dd>
             <p>

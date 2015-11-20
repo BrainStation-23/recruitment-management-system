@@ -1,34 +1,34 @@
-﻿@model RecruitmentManagementSystem.App.ViewModels.Account.IndexViewModel
-
-<h3>Account Details</h3>
+﻿<h3>Account Details</h3>
 <hr />
 
-<div>
-    <dl class="dl-horizontal col-xs-12 col-md-10">
-        <dt>First Name:</dt>
-        <dd>
-            @Model.ApplicationUser.FirstName
-        </dd>
-        <dt>Last Name:</dt>
-        <dd>
-            @Model.ApplicationUser.LastName
-        </dd>
-        <dt>Email:</dt>
-        <dd>
-            @Model.ApplicationUser.Email
-        </dd>
-        <dt>Phone Number:</dt>
-        <dd>
-            @Model.ApplicationUser.PhoneNumber
-        </dd>
-    </dl>
-    
-    <dl>
-        <dd>
-            <img src="@Model.ApplicationUser.Avatar.RelativePath" height="160" width="160" class="img-thumbnail" alt="Avatar" />
-        </dd>
-    </dl>
-    
+<div ng-controller="AccountsController as account" ng-init="account.getAccountDetails()">
+    <div class="row">
+        <div class="col-sm-10">
+            <dl class="dl-horizontal">
+                <dt>First Name:</dt>
+                <dd ng-bind="account.profile.firstName"></dd>
 
-    @Html.ActionLink("Edit", "EditProfile", "Manage")
+                <dt>Last Name:</dt>
+                <dd ng-bind="account.profile.lastName"></dd>
+
+                <dt>Email Address:</dt>
+                <dd ng-bind="account.profile.email"></dd>
+            </dl>
+        </div>
+
+        <div class="col-sm-2">
+            <form novalidate>
+                @Html.AntiForgeryToken()
+
+                <img src="~/Content/Images/default-avatar.jpg" ng-src="{{ account.profile.avatar.relativePath }}" alt="Avatar" class="img-thumbnail" style="height: 155px; width: 155px;">
+                <input type="file" name="avatar" title="Select Photo" accept="image/*" ngf-fix-orientation="false" ngf-select="account.uploadAvatar($file)" />
+
+                <a href="javascript:void(0)" ng-click="account.removeAvatar()" ng-hide="!account.profile.avatar">
+                    Remove Avatar
+                </a>
+            </form>
+        </div>
+    </div>
+
+    <a href="javascript:void(0)" ng-click="account.openAccountDetailsModal(account.profile)">Edit Profile</a>
 </div>

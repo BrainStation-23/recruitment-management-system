@@ -6,6 +6,7 @@ using Microsoft.AspNet.Identity;
 using RecruitmentManagementSystem.App.ViewModels.Question;
 using RecruitmentManagementSystem.Data.Interfaces;
 using RecruitmentManagementSystem.Model;
+using JsonResult = RecruitmentManagementSystem.App.Infrastructure.ActionResults.JsonResult;
 
 namespace RecruitmentManagementSystem.App.Controllers
 {
@@ -71,9 +72,7 @@ namespace RecruitmentManagementSystem.App.Controllers
             if (!ModelState.IsValid)
             {
                 Response.StatusCode = (int) HttpStatusCode.BadRequest;
-
-                // TODO: This will be refactored later.
-                return Json(null);
+                return new JsonResult(ModelState.Values.SelectMany(v => v.Errors));
             }
 
             var question = new Question
