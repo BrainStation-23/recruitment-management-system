@@ -2,9 +2,12 @@
     "use strict";
 
     app.controller("QuestionsController", [
-        "$http", function($http) {
+        "$http", "fileService", "notifierService", "Enums", function ($http, fileService, notifierService, Enums) {
+            
             var vm = this;
 
+            vm.enums = Enums;
+            
             vm.categories = [];
             vm.choices = [
                 {
@@ -23,16 +26,31 @@
                 var model = {
                     text: vm.text,
                     questionType: vm.questionType,
-                    choices: vm.choices,
+                    choices: vm.questionType == vm.enums.questionType.Descriptive ? [] : vm.choices,
                     notes: vm.notes,
                     answer: vm.answer,
                     categoryId: vm.categoryId,
                     __RequestVerificationToken: angular.element(":input:hidden[name*='RequestVerificationToken']").val()
                 };
 
-                $http.post("/Question/Create", model).success(function() {
-                    location.href = "/Question";
-                });
+                if (vm.form.$valid) {
+                    
+                    fileService.postMultipartForm({
+                        url: "/Question/Create",
+                        data: model
+                    }).progress(function (evt) {
+                        console.log("percent: " + parseInt(100.0 * evt.loaded / evt.total));
+                    }).success(function (data) {
+                        location.href = "/Question";
+                    }).error(function (response) {
+                        var erroMessages = _.map(response, function (error) {
+                            return error.ErrorMessage;
+                        });
+
+                        console.log(erroMessages);
+                        notifierService.notifyError(erroMessages);
+                    });
+                }
             };
 
             vm.update = function() {

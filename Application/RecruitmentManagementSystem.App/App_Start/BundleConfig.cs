@@ -29,6 +29,7 @@ namespace RecruitmentManagementSystem.App
                 "~/Scripts/core/directives/core.keyboard.enter.directive.js",
                 "~/Scripts/questions/questions.module.js",
                 "~/Scripts/questions/controllers/questions.controller.js",
+                "~/Scripts/questions/constants/questions.constants.js",
                 "~/Scripts/candidates/candidates.module.js",
                 "~/Scripts/candidates/controllers/candidates.controller.js",
                 "~/Scripts/candidates/controllers/candidates.education.controller.js",
