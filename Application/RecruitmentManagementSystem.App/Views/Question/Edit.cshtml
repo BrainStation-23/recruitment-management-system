@@ -50,8 +50,8 @@
 
             <div class="form-group">
                 <label class="control-label col-md-2">Question Type</label>
-                <div class="col-md-2">
-                    @Html.DropDownList("QuestionType", EnumHelper.GetSelectList(typeof(QuestionType)), "Select Type", new { @class = "form-control", ng_model = "ctrl.question.QuestionType" })
+                <div class="col-md-2" ng-cloak>
+                    @Html.DropDownList("QuestionType", EnumHelper.GetSelectList(typeof(QuestionType)), "Select Type", new Dictionary<string, Object>{{"class", "form-control"},{"ng-model", "ctrl.question.QuestionType"}})
                 </div>
             </div>
 

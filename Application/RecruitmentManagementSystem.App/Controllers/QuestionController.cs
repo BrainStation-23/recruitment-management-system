@@ -82,6 +82,7 @@ namespace RecruitmentManagementSystem.App.Controllers
                 Answer = viewModel.Answer,
                 Notes = viewModel.Notes,
                 CategoryId = viewModel.CategoryId,
+                Choices = viewModel.Choices,
                 CreatedBy = User.Identity.GetUserId(),
                 UpdatedBy = User.Identity.GetUserId()
             };
@@ -89,20 +90,6 @@ namespace RecruitmentManagementSystem.App.Controllers
             _questionRepository.Insert(question);
 
             _questionRepository.Save();
-
-            if (viewModel.QuestionType != QuestionType.MCQ) return Json(null);
-
-            foreach (var item in viewModel.Choices)
-            {
-                _choiceRepository.Insert(new Choice
-                {
-                    Text = item.Text,
-                    IsValid = item.IsValid,
-                    QuestionId = question.Id
-                });
-            }
-
-            _choiceRepository.Save();
 
             return Json(null);
         }

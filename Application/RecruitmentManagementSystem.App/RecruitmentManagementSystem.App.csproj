@@ -243,7 +243,6 @@
   <ItemGroup>
     <Content Include="Content\Images\default-avatar.jpg" />
     <Content Include="Content\Themes\fonts\glyphicons-halflings-regular.svg" />
-    <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="gulpfile.js" />
     <Content Include="Scripts\accounts\accounts.module.js" />
@@ -261,6 +260,7 @@
     <Content Include="Scripts\core\directives\core.keyboard.enter.directive.js" />
     <Content Include="Scripts\core\services\core.file.service.js" />
     <Content Include="Scripts\core\services\core.notifier.service.js" />
+    <Content Include="Scripts\questions\constants\questions.constants.js" />
     <Content Include="Scripts\questions\controllers\questions.controller.js" />
     <Content Include="Scripts\questions\questions.module.js" />
     <Content Include="Scripts\_references.js" />
@@ -448,6 +448,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Shared\EditorTemplates\PhoneNumber.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="favicon.jpg" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
