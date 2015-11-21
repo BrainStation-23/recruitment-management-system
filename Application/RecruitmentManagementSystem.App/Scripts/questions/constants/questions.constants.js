@@ -1,8 +1,8 @@
-﻿(function (app) {
+﻿(function(app) {
     "use strict";
 
-    app.constant("Enums", {
-        questionType: { MCQ: 1, Descriptive: 2}
+    app.constant("questionConstants", {
+        questionType: { MCQ: 1, Descriptive: 2 }
     });
-    
+
 })(angular.module("questions"));

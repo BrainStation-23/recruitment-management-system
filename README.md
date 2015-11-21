@@ -2,7 +2,7 @@
 
 [![Build status](https://ci.appveyor.com/api/projects/status/7sa9b0lnwjen7808?svg=true)](https://ci.appveyor.com/project/shibbir/recruitment-management-system-nv0ec)
 [![Dependency Status](https://www.versioneye.com/user/projects/561946aca193340f320004b1/badge.svg?style=flat)](https://www.versioneye.com/user/projects/561946aca193340f320004b1)
-[![License](https://img.shields.io/badge/license-MIT-lightgray.svg)](http://opensource.org/licenses/MIT)
+[![License](https://img.shields.io/npm/l/express.svg)](http://opensource.org/licenses/MIT)
 
 # Technologies
 
@@ -38,7 +38,7 @@ $ npm install -g gulp
 $ gem install scss_lint
 
 $ cd /path/to/RecruitmentManagementSystem.App
-$ npm install # this will also run "bower install" automatically
+$ npm install # this will also trigger "bower install"
 $ gulp
 
 # Build and run the solution

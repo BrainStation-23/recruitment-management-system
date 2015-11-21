@@ -2,12 +2,12 @@
     "use strict";
 
     app.controller("QuestionsController", [
-        "$http", "fileService", "notifierService", "Enums", function ($http, fileService, notifierService, Enums) {
-            
+        "$http", "fileService", "notifierService", "questionConstants", function($http, fileService, notifierService, constants) {
+
             var vm = this;
 
-            vm.enums = Enums;
-            
+            vm.constants = constants;
+
             vm.categories = [];
             vm.choices = [
                 {
@@ -26,7 +26,7 @@
                 var model = {
                     text: vm.text,
                     questionType: vm.questionType,
-                    choices: vm.questionType == vm.enums.questionType.Descriptive ? [] : vm.choices,
+                    choices: vm.questionType === vm.constants.questionType.descriptive ? [] : vm.choices,
                     notes: vm.notes,
                     answer: vm.answer,
                     categoryId: vm.categoryId,
@@ -34,20 +34,25 @@
                 };
 
                 if (vm.form.$valid) {
-                    
+
                     fileService.postMultipartForm({
                         url: "/Question/Create",
                         data: model
-                    }).progress(function (evt) {
+                    }).progress(function(evt) {
                         console.log("percent: " + parseInt(100.0 * evt.loaded / evt.total));
-                    }).success(function (data) {
+                    }).success(function(data) {
                         location.href = "/Question";
-                    }).error(function (response) {
-                        var erroMessages = _.map(response, function (error) {
-                            return error.ErrorMessage;
-                        });
+                    }).error(function(response) {
+                        var erroMessages = [];
 
-                        console.log(erroMessages);
+                        if (Object.prototype.toString.call(response) === "[object Array]") {
+                            erroMessages = _.map(response, function(error) {
+                                return error.errorMessage;
+                            });
+                        } else {
+                            erroMessages.push("Something happened! Please try again.");
+                        }
+
                         notifierService.notifyError(erroMessages);
                     });
                 }
