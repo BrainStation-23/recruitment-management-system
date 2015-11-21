@@ -242,6 +242,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Images\default-avatar.jpg" />
+    <Content Include="Content\Images\miniLogo.png" />
     <Content Include="Content\Themes\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
