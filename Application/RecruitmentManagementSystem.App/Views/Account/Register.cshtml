@@ -18,7 +18,7 @@
             <div class="form-group">
                 @Html.LabelFor(m => m.FirstName, new {@class = "col-md-4 control-label required"})
                 <div class="col-md-8">
-                    @Html.TextBoxFor(m => m.FirstName, new {@class = "form-control"})
+                    @Html.EditorFor(m => m.FirstName)
                     @Html.ValidationMessageFor(m => m.FirstName, "", new {@class = "text-danger"})
                 </div>
             </div>
@@ -26,7 +26,7 @@
             <div class="form-group">
                 @Html.LabelFor(m => m.LastName, new {@class = "col-md-4 control-label required"})
                 <div class="col-md-8">
-                    @Html.TextBoxFor(m => m.LastName, new {@class = "form-control"})
+                    @Html.EditorFor(m => m.LastName)
                     @Html.ValidationMessageFor(m => m.LastName, "", new {@class = "text-danger"})
                 </div>
             </div>
@@ -34,7 +34,7 @@
             <div class="form-group">
                 @Html.LabelFor(m => m.Email, new {@class = "col-md-4 control-label required"})
                 <div class="col-md-8">
-                    @Html.TextBoxFor(m => m.Email, new {@class = "form-control"})
+                    @Html.EditorFor(m => m.Email)
                     @Html.ValidationMessageFor(m => m.Email, "", new {@class = "text-danger"})
                 </div>
             </div>
@@ -42,7 +42,7 @@
             <div class="form-group">
                 @Html.LabelFor(m => m.PhoneNumber, new {@class = "col-md-4 control-label"})
                 <div class="col-md-8">
-                    @Html.TextBoxFor(m => m.PhoneNumber, new {@class = "form-control"})
+                    @Html.EditorFor(m => m.PhoneNumber)
                     @Html.ValidationMessageFor(m => m.PhoneNumber, "", new {@class = "text-danger"})
                 </div>
             </div>
@@ -50,7 +50,7 @@
             <div class="form-group">
                 @Html.LabelFor(m => m.Password, new {@class = "col-md-4 control-label required"})
                 <div class="col-md-8">
-                    @Html.PasswordFor(m => m.Password, new {@class = "form-control"})
+                    @Html.EditorFor(m => m.Password)
                     @Html.ValidationMessageFor(m => m.Password, "", new {@class = "text-danger"})
                 </div>
             </div>
@@ -58,23 +58,23 @@
             <div class="form-group">
                 @Html.LabelFor(m => m.ConfirmPassword, new {@class = "col-md-4 control-label required"})
                 <div class="col-md-8">
-                    @Html.PasswordFor(m => m.ConfirmPassword, new {@class = "form-control"})
+                    @Html.EditorFor(m => m.ConfirmPassword)
                     @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new {@class = "text-danger"})
                 </div>
             </div>
 
             <div class="form-group">
-                @Html.LabelFor(m => m.Role, new {@class = "col-md-4 control-label required"})
+                @Html.LabelFor(m => m.RoleId, new {@class = "col-md-4 control-label required"})
                 <div class="col-md-8">
-                    @Html.TextBoxFor(m => m.Role, new {@class = "form-control"})
-                    @Html.ValidationMessageFor(m => m.Role, "", new {@class = "text-danger"})
+                    @Html.EditorFor(m => m.RoleId)
+                    @Html.ValidationMessageFor(m => m.RoleId, "", new { @class = "text-danger" })
                 </div>
             </div>
 
             <div class="form-group">
                 @Html.LabelFor(model => model.Avatar, new {@class = "control-label col-md-4"})
                 <div class="col-md-8">
-                    @Html.TextBoxFor(model => model.Avatar, new {type = "file"})
+                    @Html.EditorFor(model => model.Avatar)
                 </div>
             </div>
 

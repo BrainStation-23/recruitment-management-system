@@ -25,10 +25,12 @@ namespace RecruitmentManagementSystem.App.Controllers
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
         private readonly IFileRepository _fileRepository;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
         public AccountController()
         {
             _fileRepository = new FileRepository();
+            _roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(new ApplicationDbContext()));
         }
 
         public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager,
@@ -56,8 +58,6 @@ namespace RecruitmentManagementSystem.App.Controllers
             return View(UserManager.Users.ToList());
         }
 
-        //
-        // GET: /Account/Login
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
@@ -65,8 +65,6 @@ namespace RecruitmentManagementSystem.App.Controllers
             return View();
         }
 
-        //
-        // POST: /Account/Login
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -96,8 +94,6 @@ namespace RecruitmentManagementSystem.App.Controllers
             }
         }
 
-        //
-        // GET: /Account/VerifyCode
         [AllowAnonymous]
         public async Task<ActionResult> VerifyCode(string provider, string returnUrl, bool rememberMe)
         {
@@ -109,8 +105,6 @@ namespace RecruitmentManagementSystem.App.Controllers
             return View(new VerifyCodeViewModel {Provider = provider, ReturnUrl = returnUrl, RememberMe = rememberMe});
         }
 
-        //
-        // POST: /Account/VerifyCode
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -141,15 +135,12 @@ namespace RecruitmentManagementSystem.App.Controllers
             }
         }
 
-        //
-        // GET: /Account/Register
+        [HttpGet]
         public ActionResult Register()
         {
             return View();
         }
 
-        //
-        // POST: /Account/Register
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Register(RegisterViewModel model)
@@ -168,14 +159,9 @@ namespace RecruitmentManagementSystem.App.Controllers
             var result = await UserManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
             {
-                var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(new ApplicationDbContext()));
-                var role = new IdentityRole {Name = model.Role};
+                var role = await _roleManager.FindByIdAsync(model.RoleId);
 
-                if (!roleManager.RoleExists(model.Role))
-                {
-                    roleManager.Create(role);
-                }
-                UserManager.AddToRole(user.Id, model.Role);
+                await UserManager.AddToRoleAsync(user.Id, role.Name);
 
                 if (model.Avatar != null && model.Avatar.ContentLength > 0)
                 {
@@ -218,8 +204,6 @@ namespace RecruitmentManagementSystem.App.Controllers
             return View(model);
         }
 
-        //
-        // GET: /Account/ConfirmEmail
         [AllowAnonymous]
         public async Task<ActionResult> ConfirmEmail(string userId, string code)
         {
@@ -231,16 +215,12 @@ namespace RecruitmentManagementSystem.App.Controllers
             return View(result.Succeeded ? "ConfirmEmail" : "Error");
         }
 
-        //
-        // GET: /Account/ForgotPassword
         [AllowAnonymous]
         public ActionResult ForgotPassword()
         {
             return View();
         }
 
-        //
-        // POST: /Account/ForgotPassword
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -265,24 +245,18 @@ namespace RecruitmentManagementSystem.App.Controllers
             return View(model);
         }
 
-        //
-        // GET: /Account/ForgotPasswordConfirmation
         [AllowAnonymous]
         public ActionResult ForgotPasswordConfirmation()
         {
             return View();
         }
 
-        //
-        // GET: /Account/ResetPassword
         [AllowAnonymous]
         public ActionResult ResetPassword(string code)
         {
             return code == null ? View("Error") : View();
         }
 
-        //
-        // POST: /Account/ResetPassword
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -307,16 +281,12 @@ namespace RecruitmentManagementSystem.App.Controllers
             return View();
         }
 
-        //
-        // GET: /Account/ResetPasswordConfirmation
         [AllowAnonymous]
         public ActionResult ResetPasswordConfirmation()
         {
             return View();
         }
 
-        //
-        // GET: /Account/SendCode
         [AllowAnonymous]
         public async Task<ActionResult> SendCode(string returnUrl, bool rememberMe)
         {
@@ -332,8 +302,6 @@ namespace RecruitmentManagementSystem.App.Controllers
                 View(new SendCodeViewModel {Providers = factorOptions, ReturnUrl = returnUrl, RememberMe = rememberMe});
         }
 
-        //
-        // POST: /Account/SendCode
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -353,8 +321,6 @@ namespace RecruitmentManagementSystem.App.Controllers
                 new {Provider = model.SelectedProvider, model.ReturnUrl, model.RememberMe});
         }
 
-        //
-        // POST: /Account/LogOff
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult LogOff()
