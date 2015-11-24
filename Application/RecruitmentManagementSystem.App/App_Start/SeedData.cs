@@ -43,9 +43,9 @@ namespace RecruitmentManagementSystem.App
         {
             var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(dbContext));
 
+            roleManager.Create(new IdentityRole {Name = "System Admin"});
             roleManager.Create(new IdentityRole {Name = "Admin"});
-            roleManager.Create(new IdentityRole {Name = "HR Admin"});
-            roleManager.Create(new IdentityRole {Name = "HR"});
+            roleManager.Create(new IdentityRole {Name = "Examiner"});
             roleManager.Create(new IdentityRole {Name = "Candidate"});
         }
 

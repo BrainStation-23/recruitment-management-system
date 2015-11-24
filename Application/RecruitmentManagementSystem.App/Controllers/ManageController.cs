@@ -274,11 +274,6 @@ namespace RecruitmentManagementSystem.App.Controllers
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Email = user.Email,
-                Roles = new List<string>
-                {
-                    "Admin",
-                    "HR"
-                },
                 Avatar = _fileRepository.Find(x => x.ApplicationUserId == user.Id)
             };
 
