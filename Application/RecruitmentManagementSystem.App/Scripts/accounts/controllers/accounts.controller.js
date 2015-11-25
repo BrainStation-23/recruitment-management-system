@@ -38,17 +38,7 @@
                         vm.profile.avatar = avatar;
                         notifierService.notifySuccess("Avatar updated successfully.");
                     }).error(function(response) {
-                        var erroMessages = [];
-
-                        if (Object.prototype.toString.call(response) === "[object Array]") {
-                            erroMessages = _.map(response, function(error) {
-                                return error.errorMessage;
-                            });
-                        } else {
-                            erroMessages.push("Something happened! Please try again.");
-                        }
-
-                        notifierService.notifyError(erroMessages);
+                        notifierService.notifyError(response);
                     });
                 }
             };
@@ -60,17 +50,7 @@
                     vm.applicationUser.avatar = null;
                     notifierService.notifySuccess("Avatar removed successfully.");
                 }).error(function(response) {
-                    var erroMessages = [];
-
-                    if (Object.prototype.toString.call(response) === "[object Array]") {
-                        erroMessages = _.map(response, function(error) {
-                            return error.errorMessage;
-                        });
-                    } else {
-                        erroMessages.push("Something happened! Please try again.");
-                    }
-
-                    notifierService.notifyError(erroMessages);
+                    notifierService.notifyError(response);
                 });
             };
 

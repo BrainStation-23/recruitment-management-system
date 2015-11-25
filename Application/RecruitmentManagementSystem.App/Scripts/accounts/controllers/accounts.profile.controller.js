@@ -25,17 +25,7 @@
                     $http.post("/Manage/AccountDetails", model).success(function() {
                         $uibModalInstance.close(model);
                     }).error(function(response) {
-                        var erroMessages = [];
-
-                        if (Object.prototype.toString.call(response) === "[object Array]") {
-                            erroMessages = _.map(response, function(error) {
-                                return error.errorMessage;
-                            });
-                        } else {
-                            erroMessages.push("Something happened! Please try again.");
-                        }
-
-                        notifierService.notifyError(erroMessages);
+                        notifierService.notifyError(response);
                     });
 
 

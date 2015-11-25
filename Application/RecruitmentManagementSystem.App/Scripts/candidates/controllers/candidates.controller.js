@@ -10,6 +10,7 @@
             vm.experiences = [];
             vm.projects = [];
             vm.skills = [];
+            vm.positions = [];
 
             vm.discardEducation = function($index) {
                 if (confirm("Are you sure?")) {
@@ -27,6 +28,14 @@
                 if (confirm("Are you sure?")) {
                     vm.projects.splice(index, 1);
                 }
+            };
+
+            vm.getJobPositions = function() {
+                $http.get("/JobPosition/List").success(function (data) {
+                    vm.positions = data;
+                }).error(function() {
+                    notifierService.notifyError("Oops! Something happened.");
+                });
             };
 
             vm.create = function() {
@@ -49,6 +58,7 @@
                     website: vm.website,
                     skills: vm.skills,
                     files: [],
+                    jobPositionId: vm.jobPositionId,
                     __RequestVerificationToken: angular.element(":input:hidden[name*='RequestVerificationToken']").val()
                 };
 
@@ -71,11 +81,7 @@
                     }).success(function(data) {
                         location.href = "/Candidate";
                     }).error(function(response) {
-                        var erroMessages = _.map(response, function(error) {
-                            return error.ErrorMessage;
-                        });
-
-                        notifierService.notifyError(erroMessages);
+                        notifierService.notifyError(response);
                     });
                 }
             };

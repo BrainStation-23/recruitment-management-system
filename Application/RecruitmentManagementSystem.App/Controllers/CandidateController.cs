@@ -70,6 +70,7 @@ namespace RecruitmentManagementSystem.App.Controllers
                 PhoneNumber = model.PhoneNumber,
                 Others = model.Others,
                 Website = model.Website,
+                JobPositionId = model.JobPositionId,
                 CreatedBy = User.Identity.GetUserId(),
                 UpdatedBy = User.Identity.GetUserId()
             };

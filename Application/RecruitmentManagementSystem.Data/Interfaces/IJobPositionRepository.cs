@@ -2,7 +2,7 @@
 
 namespace RecruitmentManagementSystem.Data.Interfaces
 {
-    public interface IProjectRepository : IRepository<Project>
+    public interface IJobPositionRepository : IRepository<JobPosition>
     {
     }
 }
