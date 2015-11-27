@@ -26,7 +26,7 @@
                 var model = {
                     text: vm.text,
                     questionType: vm.questionType,
-                    choices: vm.questionType === vm.constants.questionType.descriptive ? [] : vm.choices,
+                    choices: parseInt(vm.questionType, 10) === vm.constants.questionType.Descriptive ? [] : vm.choices,
                     notes: vm.notes,
                     answer: vm.answer,
                     categoryId: vm.categoryId,
