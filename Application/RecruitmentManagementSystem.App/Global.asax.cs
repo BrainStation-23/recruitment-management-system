@@ -1,9 +1,11 @@
-﻿using System.Web.Mvc;
+﻿using System.Data.Entity;
+using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using Microsoft.Practices.Unity;
 using RecruitmentManagementSystem.App.Infrastructure.Tasks;
 using System.Web;
+using RecruitmentManagementSystem.Data.DbContext;
 
 namespace RecruitmentManagementSystem.App
 {
@@ -18,6 +20,8 @@ namespace RecruitmentManagementSystem.App
 
         protected void Application_Start()
         {
+            Database.SetInitializer(new DropCreateDatabaseIfModelChanges<ApplicationDbContext>());
+
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
