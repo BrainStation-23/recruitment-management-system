@@ -64,8 +64,6 @@ namespace RecruitmentManagementSystem.App
             //    ClientId = OAuthConfig.GoogleClientId,
             //    ClientSecret = OAuthConfig.GoogleClientSecret
             //});
-
-            //app.CreatePerOwinContext<ApplicationRoleManager>(ApplicationRoleManager.Create);
         }
     }
 }

@@ -12,6 +12,20 @@
             "extendedTimeOut": 1000
         };
 
+        var formatErrors = function (messages) {
+            var erroMessages = [];
+
+            if (Array.isArray(messages)) {
+                erroMessages = _.map(response, function (error) {
+                    return error.errorMessage;
+                });
+            } else {
+                erroMessages.push("Something happened! Please try again.");
+            }
+
+            return erroMessages;
+        };
+
         var notifySuccess = function (message, options) {
             if (options && options.timeOut) {
                 toastr.options.timeOut = options.timeOut;
@@ -26,18 +40,16 @@
             }
         };
 
-        var notifyError = function (message, options) {
+        var notifyError = function(messages, options) {
             if (options && options.timeOut) {
                 toastr.options.timeOut = options.timeOut;
             }
 
-            if (Array.isArray(message)) {
-                message.forEach(function(err) {
-                    toastr.error(err);
-                });
-            } else {
-                toastr.error(message);
-            }
+            messages = formatErrors(messages);
+
+            messages.forEach(function (err) {
+                toastr.error(err);
+            });
         };
 
         var notifyWarning = function (message, options) {

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using AutoMapper.QueryableExtensions;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
@@ -53,9 +54,17 @@ namespace RecruitmentManagementSystem.App.Controllers
             private set { _userManager = value; }
         }
 
+        [HttpGet]
         public ActionResult Index()
         {
-            return View(UserManager.Users.ToList());
+            var users = UserManager.Users.ProjectTo<ApplicationUserViewModel>().ToList();
+
+            foreach (var user in users)
+            {
+                user.Roles = UserManager.GetRoles(user.Id);
+            }
+
+            return View(users);
         }
 
         [AllowAnonymous]
@@ -204,6 +213,7 @@ namespace RecruitmentManagementSystem.App.Controllers
             return View(model);
         }
 
+        [HttpGet]
         [AllowAnonymous]
         public async Task<ActionResult> ConfirmEmail(string userId, string code)
         {
@@ -215,6 +225,7 @@ namespace RecruitmentManagementSystem.App.Controllers
             return View(result.Succeeded ? "ConfirmEmail" : "Error");
         }
 
+        [HttpGet]
         [AllowAnonymous]
         public ActionResult ForgotPassword()
         {
@@ -251,6 +262,7 @@ namespace RecruitmentManagementSystem.App.Controllers
             return View();
         }
 
+        [HttpGet]
         [AllowAnonymous]
         public ActionResult ResetPassword(string code)
         {
@@ -281,12 +293,14 @@ namespace RecruitmentManagementSystem.App.Controllers
             return View();
         }
 
+        [HttpGet]
         [AllowAnonymous]
         public ActionResult ResetPasswordConfirmation()
         {
             return View();
         }
 
+        [HttpGet]
         [AllowAnonymous]
         public async Task<ActionResult> SendCode(string returnUrl, bool rememberMe)
         {

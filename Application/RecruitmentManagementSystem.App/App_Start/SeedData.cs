@@ -35,6 +35,11 @@ namespace RecruitmentManagementSystem.App
                     SeedInstitution(dbContext);
                 }
 
+                if (!dbContext.JobPositions.Any())
+                {
+                    SeedJobPosition(dbContext);
+                }
+
                 dbContext.SaveChanges();
             }
         }
@@ -43,9 +48,9 @@ namespace RecruitmentManagementSystem.App
         {
             var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(dbContext));
 
+            roleManager.Create(new IdentityRole {Name = "System Admin"});
             roleManager.Create(new IdentityRole {Name = "Admin"});
-            roleManager.Create(new IdentityRole {Name = "HR Admin"});
-            roleManager.Create(new IdentityRole {Name = "HR"});
+            roleManager.Create(new IdentityRole {Name = "Examiner"});
             roleManager.Create(new IdentityRole {Name = "Candidate"});
         }
 
@@ -163,6 +168,23 @@ namespace RecruitmentManagementSystem.App
                     City = "Dhaka"
                 }
             }.ForEach(institution => dbContext.Institutions.Add(institution));
+        }
+
+        private static void SeedJobPosition(ApplicationDbContext dbContext)
+        {
+            new List<JobPosition>
+            {
+                new JobPosition
+                {
+                    Name = "Junior Software Engineer",
+                    Description = "Lorem Ipsum."
+                },
+                new JobPosition
+                {
+                    Name = "Senior Software Engineer",
+                    Description = "Lorem Ipsum."
+                }
+            }.ForEach(row => dbContext.JobPositions.Add(row));
         }
     }
 }

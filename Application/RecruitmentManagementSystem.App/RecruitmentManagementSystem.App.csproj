@@ -201,6 +201,7 @@
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InstitutionController.cs" />
+    <Compile Include="Controllers\JobPositionController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\QuestionCategoryController.cs" />
     <Compile Include="Controllers\QuestionController.cs" />

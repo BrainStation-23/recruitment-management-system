@@ -1,4 +1,4 @@
-﻿@model IEnumerable<RecruitmentManagementSystem.Model.ApplicationUser>
+﻿@model IEnumerable<RecruitmentManagementSystem.App.ViewModels.Account.ApplicationUserViewModel>
 
 @{
     ViewBag.Title = "Application Users";
@@ -21,6 +21,9 @@
         <th>
             @Html.DisplayNameFor(model => model.PhoneNumber)
         </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Roles)
+        </th>
     </tr>
 
     @foreach (var item in Model)
@@ -37,6 +40,12 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.PhoneNumber)
+            </td>
+            <td>
+                @foreach (var role in item.Roles)
+                {
+                    <text>@role</text>
+                }
             </td>
         </tr>
     }
