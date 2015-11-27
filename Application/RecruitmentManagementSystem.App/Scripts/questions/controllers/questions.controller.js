@@ -30,8 +30,13 @@
                     notes: vm.notes,
                     answer: vm.answer,
                     categoryId: vm.categoryId,
+                    files: [],
                     __RequestVerificationToken: angular.element(":input:hidden[name*='RequestVerificationToken']").val()
                 };
+
+                angular.forEach(vm.documents, function (document) {
+                    model.files.push(document);
+                });
 
                 if (vm.form.$valid) {
 

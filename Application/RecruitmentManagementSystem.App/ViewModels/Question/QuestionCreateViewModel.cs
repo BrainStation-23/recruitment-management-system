@@ -17,8 +17,6 @@ namespace RecruitmentManagementSystem.App.ViewModels.Question
         [Required]
         public QuestionType QuestionType { get; set; }
 
-        public ICollection<File> Files { get; set; }
-
         public ICollection<Choice> Choices { get; set; }
 
         [DataType(DataType.MultilineText)]

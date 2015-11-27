@@ -47,11 +47,21 @@
                             <textarea class="form-control" rows="6" ng-model="ctrl.notes"></textarea>
                         </div>
                     </div>
+                    
+                    <div class="form-group">
+                        <label class="control-label col-sm-2">Related Documents</label>
+                        <div class="col-sm-5">
+                            <input type="file" title="Select Document" ng-model="ctrl.documents" ngf-select accept=".pdf,.doc,.docx" multiple />
+                        </div>
+                    </div>
 
                     <div class="form-group">
                         <label class="control-label col-sm-2">Question Type</label>
                         <div class="col-sm-4">
-                            @Html.DropDownList("QuestionType", EnumHelper.GetSelectList(typeof(QuestionType)), "Select Type", new { @class = "form-control", ng_model = "ctrl.questionType" })
+                            @Html.DropDownList("QuestionType", EnumHelper.GetSelectList(typeof(QuestionType)), "Select Type", new { @class = "form-control", ng_model = "ctrl.questionType", @required ="" })
+                            <div class="text-danger field-validation-error" ng-messages="ctrl.form.submitted && ctrl.form.QuestionType.$error">
+                                <span ng-message="required">This field is required.</span>
+                            </div>
                         </div>
                     </div>
 
