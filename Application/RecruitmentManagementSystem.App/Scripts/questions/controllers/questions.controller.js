@@ -2,8 +2,11 @@
     "use strict";
 
     app.controller("QuestionsController", [
-        "$http", function($http) {
+        "$http", "fileService", "notifierService", "questionConstants", function($http, fileService, notifierService, constants) {
+
             var vm = this;
+
+            vm.constants = constants;
 
             vm.categories = [];
             vm.choices = [
@@ -23,16 +26,31 @@
                 var model = {
                     text: vm.text,
                     questionType: vm.questionType,
-                    choices: vm.choices,
+                    choices: parseInt(vm.questionType, 10) === vm.constants.questionType.Descriptive ? [] : vm.choices,
                     notes: vm.notes,
                     answer: vm.answer,
                     categoryId: vm.categoryId,
+                    files: [],
                     __RequestVerificationToken: angular.element(":input:hidden[name*='RequestVerificationToken']").val()
                 };
 
-                $http.post("/Question/Create", model).success(function() {
-                    location.href = "/Question";
+                angular.forEach(vm.documents, function (document) {
+                    model.files.push(document);
                 });
+
+                if (vm.form.$valid) {
+
+                    fileService.postMultipartForm({
+                        url: "/Question/Create",
+                        data: model
+                    }).progress(function(evt) {
+                        console.log("percent: " + parseInt(100.0 * evt.loaded / evt.total));
+                    }).success(function(data) {
+                        location.href = "/Question";
+                    }).error(function(response) {
+                        notifierService.notifyError(response);
+                    });
+                }
             };
 
             vm.update = function() {

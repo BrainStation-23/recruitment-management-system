@@ -1,0 +1,11 @@
+﻿@using Microsoft.AspNet.Identity
+@using Microsoft.AspNet.Identity.EntityFramework
+@using RecruitmentManagementSystem.Data.DbContext
+
+@model string
+@{
+    var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(new ApplicationDbContext()));
+    var roles = new SelectList(roleManager.Roles, "Id", "Name");
+}
+
+@Html.DropDownList("", roles, "Select Role", new { @class = "form-control" })

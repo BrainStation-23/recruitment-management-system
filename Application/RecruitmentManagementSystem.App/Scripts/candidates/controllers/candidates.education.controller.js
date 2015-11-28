@@ -5,8 +5,6 @@
         "$http", "$uibModalInstance", "data", function($http, $uibModalInstance, data) {
             var vm = this;
 
-            vm.institutions = [];
-
             $http.get("/Institution/").success(function(response) {
                 vm.institutions = response;
 
@@ -19,10 +17,10 @@
                 vm.degree = data.degree;
                 vm.fieldOfStudy = data.fieldOfStudy;
                 vm.grade = data.grade;
-                vm.startDate = data.startDate;
-                vm.endDate = data.endDate;
+                vm.startDate = new Date(data.startDate);
+                vm.endDate = new Date(data.endDate);
                 vm.present = data.present;
-                vm.activites = data.activites;
+                vm.activities = data.activities;
                 vm.notes = data.notes;
             }
 
@@ -37,7 +35,7 @@
                         institution: vm.institution,
                         startDate: vm.startDate,
                         present: vm.present,
-                        activites: vm.activites,
+                        activities: vm.activities,
                         notes: vm.notes
                     };
 

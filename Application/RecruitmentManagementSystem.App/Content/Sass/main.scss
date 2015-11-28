@@ -38,3 +38,9 @@ body {
     font-weight: bold;
     line-height: 2.5em;
 }
+
+// Because, in a bootstrap panel it creates unnecessary spaces.
+// However there might be a better solution.
+.table {
+    margin-bottom: 0;
+}

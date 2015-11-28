@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using AutoMapper;
+using RecruitmentManagementSystem.App.Infrastructure.Mappings;
 using RecruitmentManagementSystem.Model;
 
 namespace RecruitmentManagementSystem.App.ViewModels.Account
 {
-    public class ApplicationUserViewModel
+    public class ApplicationUserViewModel : IHaveCustomMappings
     {
         public string Id { get; set; }
 
@@ -30,5 +32,11 @@ namespace RecruitmentManagementSystem.App.ViewModels.Account
 
         [Display(Name = "Avatar")]
         public File Avatar { get; set; }
+
+        public void CreateMappings(IConfiguration configuration)
+        {
+            configuration.CreateMap<ApplicationUser, ApplicationUserViewModel>()
+                .ForMember(dest => dest.Roles, opt => opt.Ignore());
+        }
     }
 }

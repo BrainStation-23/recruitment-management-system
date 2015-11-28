@@ -70,6 +70,7 @@ namespace RecruitmentManagementSystem.App.Controllers
                 PhoneNumber = model.PhoneNumber,
                 Others = model.Others,
                 Website = model.Website,
+                JobPositionId = model.JobPositionId,
                 CreatedBy = User.Identity.GetUserId(),
                 UpdatedBy = User.Identity.GetUserId()
             };
@@ -90,7 +91,7 @@ namespace RecruitmentManagementSystem.App.Controllers
                         StartDate = item.StartDate,
                         EndDate = item.EndDate,
                         Present = item.CurrentlyPresent,
-                        Activites = item.Activites,
+                        Activities = item.Activities,
                         Notes = item.Notes,
                         CandidateId = candidate.Id
                     });
@@ -152,46 +153,55 @@ namespace RecruitmentManagementSystem.App.Controllers
         }
 
         [HttpGet]
-        public ActionResult Details(int? id)
+        public ActionResult Details()
         {
-            var model =
-                _candidateRepository.FindAll().ProjectTo<CandidateViewModel>().SingleOrDefault(x => x.Id == id);
-
-            if (model == null) return new HttpNotFoundResult();
-
-            return View(model);
+            return View();
         }
 
         [HttpGet]
-        public ActionResult Edit(int? id)
+        [Route("candidates/{id:int}")]
+        public ActionResult Details(int id)
         {
             var model =
                 _candidateRepository.FindAll().ProjectTo<CandidateViewModel>().SingleOrDefault(x => x.Id == id);
 
-            if (model == null) return new HttpNotFoundResult();
-
-            return View(model);
+            return new JsonResult(model, JsonRequestBehavior.AllowGet);
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(CandidateViewModel candidate)
+        [HttpGet]
+        public ActionResult Edit(int id)
         {
-            if (!ModelState.IsValid) return View(candidate);
+            return View();
+        }
+
+        [HttpPut]
+        [ValidateAntiForgeryToken]
+        [Route("candidates/{id:int}")]
+        public ActionResult Edit(CandidateViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                Response.StatusCode = (int) HttpStatusCode.BadRequest;
+                return new JsonResult(ModelState.Values.SelectMany(v => v.Errors));
+            }
 
             _candidateRepository.Update(new Candidate
             {
-                Id = candidate.Id,
-                FirstName = candidate.FirstName,
-                LastName = candidate.LastName,
-                Email = candidate.Email,
-                PhoneNumber = candidate.PhoneNumber,
-                Others = candidate.Others,
-                Website = candidate.Website
+                Id = model.Id,
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                Email = model.Email,
+                PhoneNumber = model.PhoneNumber,
+                Others = model.Others,
+                Website = model.Website,
+                JobPositionId = model.JobPositionId,
+                UpdatedAt = DateTime.UtcNow,
+                UpdatedBy = User.Identity.GetUserId()
             });
 
             _candidateRepository.Save();
-            return RedirectToAction("Index");
+
+            return Json(null);
         }
 
         [HttpGet]
@@ -205,7 +215,7 @@ namespace RecruitmentManagementSystem.App.Controllers
             return View(model);
         }
 
-        [HttpPost, ActionName("Delete")]
+        [HttpDelete, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {

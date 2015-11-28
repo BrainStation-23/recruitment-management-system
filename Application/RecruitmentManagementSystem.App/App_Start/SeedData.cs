@@ -15,6 +15,11 @@ namespace RecruitmentManagementSystem.App
         {
             using (var dbContext = new ApplicationDbContext())
             {
+                if (!dbContext.Roles.Any())
+                {
+                    SeedApplicaionRole(dbContext);
+                }
+
                 if (!dbContext.Users.Any())
                 {
                     SeedApplicationUser(dbContext);
@@ -30,8 +35,23 @@ namespace RecruitmentManagementSystem.App
                     SeedInstitution(dbContext);
                 }
 
+                if (!dbContext.JobPositions.Any())
+                {
+                    SeedJobPosition(dbContext);
+                }
+
                 dbContext.SaveChanges();
             }
+        }
+
+        private static void SeedApplicaionRole(DbContext dbContext)
+        {
+            var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(dbContext));
+
+            roleManager.Create(new IdentityRole {Name = "System Admin"});
+            roleManager.Create(new IdentityRole {Name = "Admin"});
+            roleManager.Create(new IdentityRole {Name = "Examiner"});
+            roleManager.Create(new IdentityRole {Name = "Candidate"});
         }
 
         private static void SeedApplicationUser(DbContext dbContext)
@@ -68,12 +88,6 @@ namespace RecruitmentManagementSystem.App
 
             if (!result.Succeeded) return;
 
-            var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(dbContext));
-            var admin = new IdentityRole {Name = "Admin"};
-
-            if (roleManager.RoleExists("Admin")) return;
-
-            roleManager.Create(admin);
             userManager.AddToRole(user.Id, "Admin");
         }
 
@@ -154,6 +168,23 @@ namespace RecruitmentManagementSystem.App
                     City = "Dhaka"
                 }
             }.ForEach(institution => dbContext.Institutions.Add(institution));
+        }
+
+        private static void SeedJobPosition(ApplicationDbContext dbContext)
+        {
+            new List<JobPosition>
+            {
+                new JobPosition
+                {
+                    Name = "Junior Software Engineer",
+                    Description = "Lorem Ipsum."
+                },
+                new JobPosition
+                {
+                    Name = "Senior Software Engineer",
+                    Description = "Lorem Ipsum."
+                }
+            }.ForEach(row => dbContext.JobPositions.Add(row));
         }
     }
 }

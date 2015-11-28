@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "authors": [
     "Adnan <adnan.faiz@bs-23.com>",
+    "Arif <arifur.rahman@bs-23.com>",
     "Ruhul <ruhul.amin@bs-23.com>",
     "Shibbir <shibbir@bs-23.com>"
   ],
@@ -23,12 +24,15 @@
     "jquery": "~2.1.4",
     "jquery-validation": "~1.14.0",
     "jquery-validation-unobtrusive": "~3.2.4",
-    "angular": "~1.4.7",
+    "angular": "~1.4.8",
     "angular-bootstrap": "~0.14.3",
-    "angular-messages": "~1.4.7",
-    "font-awesome": "~4.4.0",
-    "ng-file-upload": "~10.0.2",
+    "angular-messages": "~1.4.8",
+    "font-awesome": "~4.5.0",
+    "ng-file-upload": "~10.0.4",
     "toastr": "~2.1.2",
     "lodash": "~3.10.1"
+  },
+  "resolutions": {
+    "angular": "~1.4.8"
   }
 }

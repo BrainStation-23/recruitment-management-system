@@ -17,6 +17,8 @@ namespace RecruitmentManagementSystem.App.ViewModels.Account
         [StringLength(30, ErrorMessage = "The {0} must be at least {2} characters long.")]
         public string LastName { get; set; }
 
+        [Phone]
+        [DataType(DataType.PhoneNumber)]
         [Display(Name = "Phone Number")]
         public string PhoneNumber { get; set; }
 
@@ -37,7 +39,9 @@ namespace RecruitmentManagementSystem.App.ViewModels.Account
         public string ConfirmPassword { get; set; }
 
         [Required]
-        public string Role { get; set; }
+        [Display(Name = "Role")]
+        [DataType("IdentityRole")]
+        public string RoleId { get; set; }
 
         [DataType(DataType.Upload)]
         public HttpPostedFileBase Avatar { get; set; }

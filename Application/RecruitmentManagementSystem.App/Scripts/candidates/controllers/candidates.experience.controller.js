@@ -8,8 +8,8 @@
             if (data) {
                 vm.organization = data.organization;
                 vm.jobTitle = data.jobTitle;
-                vm.startDate = data.startDate;
-                vm.endDate = data.endDate;
+                vm.startDate = new Date(data.startDate);
+                vm.endDate = new Date(data.endDate);
                 vm.present = data.present;
                 vm.description = data.description;
                 vm.notes = data.notes;

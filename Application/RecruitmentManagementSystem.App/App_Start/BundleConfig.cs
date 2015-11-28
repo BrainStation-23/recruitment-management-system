@@ -29,13 +29,15 @@ namespace RecruitmentManagementSystem.App
                 "~/Scripts/core/directives/core.keyboard.enter.directive.js",
                 "~/Scripts/questions/questions.module.js",
                 "~/Scripts/questions/controllers/questions.controller.js",
+                "~/Scripts/questions/constants/questions.constants.js",
                 "~/Scripts/candidates/candidates.module.js",
                 "~/Scripts/candidates/controllers/candidates.controller.js",
                 "~/Scripts/candidates/controllers/candidates.education.controller.js",
                 "~/Scripts/candidates/controllers/candidates.experience.controller.js",
                 "~/Scripts/candidates/controllers/candidates.project.controller.js",
                 "~/Scripts/accounts/accounts.module.js",
-                "~/Scripts/accounts/controllers/accounts.controller.js"));
+                "~/Scripts/accounts/controllers/accounts.controller.js",
+                "~/Scripts/accounts/controllers/accounts.profile.controller.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                 "~/Content/Themes/Superhero/bootstrap.css",

@@ -2,7 +2,7 @@
 
 namespace RecruitmentManagementSystem.App.ViewModels.Account
 {
-    public class ApplicationUserInformationViewModel
+    public class AccountDetailsViewModel
     {
         [Required]
         [Display(Name = "First Name")]
@@ -13,9 +13,6 @@ namespace RecruitmentManagementSystem.App.ViewModels.Account
         [Display(Name = "Last Name")]
         [StringLength(30, ErrorMessage = "The {0} must be at least {2} characters long.")]
         public string LastName { get; set; }
-
-        [Display(Name = "Phone Number")]
-        public string PhoneNumber { get; set; }
 
         [Required]
         [EmailAddress]

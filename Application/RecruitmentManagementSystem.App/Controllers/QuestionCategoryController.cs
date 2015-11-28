@@ -5,6 +5,7 @@ using Microsoft.AspNet.Identity;
 using RecruitmentManagementSystem.App.ViewModels.Question;
 using RecruitmentManagementSystem.Data.Interfaces;
 using RecruitmentManagementSystem.Model;
+using JsonResult = RecruitmentManagementSystem.App.Infrastructure.ActionResults.JsonResult;
 
 namespace RecruitmentManagementSystem.App.Controllers
 {
@@ -25,7 +26,7 @@ namespace RecruitmentManagementSystem.App.Controllers
 
             if (Request.IsAjaxRequest())
             {
-                return Json(model, JsonRequestBehavior.AllowGet);
+                return new JsonResult(model, JsonRequestBehavior.AllowGet);
             }
             return View(model);
         }

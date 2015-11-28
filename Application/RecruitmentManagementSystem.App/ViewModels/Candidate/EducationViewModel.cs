@@ -1,10 +1,11 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using RecruitmentManagementSystem.App.Infrastructure.Mappings;
+using RecruitmentManagementSystem.Model;
 
 namespace RecruitmentManagementSystem.App.ViewModels.Candidate
 {
-    public class EducationViewModel : IMapFrom<Model.Education>
+    public class EducationViewModel : IMapFrom<Education>
     {
         public int Id { get; set; }
 
@@ -19,7 +20,7 @@ namespace RecruitmentManagementSystem.App.ViewModels.Candidate
         public double Grade { get; set; }
 
         [StringLength(1500, ErrorMessage = "The {0} must be at most {1} characters long.")]
-        public string Activites { get; set; }
+        public string Activities { get; set; }
 
         [StringLength(2000, ErrorMessage = "The {0} must be at most {1} characters long.")]
         public string Notes { get; set; }
@@ -35,5 +36,7 @@ namespace RecruitmentManagementSystem.App.ViewModels.Candidate
         [Required]
         [Display(Name = "Institution")]
         public int InstitutionId { get; set; }
+
+        public Institution Institution { get; set; }
     }
 }

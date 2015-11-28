@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using RecruitmentManagementSystem.App.Infrastructure.Mappings;
+using RecruitmentManagementSystem.App.ViewModels.Shared;
+using RecruitmentManagementSystem.Model;
 
 namespace RecruitmentManagementSystem.App.ViewModels.Candidate
 {
@@ -37,6 +39,12 @@ namespace RecruitmentManagementSystem.App.ViewModels.Candidate
         [StringLength(50, ErrorMessage = "The {0} must be at most {1} characters long.")]
         public string Website { get; set; }
 
+        [Required]
+        [Display(Name = "Job Position")]
+        public int JobPositionId { get; set; }
+
+        public JobPosition JobPosition { get; set; }
+
         public ICollection<EducationViewModel> Educations { get; set; }
 
         public ICollection<ExperienceViewModel> Experiences { get; set; }
@@ -49,6 +57,8 @@ namespace RecruitmentManagementSystem.App.ViewModels.Candidate
 
         public string ResumeFileName { get; set; }
 
-        public IList<string> DocumentFileNames { get; set; }
+        public ICollection<string> DocumentFileNames { get; set; }
+
+        public ICollection<FileViewModel> Files { get; set; }
     }
 }
