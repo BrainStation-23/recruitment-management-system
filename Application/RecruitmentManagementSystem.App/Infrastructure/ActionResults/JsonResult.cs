@@ -46,11 +46,14 @@ namespace RecruitmentManagementSystem.App.Infrastructure.ActionResults
             }
 
             if (Data == null)
+            {
                 return;
+            }
 
             var jsonSerializerSettings = new JsonSerializerSettings
             {
-                ContractResolver = new CamelCasePropertyNamesContractResolver()
+                ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                NullValueHandling = NullValueHandling.Ignore
             };
 
             response.Write(JsonConvert.SerializeObject(Data, jsonSerializerSettings));

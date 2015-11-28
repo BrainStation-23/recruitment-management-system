@@ -9,6 +9,7 @@
                 vm.title = data.title;
                 vm.url = data.url;
                 vm.description = data.description;
+                vm.notes = data.notes;
             }
 
             vm.save = function() {
@@ -19,7 +20,8 @@
                     var project = {
                         title: vm.title,
                         url: vm.url,
-                        description: vm.description
+                        description: vm.description,
+                        notes: vm.notes
                     };
 
                     if (data && data.$$hashKey) {
