@@ -265,6 +265,7 @@
     <Content Include="Scripts\questions\constants\questions.constants.js" />
     <Content Include="Scripts\questions\controllers\questions.controller.js" />
     <Content Include="Scripts\questions\questions.module.js" />
+    <Content Include="Scripts\questions\templates\question-type.html" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Scripts\candidates\templates\experience-modal.html" />
     <Content Include="Web.config">
@@ -326,7 +327,7 @@
     <Content Include="bower.json" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Candidate\Index.cshtml" />
+    <Content Include="Views\Candidate\List.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Candidate\Delete.cshtml" />

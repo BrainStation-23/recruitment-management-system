@@ -5,8 +5,9 @@ namespace RecruitmentManagementSystem.Model
 {
     public enum QuestionType
     {
-        MCQ = 1,
-        Descriptive = 2
+        Descriptive = 1,
+        MultipleChoiseQuestion = 2,
+        SingleChoiceQuestion = 3
     }
 
     public class Question : BaseEntity

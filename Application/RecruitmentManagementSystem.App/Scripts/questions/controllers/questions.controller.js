@@ -2,14 +2,15 @@
     "use strict";
 
     app.controller("QuestionsController", [
-        "$http", "fileService", "notifierService", "questionConstants", function($http, fileService, notifierService, constants) {
+        "$http", "fileService", "notifierService", "questionConstants", "$scope", function($http, fileService, notifierService, constants, $scope) {
 
             var vm = this;
 
             vm.constants = constants;
 
             vm.categories = [];
-            vm.choices = [
+
+            var defaultChoices = [
                 {
                     text: "",
                     isValid: false
@@ -19,6 +20,7 @@
                     isValid: false
                 }
             ];
+            vm.choices = angular.copy(defaultChoices);
 
             vm.create = function() {
                 vm.form.submitted = true;
@@ -34,7 +36,7 @@
                     __RequestVerificationToken: angular.element(":input:hidden[name*='RequestVerificationToken']").val()
                 };
 
-                angular.forEach(vm.documents, function (document) {
+                angular.forEach(vm.documents, function(document) {
                     model.files.push(document);
                 });
 
@@ -81,6 +83,15 @@
                     vm.categories = data;
                 });
             };
+
+            // Watchers
+            $scope.$watch(function() {
+                return vm.questionType;
+            }, function(newVal, oldVal) {
+                if (newVal !== oldVal) {
+                    vm.choices = angular.copy(defaultChoices);
+                }
+            });
         }
     ]);
 })(angular.module("questions"));

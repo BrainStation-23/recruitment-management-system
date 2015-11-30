@@ -1,0 +1,45 @@
+﻿<div class="form-group" ng-if="ctrl.questionType === ctrl.constants.questionType.descriptive">
+    <label class="control-label col-sm-2">Answer (Optional)</label>
+    <div class="col-sm-10">
+        <textarea name="answer" class="form-control" rows="6" ng-model="ctrl.answer" placeholder="Write down your answer..."></textarea>
+    </div>
+</div>
+
+<div ng-if="ctrl.questionType === ctrl.constants.questionType.multipleChoice || ctrl.questionType === ctrl.constants.questionType.singleChoice">
+
+    <div class="table-responsive">
+        <table class="table">
+            <tr>
+                <th>
+                    <span ng-if="ctrl.questionType === ctrl.constants.questionType.multipleChoice">Multiple Choice Question</span>
+                    <span ng-if="ctrl.questionType === ctrl.constants.questionType.singleChoice">Single Choice Question</span>
+                </th>
+                <th></th>
+                <th></th>
+            </tr>
+            <tr ng-repeat="choice in ctrl.choices track by $index">
+                <td>
+                    <input type="text" class="form-control" ng-model="choice.text" />
+                </td>
+                <td>
+                    <div class="checkbox" ng-if="ctrl.questionType === ctrl.constants.questionType.multipleChoice">
+                        <label>
+                            <input type="checkbox" ng-value="true" ng-model="choice.isValid" /> Correct answer
+                        </label>
+                    </div>
+                    <div class="radio" ng-if="ctrl.questionType === ctrl.constants.questionType.singleChoice">
+                        <label>
+                            <input type="radio" name="name" ng-value="true" ng-model="choice.isValid" /> Correct answer
+                        </label>
+                    </div>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-danger" ng-disabled="$index < 2" ng-click="ctrl.discardChoice($index)">
+                        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                    </button>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <button type="button" class="btn btn-primary" ng-click="ctrl.addNewChoice()">Add another field</button>
+</div>
