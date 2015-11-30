@@ -7,74 +7,18 @@
 <h3>Edit Candidate</h3>
 <hr />
 
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
+<div ng-controller="CandidatesController as ctrl" ng-init="ctrl.getJobPositions(); ctrl.find()">
 
-    <div class="form-horizontal">
-        @Html.ValidationSummary(true, "", new {@class = "text-danger"})
-        @Html.HiddenFor(model => model.Id)
+    <form name="ctrl.form" ng-submit="ctrl.update()" novalidate>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.FirstName, htmlAttributes: new {@class = "control-label col-md-2"})
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.FirstName, new {htmlAttributes = new {@class = "form-control"}})
-                @Html.ValidationMessageFor(model => model.FirstName, "", new {@class = "text-danger"})
-            </div>
-        </div>
+        @Html.AntiForgeryToken()
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.LastName, htmlAttributes: new {@class = "control-label col-md-2"})
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.LastName, new {htmlAttributes = new {@class = "form-control"}})
-                @Html.ValidationMessageFor(model => model.LastName, "", new {@class = "text-danger"})
-            </div>
-        </div>
+        <input type="hidden" name="id" ng-value="ctrl.candidate.id" />
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Email, htmlAttributes: new {@class = "control-label col-md-2"})
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Email, new {htmlAttributes = new {@class = "form-control"}})
-                @Html.ValidationMessageFor(model => model.Email, "", new {@class = "text-danger"})
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.PhoneNumber, htmlAttributes: new {@class = "control-label col-md-2"})
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.PhoneNumber, new {htmlAttributes = new {@class = "form-control"}})
-                @Html.ValidationMessageFor(model => model.PhoneNumber, "", new {@class = "text-danger"})
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Others, htmlAttributes: new {@class = "control-label col-md-2"})
-            <div class="col-md-10">
-                @Html.TextAreaFor(model => model.Others, new {@class = "form-control", rows = 6})
-                @Html.ValidationMessageFor(model => model.Others, "", new {@class = "text-danger"})
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Website, htmlAttributes: new {@class = "control-label col-md-2"})
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Website, new {htmlAttributes = new {@class = "form-control"}})
-                @Html.ValidationMessageFor(model => model.Website, "", new {@class = "text-danger"})
-            </div>
-        </div>
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Update" class="btn btn-default"/>
-            </div>
-        </div>
-    </div>
-}
+        @Html.Partial("_FormBody")
+    </form>
+</div>
 
 <div>
     @Html.ActionLink("Back to List", "Index")
 </div>
-
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-}

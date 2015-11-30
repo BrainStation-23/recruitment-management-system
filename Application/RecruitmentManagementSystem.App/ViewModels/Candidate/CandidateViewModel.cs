@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using RecruitmentManagementSystem.App.Infrastructure.Mappings;
+using RecruitmentManagementSystem.App.ViewModels.Shared;
 using RecruitmentManagementSystem.Model;
 
 namespace RecruitmentManagementSystem.App.ViewModels.Candidate
@@ -56,6 +57,8 @@ namespace RecruitmentManagementSystem.App.ViewModels.Candidate
 
         public string ResumeFileName { get; set; }
 
-        public IList<string> DocumentFileNames { get; set; }
+        public ICollection<string> DocumentFileNames { get; set; }
+
+        public ICollection<FileViewModel> Files { get; set; }
     }
 }

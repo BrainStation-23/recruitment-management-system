@@ -5,61 +5,61 @@
     </div>
 
     <div class="panel-body">
-        <div ng-hide="candidate.educations && candidate.educations.length">
+        <div ng-hide="ctrl.candidate.educations && ctrl.candidate.educations.length">
             <i class="fa fa-lg fa-exclamation-triangle"></i>
             No educations are added yet.
         </div>
-    </div>
 
-    <div class="table-responsive" ng-show="candidate.educations && candidate.educations.length">
-        <table class="table">
-            <tr>
-                <th>Degree</th>
-                <th>Field Of Study</th>
-                <th>Grade</th>
-                <th>Time Duration</th>
-                <th>Activites</th>
-                <th>Notes</th>
-                <th>Institution</th>
-                <th></th>
-            </tr>
-            <tr ng-repeat="education in candidate.educations">
-                <td>
-                    <div ng-bind="education.degree"></div>
-                </td>
-                <td>
-                    <div ng-bind="education.fieldOfStudy"></div>
-                </td>
-                <td>
-                    <div ng-bind="education.grade"></div>
-                </td>
-                <td>
-                    <div>
-                        {{ education.startDate | date : 'MMM dd, yyyy' }} to {{ education.present ? 'Present' : (education.endDate | date : 'MMM dd, yyyy') }}
-                    </div>
-                </td>
-                <td>
-                    <div ng-bind="education.activites"></div>
-                </td>
-                <td>
-                    <div ng-bind="education.notes"></div>
-                </td>
-                <td>
-                    <div ng-bind="education.institution.Name"></div>
-                </td>
-                <td>
-                    <button type="button" class="btn btn-success" ng-click="candidate.openEducationModal(education)">
-                        <i class="fa fa-edit fa-lg"></i>
-                    </button>
-                    <button type="button" class="btn btn-danger" ng-click="candidate.discardEducation($index)">
-                        <i class="fa fa-trash fa-lg"></i>
-                    </button>
-                </td>
-            </tr>
-        </table>
+        <div class="table-responsive" ng-show="ctrl.candidate.educations && ctrl.candidate.educations.length">
+            <table class="table">
+                <tr>
+                    <th>Degree</th>
+                    <th>Field Of Study</th>
+                    <th>Grade</th>
+                    <th>Time Duration</th>
+                    <th>Activites</th>
+                    <th>Notes</th>
+                    <th>Institution</th>
+                    <th></th>
+                </tr>
+                <tr ng-repeat="education in ctrl.candidate.educations">
+                    <td>
+                        <div ng-bind="education.degree"></div>
+                    </td>
+                    <td>
+                        <div ng-bind="education.fieldOfStudy"></div>
+                    </td>
+                    <td>
+                        <div ng-bind="education.grade"></div>
+                    </td>
+                    <td>
+                        <div>
+                            {{ education.startDate | date : 'MMM dd, yyyy' }} to {{ education.present ? 'Present' : (education.endDate | date : 'MMM dd, yyyy') }}
+                        </div>
+                    </td>
+                    <td>
+                        <div ng-bind="education.activites"></div>
+                    </td>
+                    <td>
+                        <div ng-bind="education.notes"></div>
+                    </td>
+                    <td>
+                        <div ng-bind="education.institution.name"></div>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-success" ng-click="ctrl.openEducationModal(education)">
+                            <i class="fa fa-edit fa-lg"></i>
+                        </button>
+                        <button type="button" class="btn btn-danger" ng-click="ctrl.discardEducation($index)">
+                            <i class="fa fa-trash fa-lg"></i>
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </div>
     </div>
 
     <div class="panel-footer">
-        <button type="button" class="btn btn-primary" ng-click="candidate.openEducationModal()">Add Education</button>
+        <button type="button" class="btn btn-primary" ng-click="ctrl.openEducationModal()">Add Education</button>
     </div>
 </div>

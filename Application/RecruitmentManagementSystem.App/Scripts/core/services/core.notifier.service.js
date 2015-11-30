@@ -12,11 +12,11 @@
             "extendedTimeOut": 1000
         };
 
-        var formatErrors = function (messages) {
+        var formatErrors = function(messages) {
             var erroMessages = [];
 
             if (Array.isArray(messages)) {
-                erroMessages = _.map(response, function (error) {
+                erroMessages = _.map(messages, function (error) {
                     return error.errorMessage;
                 });
             } else {
