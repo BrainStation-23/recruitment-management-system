@@ -2,7 +2,7 @@
     "use strict";
 
     app.controller("QuestionsController", [
-        "$http", "fileService", "notifierService", "questionConstants", function($http, fileService, notifierService, constants) {
+        "$http", "fileService", "notifierService", "questionConstants", "$scope", function($http, fileService, notifierService, constants, $scope) {
 
             var vm = this;
 
@@ -10,7 +10,8 @@
             vm.allDocuments = [];
 
             vm.categories = [];
-            vm.choices = [
+
+            var defaultChoices = [
                 {
                     text: "",
                     isValid: false
@@ -20,6 +21,7 @@
                     isValid: false
                 }
             ];
+            vm.choices = angular.copy(defaultChoices);
 
             vm.create = function() {
                 vm.form.submitted = true;
@@ -27,7 +29,7 @@
                 var model = {
                     text: vm.text,
                     questionType: vm.questionType,
-                    choices: parseInt(vm.questionType, 10) === vm.constants.questionType.Descriptive ? [] : vm.choices,
+                    choices: parseInt(vm.questionType, 10) === vm.constants.questionType.descriptive ? [] : vm.choices,
                     notes: vm.notes,
                     answer: vm.answer,
                     categoryId: vm.categoryId,
@@ -93,6 +95,15 @@
             vm.discardDocument = function(index) {
                 vm.allDocuments.splice(index, 1);
             }
+
+            // Watchers
+            $scope.$watch(function() {
+                return vm.questionType;
+            }, function(newVal, oldVal) {
+                if (newVal !== oldVal) {
+                    vm.choices = angular.copy(defaultChoices);
+                }
+            });
         }
     ]);
 })(angular.module("questions"));

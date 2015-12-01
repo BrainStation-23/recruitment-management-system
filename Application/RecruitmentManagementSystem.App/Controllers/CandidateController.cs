@@ -39,7 +39,7 @@ namespace RecruitmentManagementSystem.App.Controllers
         }
 
         [HttpGet]
-        public ActionResult Index()
+        public ActionResult List()
         {
             var model = _candidateRepository.FindAll().ProjectTo<CandidateViewModel>();
 
@@ -222,7 +222,7 @@ namespace RecruitmentManagementSystem.App.Controllers
             _candidateRepository.Delete(id);
             _candidateRepository.Save();
 
-            return RedirectToAction("Index");
+            return RedirectToAction("List");
         }
 
         #region Private Methods
