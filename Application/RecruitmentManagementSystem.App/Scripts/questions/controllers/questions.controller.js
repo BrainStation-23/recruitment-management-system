@@ -7,6 +7,7 @@
             var vm = this;
 
             vm.constants = constants;
+            vm.allDocuments = [];
 
             vm.categories = [];
             vm.choices = [
@@ -34,12 +35,11 @@
                     __RequestVerificationToken: angular.element(":input:hidden[name*='RequestVerificationToken']").val()
                 };
 
-                angular.forEach(vm.documents, function (document) {
-                    model.files.push(document);
-                });
+                if (vm.allDocuments && vm.allDocuments.length) {
+                    model.files = vm.allDocuments;
+                }
 
                 if (vm.form.$valid) {
-
                     fileService.postMultipartForm({
                         url: "/Question/Create",
                         data: model
@@ -81,6 +81,18 @@
                     vm.categories = data;
                 });
             };
+
+            vm.addDocument = function(files) {
+                angular.forEach(files, function(file) {
+                    if (file) {
+                        vm.allDocuments.push(file);
+                    }
+                });
+            }
+
+            vm.discardDocument = function(index) {
+                vm.allDocuments.splice(index, 1);
+            }
         }
     ]);
 })(angular.module("questions"));
