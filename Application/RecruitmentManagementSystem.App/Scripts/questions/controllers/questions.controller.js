@@ -7,6 +7,7 @@
             var vm = this;
 
             vm.constants = constants;
+            
             vm.allDocuments = [];
 
             vm.categories = [];
@@ -25,11 +26,12 @@
 
             vm.create = function() {
                 vm.form.submitted = true;
-
+                console.log(vm.questionType);
+                console.log(vm.constants.questionType.descriptive);
                 var model = {
                     text: vm.text,
                     questionType: vm.questionType,
-                    choices: parseInt(vm.questionType, 10) === vm.constants.questionType.descriptive ? [] : vm.choices,
+                    choices: vm.questionType === vm.constants.questionType.descriptive ? [] : vm.choices,
                     notes: vm.notes,
                     answer: vm.answer,
                     categoryId: vm.categoryId,
@@ -84,17 +86,17 @@
                 });
             };
 
-            vm.addDocument = function(files) {
+            vm.addDocument = function (files) {
                 angular.forEach(files, function(file) {
                     if (file) {
                         vm.allDocuments.push(file);
                     }
                 });
-            }
+            };
 
             vm.discardDocument = function(index) {
                 vm.allDocuments.splice(index, 1);
-            }
+            };
 
             // Watchers
             $scope.$watch(function() {
