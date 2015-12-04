@@ -12,13 +12,13 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Title)
+            @Html.DisplayNameFor(model => model.Text)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Title)
+            @Html.DisplayFor(model => model.Text)
         </dd>
-        
+
         <dt>
             @Html.DisplayNameFor(model => model.QuestionType)
         </dt>
@@ -36,11 +36,11 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.CategoryName)
+            @Html.DisplayNameFor(model => model.Category)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.CategoryName)
+            @Html.ActionLink(Model.Category, "Details", "QuestionCategory", new { id = Model.CategoryId }, null)
         </dd>
 
     </dl>

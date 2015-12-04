@@ -5,9 +5,10 @@
     </div>
 </div>
 
-<div ng-if="ctrl.questionType === ctrl.constants.questionType.multipleChoice || ctrl.questionType === ctrl.constants.questionType.singleChoice">
+<div class="form-group" ng-if="ctrl.questionType === ctrl.constants.questionType.multipleChoice || ctrl.questionType === ctrl.constants.questionType.singleChoice">
+    <label class="control-label col-sm-2"></label>
 
-    <div class="table-responsive">
+    <div class="table-responsive col-sm-10">
         <table class="table">
             <tr>
                 <th>
@@ -19,17 +20,17 @@
             </tr>
             <tr ng-repeat="choice in ctrl.choices track by $index">
                 <td>
-                    <input type="text" class="form-control" ng-model="choice.text" />
+                    <input type="text" class="form-control" ng-model="choice.text"/>
                 </td>
                 <td>
                     <div class="checkbox" ng-if="ctrl.questionType === ctrl.constants.questionType.multipleChoice">
                         <label>
-                            <input type="checkbox" ng-value="true" ng-model="choice.isValid" /> Correct answer
+                            <input type="checkbox" ng-value="true" ng-model="choice.isValid"/> Correct answer
                         </label>
                     </div>
                     <div class="radio" ng-if="ctrl.questionType === ctrl.constants.questionType.singleChoice">
                         <label>
-                            <input type="radio" name="name" ng-value="true" ng-model="choice.isValid" /> Correct answer
+                            <input type="radio" name="name" ng-value="true" ng-model="choice.isValid"/> Correct answer
                         </label>
                     </div>
                 </td>
@@ -40,6 +41,7 @@
                 </td>
             </tr>
         </table>
+        <button type="button" class="btn btn-primary" ng-click="ctrl.addNewChoice()">Add another field</button>
     </div>
-    <button type="button" class="btn btn-primary" ng-click="ctrl.addNewChoice()">Add another field</button>
+    
 </div>

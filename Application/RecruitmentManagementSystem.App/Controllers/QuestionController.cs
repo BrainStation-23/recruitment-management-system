@@ -36,6 +36,8 @@ namespace RecruitmentManagementSystem.App.Controllers
                 Id = question.Id,
                 Text = question.Text,
                 QuestionType = question.QuestionType,
+                Files = question.Files,
+                Choices = question.Choices,
                 Notes = question.Notes,
                 CategoryId = question.CategoryId,
                 Category = question.Category.Name
@@ -59,7 +61,7 @@ namespace RecruitmentManagementSystem.App.Controllers
 
             if (Request.IsAjaxRequest())
             {
-                return Json(viewModel, JsonRequestBehavior.AllowGet);
+                return new JsonResult(viewModel, JsonRequestBehavior.AllowGet);
             }
 
             return View(viewModel);
@@ -157,21 +159,45 @@ namespace RecruitmentManagementSystem.App.Controllers
         [HttpGet]
         public ActionResult Edit(int? id)
         {
-            return View();
+            var viewModel =
+               _questionRepository.FindAll().ProjectTo<QuestionViewModel>().SingleOrDefault(x => x.Id == id);
+
+            var json = new JsonResult(viewModel, JsonRequestBehavior.AllowGet);
+
+            //ViewBag.questionViewModel = json;
+            ViewData["Id"] = id;
+            ViewData["questionViewModel"] = viewModel;
+
+            return View(viewModel);
+
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(QuestionViewModel model)
+        public ActionResult Edit(QuestionCreateViewModel model)
         {
-            if (!ModelState.IsValid) return View();
 
-            var question = _questionRepository.Find(x => x.Id == model.Id);
+            if (!ModelState.IsValid)
+            {
+                Response.StatusCode = (int) HttpStatusCode.BadRequest;
+                return new JsonResult(ModelState.Values.SelectMany(v => v.Errors));
+            }
 
-            _questionRepository.Update(question);
+            _questionRepository.Update(new Question
+            {
+                Id = model.Id,
+                Text = model.Text,
+                QuestionType = model.QuestionType,
+                Answer = model.Answer,
+                Notes = model.Notes,
+                CategoryId = model.CategoryId,
+                Choices = model.Choices,
+                Files = ManageFiles(Request.Files),
+                UpdatedAt = DateTime.UtcNow,
+                UpdatedBy = User.Identity.GetUserId()
+            });
             _questionRepository.Save();
-
-            return RedirectToAction("Index");
+            return Json(null);
         }
 
         [HttpGet]
@@ -179,14 +205,18 @@ namespace RecruitmentManagementSystem.App.Controllers
         {
             var question = _questionRepository.Find(x => x.Id == id);
             if (question == null) return new HttpNotFoundResult();
-            return View(ViewModelQuestion(question));
+            //return View(ViewModelQuestion(question));
+            var viewModel =
+               _questionRepository.FindAll().ProjectTo<QuestionViewModel>().SingleOrDefault(x => x.Id == id);
+
+            return View(viewModel);
         }
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            _questionRepository.Delete(id);
+            _questionRepository.Delete(_questionRepository.Find(x => x.Id == id));
             _questionRepository.Save();
 
             return RedirectToAction("Index");

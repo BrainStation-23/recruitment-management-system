@@ -10,7 +10,7 @@ namespace RecruitmentManagementSystem.App.ViewModels.Question
 
         [Required]
         [Display(Name = "Text")]
-        [StringLength(30, ErrorMessage = "The {0} must be at most {1} characters long.")]
+        [StringLength(500, ErrorMessage = "The {0} must be at most {1} characters long.")]
         public string Text { get; set; }
 
         [Required]
@@ -19,6 +19,8 @@ namespace RecruitmentManagementSystem.App.ViewModels.Question
 
         [Display(Name = "Choices")]
         public ICollection<Choice> Choices { get; set; }
+
+        public ICollection<File> Files { get; set; }
 
         [DataType(DataType.MultilineText)]
         [StringLength(500, ErrorMessage = "The {0} must be at most {1} characters long.")]
