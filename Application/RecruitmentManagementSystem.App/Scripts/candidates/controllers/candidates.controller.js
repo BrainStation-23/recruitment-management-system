@@ -68,7 +68,7 @@
                     }).progress(function(evt) {
                         console.log("percent: " + parseInt(100.0 * evt.loaded / evt.total));
                     }).success(function(data) {
-                        location.href = "/Candidate";
+                        location.href = "/Candidate/List";
                     }).error(function(response) {
                         notifierService.notifyError(response);
                     });
@@ -180,7 +180,7 @@
                         (function(fileReader) {
                             fileReader.onload = function(e) {
                                 $timeout(function() {
-                                    vm.candidate.avatarSource = e.target.result;
+                                    vm.candidate.avatar.relativePath = e.target.result;
                                 });
                             };
                         })(fileReader);
@@ -209,20 +209,20 @@
                 vm.candidate.skills.splice(index, 1);
             };
 
-            vm.find = function() {
-                $http.get("/candidates/6").success(function(data) {
+            vm.find = function(id) {
+                $http.get("/Candidate/Details/" + id).success(function(data) {
                     vm.candidate = data;
                 });
             };
 
-            vm.update = function() {
+            vm.update = function(id) {
                 vm.form.submitted = true;
 
                 if (vm.form.$valid) {
                     prepareFormData();
 
                     fileService.postMultipartForm({
-                        url: "/candidates/4",
+                        url: "/Candidate/Edit/" + id,
                         data: vm.candidate,
                         method: "PUT"
                     }).progress(function(evt) {

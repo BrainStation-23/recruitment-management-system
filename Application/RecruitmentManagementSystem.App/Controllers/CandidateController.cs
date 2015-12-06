@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -20,28 +22,16 @@ namespace RecruitmentManagementSystem.App.Controllers
     public class CandidateController : BaseController
     {
         private readonly ICandidateRepository _candidateRepository;
-        private readonly IEducationRepository _educationRepository;
-        private readonly IFileRepository _fileRepository;
-        private readonly IExperienceRepository _experienceRepository;
-        private readonly IProjectRepository _projectRepository;
-        private readonly ISkillRepository _skillRepository;
 
-        public CandidateController(ICandidateRepository candidateRepository, IFileRepository fileRepository,
-            IEducationRepository educationRepository, IExperienceRepository experienceRepository,
-            IProjectRepository projectRepository, ISkillRepository skillRepository)
+        public CandidateController(ICandidateRepository candidateRepository)
         {
             _candidateRepository = candidateRepository;
-            _fileRepository = fileRepository;
-            _educationRepository = educationRepository;
-            _experienceRepository = experienceRepository;
-            _projectRepository = projectRepository;
-            _skillRepository = skillRepository;
         }
 
         [HttpGet]
-        public ActionResult Index()
+        public ActionResult List()
         {
-            var model = _candidateRepository.FindAll().ProjectTo<CandidateViewModel>();
+            var model = _candidateRepository.FindAll().ProjectTo<CandidateModel>();
 
             return View(model);
         }
@@ -54,7 +44,7 @@ namespace RecruitmentManagementSystem.App.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(CandidateViewModel model)
+        public ActionResult Create(CandidateCreateModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -71,18 +61,18 @@ namespace RecruitmentManagementSystem.App.Controllers
                 Others = model.Others,
                 Website = model.Website,
                 JobPositionId = model.JobPositionId,
+                Files = ManageFiles(Request.Files, model),
                 CreatedBy = User.Identity.GetUserId(),
                 UpdatedBy = User.Identity.GetUserId()
             };
 
-            _candidateRepository.Insert(candidate);
-            _candidateRepository.Save();
-
             if (model.Educations != null)
             {
+                var educations = new Collection<Education>();
+
                 foreach (var item in model.Educations)
                 {
-                    _educationRepository.Insert(new Education
+                    educations.Add(new Education
                     {
                         Degree = item.Degree,
                         FieldOfStudy = item.FieldOfStudy,
@@ -92,19 +82,19 @@ namespace RecruitmentManagementSystem.App.Controllers
                         EndDate = item.EndDate,
                         Present = item.CurrentlyPresent,
                         Activities = item.Activities,
-                        Notes = item.Notes,
-                        CandidateId = candidate.Id
+                        Notes = item.Notes
                     });
                 }
-
-                _educationRepository.Save();
+                candidate.Educations = educations;
             }
 
             if (model.Experiences != null)
             {
+                var experiences = new Collection<Experience>();
+
                 foreach (var item in model.Experiences)
                 {
-                    _experienceRepository.Insert(new Experience
+                    experiences.Add(new Experience
                     {
                         Organization = item.Organization,
                         JobTitle = item.JobTitle,
@@ -112,58 +102,61 @@ namespace RecruitmentManagementSystem.App.Controllers
                         EndDate = item.EndDate,
                         Present = item.Present,
                         Description = item.Description,
-                        Notes = item.Notes,
-                        CandidateId = candidate.Id
+                        Notes = item.Notes
                     });
                 }
-                _experienceRepository.Save();
+                candidate.Experiences = experiences;
             }
 
             if (model.Projects != null)
             {
+                var projects = new Collection<Project>();
+
                 foreach (var item in model.Projects)
                 {
-                    _projectRepository.Insert(new Project
+                    projects.Add(new Project
                     {
                         Title = item.Title,
                         Url = item.Url,
-                        Description = item.Description,
-                        CandidateId = candidate.Id
+                        Description = item.Description
                     });
                 }
-                _projectRepository.Save();
+                candidate.Projects = projects;
             }
 
             if (model.Skills != null)
             {
+                var skills = new Collection<Skill>();
+
                 foreach (var item in model.Skills)
                 {
-                    _skillRepository.Insert(new Skill
+                    skills.Add(new Skill
                     {
-                        Name = item.Name,
-                        CandidateId = candidate.Id
+                        Name = item.Name
                     });
                 }
-                _skillRepository.Save();
+
+                candidate.Skills = skills;
             }
 
-            ManageFiles(candidate.Id, Request.Files, model);
+            _candidateRepository.Insert(candidate);
+            _candidateRepository.Save();
 
             return new JsonResult(candidate);
         }
 
         [HttpGet]
-        public ActionResult Details()
+        public ActionResult Details(int? id)
         {
-            return View();
-        }
+            if (!Request.IsAjaxRequest())
+            {
+                ViewData["Id"] = id;
+                return View();
+            }
 
-        [HttpGet]
-        [Route("candidates/{id:int}")]
-        public ActionResult Details(int id)
-        {
-            var model =
-                _candidateRepository.FindAll().ProjectTo<CandidateViewModel>().SingleOrDefault(x => x.Id == id);
+            var model = _candidateRepository.FindAll().ProjectTo<CandidateModel>().SingleOrDefault(x => x.Id == id);
+
+            ExtendCandidateModel(model);
 
             return new JsonResult(model, JsonRequestBehavior.AllowGet);
         }
@@ -171,13 +164,13 @@ namespace RecruitmentManagementSystem.App.Controllers
         [HttpGet]
         public ActionResult Edit(int id)
         {
+            ViewData["Id"] = id;
             return View();
         }
 
         [HttpPut]
         [ValidateAntiForgeryToken]
-        [Route("candidates/{id:int}")]
-        public ActionResult Edit(CandidateViewModel model)
+        public ActionResult Edit(CandidateModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -208,7 +201,7 @@ namespace RecruitmentManagementSystem.App.Controllers
         public ActionResult Delete(int? id)
         {
             var model =
-                _candidateRepository.FindAll().ProjectTo<CandidateViewModel>().SingleOrDefault(x => x.Id == id);
+                _candidateRepository.FindAll().ProjectTo<CandidateModel>().SingleOrDefault(x => x.Id == id);
 
             if (model == null) return new HttpNotFoundResult();
 
@@ -222,13 +215,23 @@ namespace RecruitmentManagementSystem.App.Controllers
             _candidateRepository.Delete(id);
             _candidateRepository.Save();
 
-            return RedirectToAction("Index");
+            return RedirectToAction("List");
         }
 
         #region Private Methods
 
-        private void ManageFiles(int candidateId, HttpFileCollectionBase fileCollection, CandidateViewModel viewModel)
+        private static void ExtendCandidateModel(CandidateModel model)
         {
+            model.Avatar = model.Files.SingleOrDefault(x => x.FileType == FileType.Avatar);
+            model.Resume = model.Files.SingleOrDefault(x => x.FileType == FileType.Resume);
+            model.Files = null;
+        }
+
+        private ICollection<File> ManageFiles(HttpFileCollectionBase fileCollection,
+            CandidateCreateModel viewModel)
+        {
+            var files = new List<File>();
+
             for (var index = 0; index < fileCollection.Count; index++)
             {
                 if (fileCollection[index] == null || fileCollection[index].ContentLength <= 0)
@@ -236,25 +239,41 @@ namespace RecruitmentManagementSystem.App.Controllers
                     continue;
                 }
 
+                var uploadConfig = UploadFile(fileCollection[index], FileType.Avatar);
+
+                if (uploadConfig.FileBase == null) continue;
+
+                var file = new File
+                {
+                    Name = uploadConfig.FileName,
+                    MimeType = uploadConfig.FileBase.ContentType,
+                    Size = uploadConfig.FileBase.ContentLength,
+                    RelativePath = uploadConfig.FilePath + uploadConfig.FileName,
+                    CreatedBy = User.Identity.GetUserId(),
+                    UpdatedBy = User.Identity.GetUserId()
+                };
+
                 if (fileCollection[index].FileName == viewModel.AvatarFileName)
                 {
-                    UploadFile(candidateId, fileCollection[index], FileType.Avatar);
+                    file.FileType = FileType.Avatar;
                 }
                 else if (fileCollection[index].FileName == viewModel.ResumeFileName)
                 {
-                    UploadFile(candidateId, Request.Files[index], FileType.Resume);
+                    file.FileType = FileType.Resume;
                 }
                 else if (viewModel.DocumentFileNames.Contains(fileCollection[index].FileName))
                 {
-                    UploadFile(candidateId, Request.Files[index], FileType.Document);
+                    file.FileType = FileType.Document;
                 }
+
+                files.Add(file);
             }
+
+            return files;
         }
 
-        private void UploadFile(int candidateId, HttpPostedFileBase fileBase, FileType fileType)
+        private static UploadConfig UploadFile(HttpPostedFileBase fileBase, FileType fileType)
         {
-            if (fileBase == null || fileBase.ContentLength <= 0) return;
-
             var fileName = string.Format("{0}.{1}", Guid.NewGuid(), Path.GetFileName(fileBase.FileName));
 
             var filePath = string.Empty;
@@ -272,27 +291,23 @@ namespace RecruitmentManagementSystem.App.Controllers
                     break;
             }
 
-            FileHelper.SaveFile(new UploadConfig
+            var uploadConfig = new UploadConfig
             {
                 FileBase = fileBase,
                 FileName = fileName,
                 FilePath = filePath
-            });
-
-            var file = new File
-            {
-                Name = fileName,
-                MimeType = fileBase.ContentType,
-                Size = fileBase.ContentLength,
-                RelativePath = filePath + fileName,
-                FileType = fileType,
-                CandidateId = candidateId,
-                CreatedBy = User.Identity.GetUserId(),
-                UpdatedBy = User.Identity.GetUserId()
             };
 
-            _fileRepository.Insert(file);
-            _fileRepository.Save();
+            try
+            {
+                FileHelper.SaveFile(uploadConfig);
+            }
+            catch (Exception)
+            {
+                return new UploadConfig();
+            }
+
+            return uploadConfig;
         }
 
         #endregion

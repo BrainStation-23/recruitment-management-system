@@ -1,25 +1,26 @@
 ﻿@using RecruitmentManagementSystem.Model
+@model RecruitmentManagementSystem.App.ViewModels.Question.QuestionModel
 
 @{
-    ViewBag.Title = "Edit";
+    ViewBag.Title = "Edit Question";
 }
 
 <h2>Edit Question</h2>
 <hr />
 
-<div ng-controller="QuestionsController as ctrl" ng-init="ctrl.findCategories(); ctrl.find()">
+<div ng-controller="QuestionsController as ctrl" ng-init="ctrl.find(@Model.Id)">
     <form name="ctrl.form" ng-submit="ctrl.update()" novalidate>
 
         @Html.AntiForgeryToken()
 
         <div class="form-horizontal">
 
-            <input type="hidden" name="id" ng-model="ctrl.question.Id" />
+            <input type="hidden" name="id" ng-value="ctrl.id" />
 
             <div class="form-group">
                 <label class="control-label col-md-2">Text</label>
                 <div class="col-md-10">
-                    <textarea name="text" ng-model="ctrl.question.Text" required class="form-control" rows="6"></textarea>
+                    <textarea name="text" ng-model="ctrl.text" required class="form-control" rows="6"></textarea>
                     <div class="text-danger field-validation-error" ng-messages="ctrl.form.submitted && ctrl.form.text.$error">
                         <span ng-message="required">This field is required.</span>
                     </div>
@@ -29,7 +30,7 @@
             <div class="form-group">
                 <label class="control-label col-md-2">Category</label>
                 <div class="col-md-3">
-                    <select name="category" class="form-control" ng-model="ctrl.question.CategoryId" ng-options="option.Id as option.Name for option in ctrl.categories" required>
+                    <select name="category" class="form-control" ng-model="ctrl.categoryId" ng-options="option.id as option.name for option in ctrl.categories" required>
                         <option value="">Select Category</option>
                     </select>
                     <div class="text-danger field-validation-error" ng-messages="ctrl.form.submitted && ctrl.form.category.$error">
@@ -44,21 +45,42 @@
             <div class="form-group">
                 <label class="control-label col-md-2">Additional Info</label>
                 <div class="col-md-10">
-                    <textarea class="form-control" rows="6" ng-model="ctrl.question.Notes"></textarea>
+                    <textarea class="form-control" rows="6" ng-model="ctrl.notes"></textarea>
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label class="control-label col-sm-2">Related Documents</label>
+                <div class="col-sm-10">
+                    <input type="file" title="Select Document" ng-model="ctrl.documents" ngf-select="ctrl.addDocument($files)" accept=".pdf,.doc,.docx" multiple />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2"></label>
+                <div class="col-sm-10" ng-show="ctrl.allDocuments && ctrl.allDocuments.length">
+                    <span ng-repeat="document in ctrl.allDocuments" class="label label-success" style="font-size: 90%; padding: 8px; margin: 5px;">
+                        {{ document.name }}
+                        <a ng-click="ctrl.discardDocument($index)" style="cursor: pointer;" title="Remove">
+                            <i class="fa fa-remove fa-lg"></i>
+                        </a>
+                    </span>
                 </div>
             </div>
 
             <div class="form-group">
                 <label class="control-label col-md-2">Question Type</label>
                 <div class="col-md-2" ng-cloak>
-                    @Html.DropDownList("QuestionType", EnumHelper.GetSelectList(typeof(QuestionType)), "Select Type", new Dictionary<string, Object>{{"class", "form-control"},{"ng-model", "ctrl.question.QuestionType"}})
+                    @Html.DropDownList("QuestionType", EnumHelper.GetSelectList(typeof(QuestionType)), "Select Type", new Dictionary<string, object> { { "class", "form-control" }, { "ng-model", "ctrl.questionType" } })
                 </div>
             </div>
+
+            <div ng-include="'/Scripts/questions/templates/question-type.html'"></div>
 
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
                     <input type="submit" value="Save" class="btn btn-success" />
-                    @Html.ActionLink("Back to List", "Index")
+                    @Html.ActionLink("Back to List", "List")
                 </div>
             </div>
         </div>

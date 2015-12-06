@@ -21,32 +21,16 @@ namespace RecruitmentManagementSystem.App.Controllers
     public class QuestionController : BaseController
     {
         private readonly IQuestionRepository _questionRepository;
-        private readonly IFileRepository _fileRepository;
 
-        public QuestionController(IQuestionRepository questionRepository, IFileRepository fileRepository)
+        public QuestionController(IQuestionRepository questionRepository)
         {
             _questionRepository = questionRepository;
-            _fileRepository = fileRepository;
-        }
-
-        private static QuestionViewModel ViewModelQuestion(Question question)
-        {
-            var viewModel = new QuestionViewModel
-            {
-                Id = question.Id,
-                Text = question.Text,
-                QuestionType = question.QuestionType,
-                Notes = question.Notes,
-                CategoryId = question.CategoryId,
-                Category = question.Category.Name
-            };
-            return viewModel;
         }
 
         [HttpGet]
-        public ActionResult Index()
+        public ActionResult List()
         {
-            var model = _questionRepository.FindAll().ProjectTo<QuestionViewModel>();
+            var model = _questionRepository.FindAll().ProjectTo<QuestionModel>();
 
             return View(model);
         }
@@ -55,11 +39,11 @@ namespace RecruitmentManagementSystem.App.Controllers
         public ActionResult Details(int? id)
         {
             var viewModel =
-                _questionRepository.FindAll().ProjectTo<QuestionViewModel>().SingleOrDefault(x => x.Id == id);
+                _questionRepository.FindAll().ProjectTo<QuestionModel>().SingleOrDefault(x => x.Id == id);
 
             if (Request.IsAjaxRequest())
             {
-                return Json(viewModel, JsonRequestBehavior.AllowGet);
+                return new JsonResult(viewModel, JsonRequestBehavior.AllowGet);
             }
 
             return View(viewModel);
@@ -73,7 +57,7 @@ namespace RecruitmentManagementSystem.App.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(QuestionCreateViewModel viewModel)
+        public ActionResult Create(QuestionCreateModel viewModel)
         {
             if (!ModelState.IsValid)
             {
@@ -101,6 +85,68 @@ namespace RecruitmentManagementSystem.App.Controllers
             return Json(null);
         }
 
+        [HttpGet]
+        public ActionResult Edit(int id)
+        {
+            var viewModel = _questionRepository.FindAll()
+                .ProjectTo<QuestionModel>()
+                .SingleOrDefault(x => x.Id == id);
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(QuestionCreateModel model)
+        {
+
+            if (!ModelState.IsValid)
+            {
+                Response.StatusCode = (int) HttpStatusCode.BadRequest;
+                return new JsonResult(ModelState.Values.SelectMany(v => v.Errors));
+            }
+
+            _questionRepository.Update(new Question
+            {
+                Id = model.Id,
+                Text = model.Text,
+                QuestionType = model.QuestionType,
+                Answer = model.Answer,
+                Notes = model.Notes,
+                CategoryId = model.CategoryId,
+                Choices = model.Choices,
+                Files = ManageFiles(Request.Files),
+                UpdatedAt = DateTime.UtcNow,
+                UpdatedBy = User.Identity.GetUserId()
+            });
+            _questionRepository.Save();
+            return Json(null);
+        }
+
+        [HttpGet]
+        public ActionResult Delete(int? id)
+        {
+            var question = _questionRepository.Find(x => x.Id == id);
+            if (question == null) return new HttpNotFoundResult();
+            //return View(ViewModelQuestion(question));
+            var viewModel =
+                _questionRepository.FindAll().ProjectTo<QuestionModel>().SingleOrDefault(x => x.Id == id);
+
+            return View(viewModel);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(int id)
+        {
+            _questionRepository.Delete(_questionRepository.Find(x => x.Id == id));
+            _questionRepository.Save();
+
+            return RedirectToAction("List");
+        }
+
+        #region Private Methods
+
         private ICollection<File> ManageFiles(HttpFileCollectionBase fileCollection)
         {
             var files = new List<File>();
@@ -112,84 +158,52 @@ namespace RecruitmentManagementSystem.App.Controllers
                     continue;
                 }
 
-                var uploaded = UploadFile(Request.Files[index]);
+                var uploadConfig = UploadFile(Request.Files[index]);
 
-                if (!String.IsNullOrEmpty(uploaded.FilePath))
+                if (uploadConfig.FileBase == null) continue;
+
+                var file = new File
                 {
-                    var file = new File
-                    {
-                        Name = uploaded.FileName,
-                        MimeType = uploaded.FileBase.ContentType,
-                        Size = uploaded.FileBase.ContentLength,
-                        RelativePath = uploaded.FilePath + uploaded.FileName,
-                        FileType = FileType.Document,
-                        CreatedBy = User.Identity.GetUserId(),
-                        UpdatedBy = User.Identity.GetUserId()
-                    };
+                    Name = uploadConfig.FileName,
+                    MimeType = uploadConfig.FileBase.ContentType,
+                    Size = uploadConfig.FileBase.ContentLength,
+                    RelativePath = uploadConfig.FilePath + uploadConfig.FileName,
+                    FileType = FileType.Document,
+                    CreatedBy = User.Identity.GetUserId(),
+                    UpdatedBy = User.Identity.GetUserId()
+                };
 
-                    files.Add(file);
-                }
+                files.Add(file);
             }
 
             return files;
         }
 
-        private UploadConfig UploadFile(HttpPostedFileBase fileBase)
+        private static UploadConfig UploadFile(HttpPostedFileBase fileBase)
         {
-            if (fileBase == null || fileBase.ContentLength <= 0) return new UploadConfig();
-
             var fileName = string.Format("{0}.{1}", Guid.NewGuid(), Path.GetFileName(fileBase.FileName));
 
             const string filePath = FilePath.DocumentRelativePath;
 
             var uploadConfig = new UploadConfig
-                               {
-                                   FileBase = fileBase,
-                                   FileName = fileName,
-                                   FilePath = filePath
-                               };
+            {
+                FileBase = fileBase,
+                FileName = fileName,
+                FilePath = filePath
+            };
 
-            FileHelper.SaveFile(uploadConfig);
+            try
+            {
+                FileHelper.SaveFile(uploadConfig);
+            }
+            catch (Exception)
+            {
+                return new UploadConfig();
+            }
 
             return uploadConfig;
         }
 
-        [HttpGet]
-        public ActionResult Edit(int? id)
-        {
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(QuestionViewModel model)
-        {
-            if (!ModelState.IsValid) return View();
-
-            var question = _questionRepository.Find(x => x.Id == model.Id);
-
-            _questionRepository.Update(question);
-            _questionRepository.Save();
-
-            return RedirectToAction("Index");
-        }
-
-        [HttpGet]
-        public ActionResult Delete(int? id)
-        {
-            var question = _questionRepository.Find(x => x.Id == id);
-            if (question == null) return new HttpNotFoundResult();
-            return View(ViewModelQuestion(question));
-        }
-
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            _questionRepository.Delete(id);
-            _questionRepository.Save();
-
-            return RedirectToAction("Index");
-        }
+        #endregion
     }
 }

@@ -1,8 +1,9 @@
-﻿(function(app) {
+﻿(function (app) {
     "use strict";
 
     app.constant("questionConstants", {
-        questionType: { MCQ: 1, Descriptive: 2 }
+        questionType: { descriptive: "1", multipleChoice: "2", singleChoice: "3" }
     });
+    app.value('questionViewModel', 'myModel');
 
 })(angular.module("questions"));

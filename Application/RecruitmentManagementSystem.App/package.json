@@ -12,7 +12,6 @@
   "author": "BrainStation 23 Ltd",
   "license": "MIT",
   "devDependencies": {
-    "bower": "^1.6.8",
     "gulp": "^3.9.0",
     "gulp-jscs": "^3.0.2",
     "gulp-jshint": "^2.0.0",

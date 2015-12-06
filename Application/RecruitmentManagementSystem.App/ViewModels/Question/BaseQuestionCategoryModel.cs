@@ -2,7 +2,7 @@
 
 namespace RecruitmentManagementSystem.App.ViewModels.Question
 {
-    public class BaseQuestionCategoryViewModel
+    public class BaseQuestionCategoryModel
     {
         public int Id { get; set; }
 

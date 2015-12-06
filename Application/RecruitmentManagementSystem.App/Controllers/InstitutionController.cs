@@ -19,7 +19,7 @@ namespace RecruitmentManagementSystem.App.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-            var model = _institutionRepository.FindAll().ProjectTo<InstitutionViewModel>();
+            var model = _institutionRepository.FindAll().ProjectTo<InstitutionModel>();
 
             return new JsonResult(model, JsonRequestBehavior.AllowGet);
         }

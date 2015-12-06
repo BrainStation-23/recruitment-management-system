@@ -2,7 +2,7 @@
 
 namespace RecruitmentManagementSystem.App.ViewModels.Question
 {
-    public class QuestionCategoryViewModel : BaseQuestionCategoryViewModel, IMapFrom<Model.QuestionCategory>
+    public class QuestionCategoryModel : BaseQuestionCategoryModel, IMapFrom<Model.QuestionCategory>
     {
     }
 }

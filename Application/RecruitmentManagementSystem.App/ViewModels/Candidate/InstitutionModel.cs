@@ -3,7 +3,7 @@ using RecruitmentManagementSystem.App.Infrastructure.Mappings;
 
 namespace RecruitmentManagementSystem.App.ViewModels.Candidate
 {
-    public class InstitutionViewModel : IMapFrom<Model.Institution>
+    public class InstitutionModel : IMapFrom<Model.Institution>
     {
         public int Id { get; set; }
 
