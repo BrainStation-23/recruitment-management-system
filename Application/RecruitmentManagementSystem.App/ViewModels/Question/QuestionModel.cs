@@ -10,8 +10,7 @@ namespace RecruitmentManagementSystem.App.ViewModels.Question
         public void CreateMappings(IConfiguration configuration)
         {
             configuration.CreateMap<Model.Question, QuestionModel>()
-                .ForMember(m => m.Category, opt =>
-                    opt.MapFrom(u => u.Category.Name))
+                .ForMember(m => m.Category, opt => opt.MapFrom(u => u.Category.Name))
                 .ForMember(m => m.Choices, opt => opt.MapFrom(u => u.Choices))
                 .ForMember(m => m.Files, opt => opt.MapFrom(u => u.Files));
         }

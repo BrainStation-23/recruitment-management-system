@@ -88,9 +88,11 @@ namespace RecruitmentManagementSystem.App.Controllers
         [HttpGet]
         public ActionResult Edit(int id)
         {
-            ViewData["Id"] = id;
+            var viewModel = _questionRepository.FindAll()
+                .ProjectTo<QuestionModel>()
+                .SingleOrDefault(x => x.Id == id);
 
-            return View();
+            return View(viewModel);
         }
 
         [HttpPost]
