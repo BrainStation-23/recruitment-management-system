@@ -159,14 +159,9 @@ namespace RecruitmentManagementSystem.App.Controllers
         [HttpGet]
         public ActionResult Edit(int? id)
         {
-            var viewModel =
-               _questionRepository.FindAll().ProjectTo<QuestionViewModel>().SingleOrDefault(x => x.Id == id);
-
-            var json = new JsonResult(viewModel, JsonRequestBehavior.AllowGet);
-
-            //ViewBag.questionViewModel = json;
-            ViewData["Id"] = id;
-            ViewData["questionViewModel"] = viewModel;
+            var viewModel = _questionRepository.FindAll()
+                            .ProjectTo<QuestionViewModel>()
+                            .SingleOrDefault(x => x.Id == id);
 
             return View(viewModel);
 

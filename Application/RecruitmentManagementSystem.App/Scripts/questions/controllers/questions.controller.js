@@ -111,17 +111,20 @@
             vm.find = function (id) {
                 
                 $http.get("/Question/Details/" + id).success(function (data) {
-                    console.log(data);
 
                     angular.forEach( data, function(value, index) {
                         vm[index] = value;
                     });
-                    //console.log(vm.choices);
-                    vm.questionType = '' + vm.questionType;  // number to string conversion
+
+                    vm.questionType = vm.questionType.toString();
+                    
                     vm.allDocuments = vm.files;
+                    
                     angular.forEach(vm.allDocuments, function (document) {
                         document.name = document.name.substring(document.name.indexOf('.') + 1);
                     });
+
+                    vm.findCategories();
                 });
 
             };

@@ -9,7 +9,7 @@
 <h2>Edit Question</h2>
 <hr />
 
-<div ng-controller="QuestionsController as ctrl" ng-init="ctrl.findCategories(); ctrl.find(@ViewData["Id"])">
+<div ng-controller="QuestionsController as ctrl" ng-init="ctrl.find(@Model.Id)">
     <form name="ctrl.form" ng-submit="ctrl.update()" novalidate>
 
         @Html.AntiForgeryToken()
