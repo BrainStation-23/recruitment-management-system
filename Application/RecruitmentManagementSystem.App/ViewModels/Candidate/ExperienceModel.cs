@@ -4,7 +4,7 @@ using RecruitmentManagementSystem.App.Infrastructure.Mappings;
 
 namespace RecruitmentManagementSystem.App.ViewModels.Candidate
 {
-    public class ExperienceViewModel : IMapFrom<Model.Experience>
+    public class ExperienceModel : IMapFrom<Model.Experience>
     {
         public int Id { get; set; }
 

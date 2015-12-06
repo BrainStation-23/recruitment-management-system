@@ -4,7 +4,7 @@ using RecruitmentManagementSystem.Model;
 
 namespace RecruitmentManagementSystem.App.ViewModels.Question
 {
-    public class BaseQuestionViewModel
+    public class BaseQuestionModel
     {
         public int Id { get; set; }
 

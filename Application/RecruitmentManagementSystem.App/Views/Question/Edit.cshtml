@@ -1,9 +1,8 @@
-﻿@*@using RecruitmentManagementSystem.Model*@
-
-@model RecruitmentManagementSystem.App.ViewModels.Question.QuestionViewModel
+﻿@using RecruitmentManagementSystem.Model
+@model RecruitmentManagementSystem.App.ViewModels.Question.QuestionModel
 
 @{
-    ViewBag.Title = "Edit";
+    ViewBag.Title = "Edit Question";
 }
 
 <h2>Edit Question</h2>
@@ -16,7 +15,7 @@
 
         <div class="form-horizontal">
 
-            <input type="hidden" name="id" ng-model="ctrl.id" />
+            <input type="hidden" name="id" ng-value="ctrl.id" />
 
             <div class="form-group">
                 <label class="control-label col-md-2">Text</label>
@@ -72,10 +71,7 @@
             <div class="form-group">
                 <label class="control-label col-md-2">Question Type</label>
                 <div class="col-md-2" ng-cloak>
-                    @Html.DropDownList("QuestionType", EnumHelper.GetSelectList(typeof(RecruitmentManagementSystem.Model.QuestionType)), "Select Type", new Dictionary<string, Object> { { "class", "form-control" }, { "ng-model", "ctrl.questionType" } })
-
-                    @*<select data-ng-options="o.name for o in ctrl.options" data-ng-model="ctrl.question.QuestionType"></select>*@
-                    @*<select class="form-control" data-ng-options="o for o in ctrl.options" data-ng-model="ctrl.question.QuestionType"></select>*@
+                    @Html.DropDownList("QuestionType", EnumHelper.GetSelectList(typeof(QuestionType)), "Select Type", new Dictionary<string, object> { { "class", "form-control" }, { "ng-model", "ctrl.questionType" } })
                 </div>
             </div>
 
@@ -84,14 +80,9 @@
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
                     <input type="submit" value="Save" class="btn btn-success" />
-                    @Html.ActionLink("Back to List", "Index")
+                    @Html.ActionLink("Back to List", "List")
                 </div>
             </div>
         </div>
     </form>
 </div>
-
-<script>
-    @*var questionViewModel = JSON.parse('@Html.Raw(Json.Encode(ViewBag.questionViewModel))').Data;
-    console.log(questionViewModel);*@
-</script>

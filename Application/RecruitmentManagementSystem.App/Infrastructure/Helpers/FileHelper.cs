@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Web;
+using RecruitmentManagementSystem.App.Infrastructure.Constants;
 
 namespace RecruitmentManagementSystem.App.Infrastructure.Helpers
 {
@@ -16,9 +17,19 @@ namespace RecruitmentManagementSystem.App.Infrastructure.Helpers
     {
         public static void SaveFile(UploadConfig config)
         {
+            if (config.FileBase == null || config.FileBase.ContentLength <= 0)
+            {
+                throw new FileNotFoundException("File not found.");
+            }
+
             if (string.IsNullOrEmpty(config.FileName))
             {
                 config.FileName = config.FileBase.FileName;
+            }
+
+            if (string.IsNullOrEmpty(config.FilePath))
+            {
+                config.FilePath = FilePath.DefaultRelativePath;
             }
 
             var fullPath = HttpContext.Current.Server.MapPath(Path.Combine(config.FilePath, config.FileName));

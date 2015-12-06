@@ -51,7 +51,7 @@
                     <div class="form-group">
                         <label class="control-label col-sm-2">Related Documents</label>
                         <div class="col-sm-10">
-                            <input type="file" title="Select Document" ng-model="ctrl.documents" ngf-select="ctrl.addDocument($files)" accept=".pdf,.doc,.docx" multiple/>
+                            <input type="file" title="Select Document" ng-model="ctrl.documents" ngf-select="ctrl.addDocument($files)" accept=".pdf,.doc,.docx" multiple />
                         </div>
                     </div>
                     <div class="form-group">
@@ -70,7 +70,7 @@
                         <label class="control-label col-sm-2">Question Type</label>
 
                         <div class="col-sm-6">
-                            @Html.DropDownList("QuestionType", EnumHelper.GetSelectList(typeof (QuestionType)), "Select Type", new {@class = "form-control", ng_model = "ctrl.questionType", @required = ""})
+                            @Html.DropDownList("QuestionType", EnumHelper.GetSelectList(typeof(QuestionType)), "Select Type", new { @class = "form-control", ng_model = "ctrl.questionType", @required = "" })
                             <div class="text-danger field-validation-error" ng-messages="ctrl.form.submitted && ctrl.form.QuestionType.$error">
                                 <span ng-message="required">This field is required.</span>
                             </div>
@@ -79,12 +79,12 @@
 
                     <div ng-include="'/Scripts/questions/templates/question-type.html'"></div>
 
-                    <hr/>
+                    <hr />
 
                     <div class="form-group">
                         <div class="col-sm-offset-2 col-sm-10">
-                            <input type="submit" value="Create" class="btn btn-success"/>
-                            @Html.ActionLink("Back to List", "Index")
+                            <input type="submit" value="Create" class="btn btn-success" />
+                            @Html.ActionLink("Back to List", "List")
                         </div>
                     </div>
                 </div>

@@ -53,7 +53,8 @@ namespace RecruitmentManagementSystem.App.Infrastructure.ActionResults
             var jsonSerializerSettings = new JsonSerializerSettings
             {
                 ContractResolver = new CamelCasePropertyNamesContractResolver(),
-                NullValueHandling = NullValueHandling.Ignore
+                NullValueHandling = NullValueHandling.Ignore,
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
             };
 
             response.Write(JsonConvert.SerializeObject(Data, jsonSerializerSettings));

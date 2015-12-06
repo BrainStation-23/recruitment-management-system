@@ -1,12 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using RecruitmentManagementSystem.App.Infrastructure.Mappings;
-using RecruitmentManagementSystem.App.ViewModels.Shared;
 using RecruitmentManagementSystem.Model;
 
 namespace RecruitmentManagementSystem.App.ViewModels.Candidate
 {
-    public class CandidateViewModel : IMapFrom<Model.Candidate>
+    public class CandidateBaseModel
     {
         public int Id { get; set; }
 
@@ -45,20 +43,18 @@ namespace RecruitmentManagementSystem.App.ViewModels.Candidate
 
         public JobPosition JobPosition { get; set; }
 
-        public ICollection<EducationViewModel> Educations { get; set; }
+        public ICollection<EducationModel> Educations { get; set; }
 
-        public ICollection<ExperienceViewModel> Experiences { get; set; }
+        public ICollection<ExperienceModel> Experiences { get; set; }
 
-        public ICollection<ProjectViewModel> Projects { get; set; }
+        public ICollection<ProjectModel> Projects { get; set; }
 
-        public ICollection<SkillViewModel> Skills { get; set; }
+        public ICollection<SkillModel> Skills { get; set; }
 
         public string AvatarFileName { get; set; }
 
         public string ResumeFileName { get; set; }
 
         public ICollection<string> DocumentFileNames { get; set; }
-
-        public ICollection<FileViewModel> Files { get; set; }
     }
 }

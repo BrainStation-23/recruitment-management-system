@@ -89,7 +89,7 @@
         </div>
 
         <div class="col-xs-12 col-md-2">
-            <img src="~/Content/Images/default-avatar.jpg" ng-src="{{ ctrl.candidate.avatarSource }}" alt="default avatar" class="img-thumbnail" style="height: 155px; width: 155px;">
+            <img src="~/Content/Images/default-avatar.jpg" ng-src="{{ ctrl.candidate.avatar.relativePath }}" alt="default avatar" class="img-thumbnail" style="height: 155px; width: 155px;">
             <input type="file" title="Select Photo" accept="image/*" ngf-fix-orientation="false" ngf-select="ctrl.renderAvatarPreview($file)" />
         </div>
     </div>

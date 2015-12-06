@@ -21,34 +21,16 @@ namespace RecruitmentManagementSystem.App.Controllers
     public class QuestionController : BaseController
     {
         private readonly IQuestionRepository _questionRepository;
-        private readonly IFileRepository _fileRepository;
 
-        public QuestionController(IQuestionRepository questionRepository, IFileRepository fileRepository)
+        public QuestionController(IQuestionRepository questionRepository)
         {
             _questionRepository = questionRepository;
-            _fileRepository = fileRepository;
-        }
-
-        private static QuestionViewModel ViewModelQuestion(Question question)
-        {
-            var viewModel = new QuestionViewModel
-            {
-                Id = question.Id,
-                Text = question.Text,
-                QuestionType = question.QuestionType,
-                Files = question.Files,
-                Choices = question.Choices,
-                Notes = question.Notes,
-                CategoryId = question.CategoryId,
-                Category = question.Category.Name
-            };
-            return viewModel;
         }
 
         [HttpGet]
-        public ActionResult Index()
+        public ActionResult List()
         {
-            var model = _questionRepository.FindAll().ProjectTo<QuestionViewModel>();
+            var model = _questionRepository.FindAll().ProjectTo<QuestionModel>();
 
             return View(model);
         }
@@ -57,7 +39,7 @@ namespace RecruitmentManagementSystem.App.Controllers
         public ActionResult Details(int? id)
         {
             var viewModel =
-                _questionRepository.FindAll().ProjectTo<QuestionViewModel>().SingleOrDefault(x => x.Id == id);
+                _questionRepository.FindAll().ProjectTo<QuestionModel>().SingleOrDefault(x => x.Id == id);
 
             if (Request.IsAjaxRequest())
             {
@@ -75,7 +57,7 @@ namespace RecruitmentManagementSystem.App.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(QuestionCreateViewModel viewModel)
+        public ActionResult Create(QuestionCreateModel viewModel)
         {
             if (!ModelState.IsValid)
             {
@@ -103,78 +85,17 @@ namespace RecruitmentManagementSystem.App.Controllers
             return Json(null);
         }
 
-        private ICollection<File> ManageFiles(HttpFileCollectionBase fileCollection)
-        {
-            var files = new List<File>();
-
-            for (var index = 0; index < fileCollection.Count; index++)
-            {
-                if (fileCollection[index] == null || fileCollection[index].ContentLength <= 0)
-                {
-                    continue;
-                }
-
-                var uploaded = UploadFile(Request.Files[index]);
-
-                if (!String.IsNullOrEmpty(uploaded.FilePath))
-                {
-                    var file = new File
-                    {
-                        Name = uploaded.FileName,
-                        MimeType = uploaded.FileBase.ContentType,
-                        Size = uploaded.FileBase.ContentLength,
-                        RelativePath = uploaded.FilePath + uploaded.FileName,
-                        FileType = FileType.Document,
-                        CreatedBy = User.Identity.GetUserId(),
-                        UpdatedBy = User.Identity.GetUserId()
-                    };
-
-                    files.Add(file);
-                }
-            }
-
-            return files;
-        }
-
-        private UploadConfig UploadFile(HttpPostedFileBase fileBase)
-        {
-            if (fileBase == null || fileBase.ContentLength <= 0) return new UploadConfig();
-
-            var fileName = string.Format("{0}.{1}", Guid.NewGuid(), Path.GetFileName(fileBase.FileName));
-
-            const string filePath = FilePath.DocumentRelativePath;
-
-            var uploadConfig = new UploadConfig
-                               {
-                                   FileBase = fileBase,
-                                   FileName = fileName,
-                                   FilePath = filePath
-                               };
-
-            FileHelper.SaveFile(uploadConfig);
-
-            return uploadConfig;
-        }
-
         [HttpGet]
-        public ActionResult Edit(int? id)
+        public ActionResult Edit(int id)
         {
-            var viewModel =
-               _questionRepository.FindAll().ProjectTo<QuestionViewModel>().SingleOrDefault(x => x.Id == id);
-
-            var json = new JsonResult(viewModel, JsonRequestBehavior.AllowGet);
-
-            //ViewBag.questionViewModel = json;
             ViewData["Id"] = id;
-            ViewData["questionViewModel"] = viewModel;
 
-            return View(viewModel);
-
+            return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(QuestionCreateViewModel model)
+        public ActionResult Edit(QuestionCreateModel model)
         {
 
             if (!ModelState.IsValid)
@@ -207,7 +128,7 @@ namespace RecruitmentManagementSystem.App.Controllers
             if (question == null) return new HttpNotFoundResult();
             //return View(ViewModelQuestion(question));
             var viewModel =
-               _questionRepository.FindAll().ProjectTo<QuestionViewModel>().SingleOrDefault(x => x.Id == id);
+                _questionRepository.FindAll().ProjectTo<QuestionModel>().SingleOrDefault(x => x.Id == id);
 
             return View(viewModel);
         }
@@ -219,7 +140,68 @@ namespace RecruitmentManagementSystem.App.Controllers
             _questionRepository.Delete(_questionRepository.Find(x => x.Id == id));
             _questionRepository.Save();
 
-            return RedirectToAction("Index");
+            return RedirectToAction("List");
         }
+
+        #region Private Methods
+
+        private ICollection<File> ManageFiles(HttpFileCollectionBase fileCollection)
+        {
+            var files = new List<File>();
+
+            for (var index = 0; index < fileCollection.Count; index++)
+            {
+                if (fileCollection[index] == null || fileCollection[index].ContentLength <= 0)
+                {
+                    continue;
+                }
+
+                var uploadConfig = UploadFile(Request.Files[index]);
+
+                if (uploadConfig.FileBase == null) continue;
+
+                var file = new File
+                {
+                    Name = uploadConfig.FileName,
+                    MimeType = uploadConfig.FileBase.ContentType,
+                    Size = uploadConfig.FileBase.ContentLength,
+                    RelativePath = uploadConfig.FilePath + uploadConfig.FileName,
+                    FileType = FileType.Document,
+                    CreatedBy = User.Identity.GetUserId(),
+                    UpdatedBy = User.Identity.GetUserId()
+                };
+
+                files.Add(file);
+            }
+
+            return files;
+        }
+
+        private static UploadConfig UploadFile(HttpPostedFileBase fileBase)
+        {
+            var fileName = string.Format("{0}.{1}", Guid.NewGuid(), Path.GetFileName(fileBase.FileName));
+
+            const string filePath = FilePath.DocumentRelativePath;
+
+            var uploadConfig = new UploadConfig
+            {
+                FileBase = fileBase,
+                FileName = fileName,
+                FilePath = filePath
+            };
+
+            try
+            {
+                FileHelper.SaveFile(uploadConfig);
+            }
+            catch (Exception)
+            {
+                return new UploadConfig();
+            }
+
+            return uploadConfig;
+        }
+
+        #endregion
     }
 }

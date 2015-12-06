@@ -5,7 +5,7 @@ using RecruitmentManagementSystem.Model;
 
 namespace RecruitmentManagementSystem.App.ViewModels.Candidate
 {
-    public class EducationViewModel : IMapFrom<Education>
+    public class EducationModel : IMapFrom<Education>
     {
         public int Id { get; set; }
 

@@ -1,13 +1,11 @@
-﻿@model RecruitmentManagementSystem.App.ViewModels.Candidate.CandidateViewModel
-
-@{
+﻿@{
     ViewBag.Title = "Edit Candidate";
 }
 
 <h3>Edit Candidate</h3>
 <hr />
 
-<div ng-controller="CandidatesController as ctrl" ng-init="ctrl.getJobPositions(); ctrl.find()">
+<div ng-controller="CandidatesController as ctrl" ng-init="ctrl.getJobPositions(); ctrl.find(@ViewData["Id"])">
 
     <form name="ctrl.form" ng-submit="ctrl.update()" novalidate>
 
@@ -20,5 +18,5 @@
 </div>
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Back to List", "List")
 </div>

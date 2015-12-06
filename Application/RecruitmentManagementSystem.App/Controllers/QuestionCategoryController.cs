@@ -22,7 +22,7 @@ namespace RecruitmentManagementSystem.App.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-            var model = _questionCategoryRepository.FindAll().ProjectTo<QuestionCategoryViewModel>();
+            var model = _questionCategoryRepository.FindAll().ProjectTo<QuestionCategoryModel>();
 
             if (Request.IsAjaxRequest())
             {
@@ -39,7 +39,7 @@ namespace RecruitmentManagementSystem.App.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(QuestionCategoryViewModel question)
+        public ActionResult Create(QuestionCategoryModel question)
         {
             if (!ModelState.IsValid) return View(question);
 
@@ -60,7 +60,7 @@ namespace RecruitmentManagementSystem.App.Controllers
         {
             var model =
                 _questionCategoryRepository.FindAll()
-                    .ProjectTo<QuestionCategoryViewModel>()
+                    .ProjectTo<QuestionCategoryModel>()
                     .FirstOrDefault(x => x.Id == id);
 
             if (model == null) return new HttpNotFoundResult();
@@ -73,7 +73,7 @@ namespace RecruitmentManagementSystem.App.Controllers
         {
             var model =
                 _questionCategoryRepository.FindAll()
-                    .ProjectTo<QuestionCategoryViewModel>()
+                    .ProjectTo<QuestionCategoryModel>()
                     .FirstOrDefault(x => x.Id == id);
 
             if (model == null) return new HttpNotFoundResult();
@@ -83,7 +83,7 @@ namespace RecruitmentManagementSystem.App.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(QuestionCategoryViewModel model)
+        public ActionResult Edit(QuestionCategoryModel model)
         {
             if (!ModelState.IsValid) return View(model);
 

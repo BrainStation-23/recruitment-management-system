@@ -5,7 +5,7 @@ using RecruitmentManagementSystem.Model;
 
 namespace RecruitmentManagementSystem.App.ViewModels.Question
 {
-    public class QuestionCreateViewModel : IMapFrom<Model.Question>
+    public class QuestionCreateModel : IMapFrom<Model.Question>
     {
         public int Id { get; set; }
 

@@ -227,19 +227,21 @@
     <Compile Include="ViewModels\Account\RegisterViewModel.cs" />
     <Compile Include="ViewModels\Account\ApplicationUserViewModel.cs" />
     <Compile Include="ViewModels\Account\RoleViewModel.cs" />
-    <Compile Include="ViewModels\Candidate\CandidateViewModel.cs" />
+    <Compile Include="ViewModels\Candidate\CandidateBaseModel.cs" />
+    <Compile Include="ViewModels\Candidate\CandidateCreateModel.cs" />
+    <Compile Include="ViewModels\Candidate\CandidateModel.cs" />
     <Compile Include="ViewModels\Account\ManageViewModels.cs" />
-    <Compile Include="ViewModels\Candidate\EducationViewModel.cs" />
-    <Compile Include="ViewModels\Candidate\ExperienceViewModel.cs" />
-    <Compile Include="ViewModels\Candidate\InstitutionViewModel.cs" />
-    <Compile Include="ViewModels\Candidate\ProjectViewModel.cs" />
-    <Compile Include="ViewModels\Candidate\SkillViewModel.cs" />
-    <Compile Include="ViewModels\Question\BaseQuestionViewModel.cs" />
-    <Compile Include="ViewModels\Question\QuestionCreateViewModel.cs" />
-    <Compile Include="ViewModels\Question\QuestionEditViewModel.cs" />
-    <Compile Include="ViewModels\Question\QuestionViewModel.cs" />
-    <Compile Include="ViewModels\Question\BaseQuestionCategoryViewModel.cs" />
-    <Compile Include="ViewModels\Question\QuestionCategoryViewModel.cs" />
+    <Compile Include="ViewModels\Candidate\EducationModel.cs" />
+    <Compile Include="ViewModels\Candidate\ExperienceModel.cs" />
+    <Compile Include="ViewModels\Candidate\InstitutionModel.cs" />
+    <Compile Include="ViewModels\Candidate\ProjectModel.cs" />
+    <Compile Include="ViewModels\Candidate\SkillModel.cs" />
+    <Compile Include="ViewModels\Question\BaseQuestionModel.cs" />
+    <Compile Include="ViewModels\Question\QuestionCreateModel.cs" />
+    <Compile Include="ViewModels\Question\QuestionEditModel.cs" />
+    <Compile Include="ViewModels\Question\QuestionModel.cs" />
+    <Compile Include="ViewModels\Question\BaseQuestionCategoryModel.cs" />
+    <Compile Include="ViewModels\Question\QuestionCategoryModel.cs" />
     <Compile Include="ViewModels\Shared\FileViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -342,7 +344,7 @@
     <Content Include="Views\Manage\_Profile.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Question\Index.cshtml" />
+    <Content Include="Views\Question\List.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Question\Delete.cshtml" />
