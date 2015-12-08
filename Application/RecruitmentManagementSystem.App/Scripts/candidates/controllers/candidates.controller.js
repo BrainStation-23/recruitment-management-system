@@ -228,7 +228,7 @@
                     }).progress(function(evt) {
                         console.log("percent: " + parseInt(100.0 * evt.loaded / evt.total));
                     }).success(function(data) {
-                        location.href = "/Candidate";
+                        location.href = "/Candidate/List";
                     }).error(function(response) {
                         notifierService.notifyError(response);
                     });

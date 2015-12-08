@@ -31,5 +31,7 @@ namespace RecruitmentManagementSystem.App.ViewModels.Question
         public int CategoryId { get; set; }
 
         public QuestionCategory Category { get; set; }
+
+        public ICollection<File> DeletableFile { get; set; }
     }
 }
