@@ -1,6 +1,6 @@
 ﻿using System.Web.Mvc;
 using AutoMapper.QueryableExtensions;
-using RecruitmentManagementSystem.App.ViewModels.Candidate;
+using RecruitmentManagementSystem.Core.Models.Institution;
 using RecruitmentManagementSystem.Data.Interfaces;
 using JsonResult = RecruitmentManagementSystem.App.Infrastructure.ActionResults.JsonResult;
 
@@ -19,7 +19,7 @@ namespace RecruitmentManagementSystem.App.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-            var model = _institutionRepository.FindAll().ProjectTo<InstitutionModel>();
+            var model = _institutionRepository.FindAll().ProjectTo<InstitutionDto>();
 
             return new JsonResult(model, JsonRequestBehavior.AllowGet);
         }

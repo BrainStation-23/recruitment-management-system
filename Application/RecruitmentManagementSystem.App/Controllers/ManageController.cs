@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -11,7 +10,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using RecruitmentManagementSystem.App.Infrastructure.Constants;
 using RecruitmentManagementSystem.App.Infrastructure.Helpers;
-using RecruitmentManagementSystem.App.ViewModels.Account;
+using RecruitmentManagementSystem.Core.Models.Account;
 using RecruitmentManagementSystem.Data.Interfaces;
 using RecruitmentManagementSystem.Data.Repositories;
 using RecruitmentManagementSystem.Model;
@@ -268,7 +267,7 @@ namespace RecruitmentManagementSystem.App.Controllers
         {
             var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
 
-            var viewModel = new ApplicationUserViewModel
+            var viewModel = new ApplicationUserDto
             {
                 Id = user.Id,
                 FirstName = user.FirstName,
@@ -281,7 +280,7 @@ namespace RecruitmentManagementSystem.App.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> AccountDetails(AccountDetailsViewModel viewModel)
+        public async Task<ActionResult> AccountDetails(AccountDetails viewModel)
         {
             if (!ModelState.IsValid)
             {
@@ -302,7 +301,7 @@ namespace RecruitmentManagementSystem.App.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> EditRole(RoleViewModel roleViewModel)
+        public async Task<ActionResult> EditRole(Role roleViewModel)
         {
             if (!ModelState.IsValid)
             {
@@ -312,7 +311,7 @@ namespace RecruitmentManagementSystem.App.Controllers
 
             var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
 
-            UserManager.AddToRole(user.Id, roleViewModel.Role);
+            UserManager.AddToRole(user.Id, roleViewModel.Name);
             await UserManager.UpdateAsync(user);
 
             return new JsonResult(user);

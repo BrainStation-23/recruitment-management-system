@@ -9,7 +9,7 @@ using AutoMapper.QueryableExtensions;
 using Microsoft.AspNet.Identity;
 using RecruitmentManagementSystem.App.Infrastructure.Constants;
 using RecruitmentManagementSystem.App.Infrastructure.Helpers;
-using RecruitmentManagementSystem.App.ViewModels.Question;
+using RecruitmentManagementSystem.Core.Models.Question;
 using RecruitmentManagementSystem.Data.Interfaces;
 using RecruitmentManagementSystem.Model;
 using File = RecruitmentManagementSystem.Model.File;
@@ -21,10 +21,15 @@ namespace RecruitmentManagementSystem.App.Controllers
     public class QuestionController : BaseController
     {
         private readonly IQuestionRepository _questionRepository;
+        private readonly IFileRepository _fileRepository;
+        private readonly IChoiceRepository _choiceRepository;
 
-        public QuestionController(IQuestionRepository questionRepository)
+        public QuestionController(IQuestionRepository questionRepository, IFileRepository fileRepository,
+            IChoiceRepository choiceRepository)
         {
             _questionRepository = questionRepository;
+            _fileRepository = fileRepository;
+            _choiceRepository = choiceRepository;
         }
 
         [HttpGet]
@@ -99,27 +104,46 @@ namespace RecruitmentManagementSystem.App.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(QuestionCreateModel model)
         {
-
             if (!ModelState.IsValid)
             {
                 Response.StatusCode = (int) HttpStatusCode.BadRequest;
                 return new JsonResult(ModelState.Values.SelectMany(v => v.Errors));
             }
 
-            _questionRepository.Update(new Question
+            if (model.DeletableFile != null)
             {
-                Id = model.Id,
-                Text = model.Text,
-                QuestionType = model.QuestionType,
-                Answer = model.Answer,
-                Notes = model.Notes,
-                CategoryId = model.CategoryId,
-                Choices = model.Choices,
-                Files = ManageFiles(Request.Files),
-                UpdatedAt = DateTime.UtcNow,
-                UpdatedBy = User.Identity.GetUserId()
-            });
+                foreach (var file in model.DeletableFile)
+                {
+                    _fileRepository.Delete(file.Id);
+                    FileHelper.DeleteFile(file);
+                }
+                _fileRepository.Save();
+            }
+
+            var choices = _choiceRepository.FindAll(x => x.QuestionId == model.Id).ToList();
+
+            if (choices.Count > 0)
+            {
+                foreach (var choice in choices)
+                {
+                    _choiceRepository.Delete(choice);
+                }
+                _choiceRepository.Save();
+            }
+
+            var entity = _questionRepository.Find(model.Id);
+
+            entity.Text = model.Text;
+            entity.Answer = model.Answer;
+            entity.CategoryId = model.CategoryId;
+            entity.Notes = model.Notes;
+            entity.QuestionType = model.QuestionType;
+            entity.Files = ManageFiles(Request.Files);
+            entity.Choices = model.Choices;
+
+            _questionRepository.Update(entity);
             _questionRepository.Save();
+
             return Json(null);
         }
 
@@ -128,7 +152,7 @@ namespace RecruitmentManagementSystem.App.Controllers
         {
             var question = _questionRepository.Find(x => x.Id == id);
             if (question == null) return new HttpNotFoundResult();
-            //return View(ViewModelQuestion(question));
+
             var viewModel =
                 _questionRepository.FindAll().ProjectTo<QuestionModel>().SingleOrDefault(x => x.Id == id);
 
@@ -164,7 +188,7 @@ namespace RecruitmentManagementSystem.App.Controllers
 
                 var file = new File
                 {
-                    Name = uploadConfig.FileName,
+                    Name = Path.GetFileName(fileCollection[index].FileName),
                     MimeType = uploadConfig.FileBase.ContentType,
                     Size = uploadConfig.FileBase.ContentLength,
                     RelativePath = uploadConfig.FilePath + uploadConfig.FileName,
@@ -203,6 +227,7 @@ namespace RecruitmentManagementSystem.App.Controllers
 
             return uploadConfig;
         }
+
 
         #endregion
     }

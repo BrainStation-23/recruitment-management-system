@@ -6,8 +6,6 @@ namespace RecruitmentManagementSystem.Model
 {
     public class Candidate : BaseEntity
     {
-        public int Id { get; set; }
-
         [Required]
         [StringLength(30, ErrorMessage = "The {0} must be at most {1} characters long.")]
         public string FirstName { get; set; }
@@ -22,6 +20,8 @@ namespace RecruitmentManagementSystem.Model
         public string Email { get; set; }
 
         [Required]
+        [Index("PhoneNumberIndex", IsUnique = true)]
+        [StringLength(20, ErrorMessage = "The {0} must be at most {1} characters long.")]
         public string PhoneNumber { get; set; }
 
         [DataType(DataType.MultilineText)]

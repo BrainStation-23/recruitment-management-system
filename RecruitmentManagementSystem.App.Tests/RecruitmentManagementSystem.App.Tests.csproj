@@ -89,6 +89,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\HomeControllerTests.cs" />
+    <Compile Include="Controllers\QuestionControllerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -102,6 +103,10 @@
     <ProjectReference Include="..\Application\RecruitmentManagementSystem.App\RecruitmentManagementSystem.App.csproj">
       <Project>{4D5DB831-FC03-422A-B859-A6DC8E273C92}</Project>
       <Name>RecruitmentManagementSystem.App</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Application\RecruitmentManagementSystem.Data\RecruitmentManagementSystem.Data.csproj">
+      <Project>{aa5c9f2b-ae74-43ea-95c3-071b99b07cbb}</Project>
+      <Name>RecruitmentManagementSystem.Data</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

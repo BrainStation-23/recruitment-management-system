@@ -3,8 +3,8 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using Microsoft.Practices.Unity;
-using RecruitmentManagementSystem.App.Infrastructure.Tasks;
 using System.Web;
+using RecruitmentManagementSystem.Core.Tasks;
 using RecruitmentManagementSystem.Data.DbContext;
 
 namespace RecruitmentManagementSystem.App

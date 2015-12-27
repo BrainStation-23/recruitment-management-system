@@ -1,7 +1,8 @@
 using System;
+using System.Linq;
 using Microsoft.Practices.Unity;
 using RecruitmentManagementSystem.App.Controllers;
-using RecruitmentManagementSystem.App.Infrastructure.Tasks;
+using RecruitmentManagementSystem.Core.Tasks;
 
 namespace RecruitmentManagementSystem.App
 {
@@ -47,7 +48,18 @@ namespace RecruitmentManagementSystem.App
                 WithName.Default
                 );
 
-            TaskRegistry.RegisterTypes(container);
+            container.RegisterTypes(
+                AllClasses.FromLoadedAssemblies().
+                    Where(
+                        type =>
+                            typeof (IRunAtInit).IsAssignableFrom(type) ||
+                            typeof (IRunAtStartup).IsAssignableFrom(type) ||
+                            typeof (IRunOnError).IsAssignableFrom(type) ||
+                            typeof (IRunOnEachRequest).IsAssignableFrom(type) ||
+                            typeof (IRunAfterEachRequest).IsAssignableFrom(type) ||
+                            typeof (IRunBeforeEachRequest).IsAssignableFrom(type)),
+                WithMappings.FromAllInterfaces,
+                WithName.TypeName);
         }
     }
 }

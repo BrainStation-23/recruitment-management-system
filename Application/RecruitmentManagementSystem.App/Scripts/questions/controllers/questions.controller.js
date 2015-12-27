@@ -1,8 +1,8 @@
-﻿(function(app) {
+﻿(function (app) {
     "use strict";
 
     app.controller("QuestionsController", [
-        "$http", "fileService", "notifierService", "questionConstants", "$scope", "$window",  function ($http, fileService, notifierService, questionConstant, $scope,$window) {
+        "$http", "fileService", "notifierService", "questionConstants", "$scope", function ($http, fileService, notifierService, questionConstant, $scope) {
 
             var vm = this;
 
@@ -22,17 +22,13 @@
                     isValid: false
                 }
             ];
-
-            //console.log(vm.choices);
             if (!vm.choices) {
                 vm.choices = angular.copy(defaultChoices);
             }
 
-            //console.log(vm.choices);
-
-            vm.create = function() {
+            vm.create = function () {
                 vm.form.submitted = true;
-              
+
                 var model = {
                     text: vm.text,
                     questionType: vm.questionType,
@@ -53,35 +49,39 @@
                     fileService.postMultipartForm({
                         url: "/Question/Create",
                         data: model
-                    }).progress(function(evt) {
+                    }).progress(function (evt) {
                         console.log("percent: " + parseInt(100.0 * evt.loaded / evt.total));
-                    }).success(function(data) {
-                        location.href = "/Question";
-                    }).error(function(response) {
+                    }).success(function (data) {
+                        location.href = "/Question/List";
+                    }).error(function (response) {
                         notifierService.notifyError(response);
                     });
                 }
             };
 
-            vm.update = function() {
+            vm.update = function () {
                 vm.form.submitted = true;
                 var model = {
-                    id:vm.id,
+                    id: vm.id,
                     text: vm.text,
                     questionType: vm.questionType,
                     choices: vm.questionType === vm.constants.questionType.descriptive ? [] : vm.choices,
                     notes: vm.notes,
                     answer: vm.answer,
                     categoryId: vm.categoryId,
+                    deletableFile: vm.deletableFile,
                     files: [],
                     __RequestVerificationToken: angular.element(":input:hidden[name*='RequestVerificationToken']").val()
                 };
 
                 if (vm.allDocuments && vm.allDocuments.length) {
+                    angular.forEach(vm.allDocuments, function (document) {
+                        if (!document.hasOwnProperty("id")) {
+                            model.files.push(document);
+                        }
+                    });
                     model.files = vm.allDocuments;
                 }
-
-                console.log(model);
 
                 if (vm.form.$valid) {
                     fileService.postMultipartForm({
@@ -90,60 +90,58 @@
                     }).progress(function (evt) {
                         console.log("percent: " + parseInt(100.0 * evt.loaded / evt.total));
                     }).success(function (data) {
-                        location.href = "/Question";
+                        location.href = "/Question/List";
                     }).error(function (response) {
                         notifierService.notifyError(response);
                     });
                 }
             };
 
-            vm.addNewChoice = function() {
+            vm.addNewChoice = function () {
                 vm.choices.push({
                     text: "",
                     isValid: false
                 });
             };
 
-            vm.discardChoice = function(index) {
+            vm.discardChoice = function (index) {
                 vm.choices.splice(index, 1);
             };
 
             vm.find = function (id) {
-                
+
                 $http.get("/Question/Details/" + id).success(function (data) {
 
-                    angular.forEach( data, function(value, index) {
+                    angular.forEach(data, function (value, index) {
                         vm[index] = value;
                     });
 
                     vm.questionType = vm.questionType.toString();
-                    
                     vm.allDocuments = vm.files;
-                    
-                    angular.forEach(vm.allDocuments, function (document) {
-                        document.name = document.name.substring(document.name.indexOf('.') + 1);
-                    });
-
                     vm.findCategories();
                 });
-
             };
 
-            vm.findCategories = function() {
-                $http.get("/QuestionCategory/").success(function(data) {
+            vm.findCategories = function () {
+                $http.get("/QuestionCategory/").success(function (data) {
                     vm.categories = data;
                 });
             };
 
-            vm.addDocument = function(files) {
-                angular.forEach(files, function(file) {
+            vm.addDocument = function (files) {
+                angular.forEach(files, function (file) {
                     if (file) {
                         vm.allDocuments.push(file);
                     }
                 });
             };
 
-            vm.discardDocument = function(index) {
+            vm.discardDocument = function (index) {
+                if (vm.allDocuments[index] && vm.allDocuments[index].hasOwnProperty("id")) {
+                    vm.deletableFile = vm.deletableFile || [];
+                    vm.deletableFile.push(vm.allDocuments[index]);
+                }
+
                 vm.allDocuments.splice(index, 1);
             };
 
@@ -155,13 +153,7 @@
             //        vm.choices = angular.copy(defaultChoices);
             //    }
             //});
-            $scope.message = "Waiting 2000ms for update";
 
-            setTimeout(function () {
-                $scope.$apply(function () {
-                    $scope.message = "Timeout called!";
-                });
-            }, 2000);
         }
     ]);
 })(angular.module("questions"));

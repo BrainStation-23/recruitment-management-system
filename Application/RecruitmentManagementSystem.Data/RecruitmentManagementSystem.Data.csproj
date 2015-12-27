@@ -60,38 +60,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ContextHelper.cs" />
     <Compile Include="DbContext\ApplicationDbContext.cs" />
     <Compile Include="Interfaces\ICandidateRepository.cs" />
     <Compile Include="Interfaces\IChoiceRepository.cs" />
-    <Compile Include="Interfaces\IEducationRepository.cs" />
-    <Compile Include="Interfaces\IExperienceRepository.cs" />
     <Compile Include="Interfaces\IFileRepository.cs" />
     <Compile Include="Interfaces\IInstitutionRepository.cs" />
     <Compile Include="Interfaces\IJobPositionRepository.cs" />
-    <Compile Include="Interfaces\IProjectRepository.cs" />
     <Compile Include="Interfaces\IQuestionCategoryRepository.cs" />
     <Compile Include="Interfaces\IQuestionRepository.cs" />
     <Compile Include="Interfaces\IRepository.cs" />
-    <Compile Include="Interfaces\ISkillRepository.cs" />
     <Compile Include="Migrations\201511042039499_InitialCreate.cs" />
     <Compile Include="Migrations\201511042039499_InitialCreate.Designer.cs">
       <DependentUpon>201511042039499_InitialCreate.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201511141746435_UpdateFileEntity.cs" />
-    <Compile Include="Migrations\201511141746435_UpdateFileEntity.Designer.cs">
-      <DependentUpon>201511141746435_UpdateFileEntity.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201511252056567_AddJobPositionTable.cs" />
-    <Compile Include="Migrations\201511252056567_AddJobPositionTable.Designer.cs">
-      <DependentUpon>201511252056567_AddJobPositionTable.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201511282313443_AddRequiredInProjectDescription.cs" />
-    <Compile Include="Migrations\201511282313443_AddRequiredInProjectDescription.Designer.cs">
-      <DependentUpon>201511282313443_AddRequiredInProjectDescription.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201512060832543_RemoveUnnecessaryNavigationProps.cs" />
-    <Compile Include="Migrations\201512060832543_RemoveUnnecessaryNavigationProps.Designer.cs">
-      <DependentUpon>201512060832543_RemoveUnnecessaryNavigationProps.cs</DependentUpon>
+    <Compile Include="Migrations\201512271813014_AddObjectStateToTrackEntityState.cs" />
+    <Compile Include="Migrations\201512271813014_AddObjectStateToTrackEntityState.Designer.cs">
+      <DependentUpon>201512271813014_AddObjectStateToTrackEntityState.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -99,14 +84,11 @@
     <Compile Include="Repositories\JobPositionRepository.cs" />
     <Compile Include="Repositories\CandidateRepository.cs" />
     <Compile Include="Repositories\ChoiceRepository.cs" />
-    <Compile Include="Repositories\EducationRepository.cs" />
-    <Compile Include="Repositories\ExperienceRepository.cs" />
     <Compile Include="Repositories\FileRepository.cs" />
     <Compile Include="Repositories\InstitutionRepository.cs" />
-    <Compile Include="Repositories\ProjectRepository.cs" />
     <Compile Include="Repositories\QuestionCategoryRepository.cs" />
     <Compile Include="Repositories\QuestionRepository.cs" />
-    <Compile Include="Repositories\SkillRepository.cs" />
+    <Compile Include="StateHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\RecruitmentManagementSystem.Model\RecruitmentManagementSystem.Model.csproj">
@@ -122,17 +104,8 @@
     <EmbeddedResource Include="Migrations\201511042039499_InitialCreate.resx">
       <DependentUpon>201511042039499_InitialCreate.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201511141746435_UpdateFileEntity.resx">
-      <DependentUpon>201511141746435_UpdateFileEntity.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201511252056567_AddJobPositionTable.resx">
-      <DependentUpon>201511252056567_AddJobPositionTable.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201511282313443_AddRequiredInProjectDescription.resx">
-      <DependentUpon>201511282313443_AddRequiredInProjectDescription.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201512060832543_RemoveUnnecessaryNavigationProps.resx">
-      <DependentUpon>201512060832543_RemoveUnnecessaryNavigationProps.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201512271813014_AddObjectStateToTrackEntityState.resx">
+      <DependentUpon>201512271813014_AddObjectStateToTrackEntityState.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

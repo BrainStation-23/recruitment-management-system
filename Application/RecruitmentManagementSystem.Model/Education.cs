@@ -4,10 +4,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RecruitmentManagementSystem.Model
 {
-    public class Education
+    public class Education : BaseEntity
     {
-        public int Id { get; set; }
-
         [Required]
         public string Degree { get; set; }
 
@@ -24,6 +22,7 @@ namespace RecruitmentManagementSystem.Model
         [StringLength(2000, ErrorMessage = "The {0} must be at most {1} characters long.")]
         public string Notes { get; set; }
 
+        [Required]
         [Column(TypeName = "DateTime2")]
         public DateTime StartDate { get; set; }
 
@@ -35,5 +34,9 @@ namespace RecruitmentManagementSystem.Model
         public int InstitutionId { get; set; }
 
         public Institution Institution { get; set; }
+
+        public int CandidateId { get; set; }
+
+        public Candidate Candidate { get; set; }
     }
 }

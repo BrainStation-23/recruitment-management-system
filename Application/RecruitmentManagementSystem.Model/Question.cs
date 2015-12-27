@@ -12,8 +12,6 @@ namespace RecruitmentManagementSystem.Model
 
     public class Question : BaseEntity
     {
-        public int Id { get; set; }
-
         [Required]
         [DataType(DataType.MultilineText)]
         [StringLength(500, ErrorMessage = "The {0} must be at most {1} characters long.")]
@@ -40,10 +38,8 @@ namespace RecruitmentManagementSystem.Model
         public QuestionCategory Category { get; set; }
     }
 
-    public class Choice
+    public class Choice : BaseEntity
     {
-        public int Id { get; set; }
-
         [Required]
         [StringLength(200, ErrorMessage = "The {0} must be at most {1} characters long.")]
         public string Text { get; set; }

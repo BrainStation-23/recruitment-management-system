@@ -1,6 +1,8 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Web;
 using RecruitmentManagementSystem.App.Infrastructure.Constants;
+using File = RecruitmentManagementSystem.Model.File;
 
 namespace RecruitmentManagementSystem.App.Infrastructure.Helpers
 {
@@ -42,6 +44,20 @@ namespace RecruitmentManagementSystem.App.Infrastructure.Helpers
             }
 
             config.FileBase.SaveAs(fullPath);
+        }
+
+        public static void DeleteFile(File file)
+        {
+            var fullPath = HttpContext.Current.Server.MapPath(file.RelativePath);
+
+            try
+            {
+                System.IO.File.Delete(fullPath);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
     }
 }
