@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Web;
 using AutoMapper.QueryableExtensions;
 using Microsoft.AspNet.Identity;
-using RecruitmentManagementSystem.Core.Constants;
 using RecruitmentManagementSystem.Core.Helpers;
 using RecruitmentManagementSystem.Core.Interfaces;
 using RecruitmentManagementSystem.Core.Mappings;
@@ -18,14 +16,16 @@ namespace RecruitmentManagementSystem.Core.Services
 {
     public class CandidateService : ICandidateService
     {
-        private readonly ICandidateRepository _candidateRepository;
         private readonly IModelFactory _modelFactory;
+        private readonly ICandidateRepository _candidateRepository;
+        private static IFileRepository _fileRepository;
 
         public CandidateService(ICandidateRepository candidateRepository,
-            IModelFactory modelFactory)
+            IModelFactory modelFactory, IFileRepository fileRepository)
         {
             _candidateRepository = candidateRepository;
             _modelFactory = modelFactory;
+            _fileRepository = fileRepository;
         }
 
         public IEnumerable<CandidateDto> GetPagedList()
@@ -44,7 +44,7 @@ namespace RecruitmentManagementSystem.Core.Services
             entity.Projects = _modelFactory.MapToDomain<ProjectDto, Project>(model.Projects, null);
             entity.Skills = _modelFactory.MapToDomain<SkillDto, Skill>(model.Skills, null);
 
-            entity.Files = PrepareFiles(model);
+            entity.Files = ManageFiles(model);
 
             _candidateRepository.Insert(entity);
             _candidateRepository.Save();
@@ -75,6 +75,7 @@ namespace RecruitmentManagementSystem.Core.Services
             }
 
             var updatedEntity = _modelFactory.MapToDomain(model, entity);
+
             updatedEntity.Educations = _modelFactory.MapToDomain<EducationDto, Education>(model.Educations,
                 entity.Educations);
             updatedEntity.Experiences = _modelFactory.MapToDomain<ExperienceDto, Experience>(model.Experiences,
@@ -82,7 +83,7 @@ namespace RecruitmentManagementSystem.Core.Services
             updatedEntity.Projects = _modelFactory.MapToDomain<ProjectDto, Project>(model.Projects, entity.Projects);
             updatedEntity.Skills = _modelFactory.MapToDomain<SkillDto, Skill>(model.Skills, entity.Skills);
 
-            //TODO: Manage files
+            updatedEntity.Files = ManageFiles(model);
 
             _candidateRepository.Update(updatedEntity);
             _candidateRepository.Save();
@@ -90,7 +91,7 @@ namespace RecruitmentManagementSystem.Core.Services
 
         #region Private Methods
 
-        private static ICollection<File> PrepareFiles(CandidateBase dto)
+        private static ICollection<File> ManageFiles(CandidateBase dto)
         {
             var files = new List<File>();
             var fileCollection = HttpContext.Current.Request.Files;
@@ -116,9 +117,21 @@ namespace RecruitmentManagementSystem.Core.Services
                     fileType = FileType.Document;
                 }
 
-                var uploadConfig = UploadFile(fileCollection[index], fileType);
+                var uploadConfig = FileHelper.Upload(fileCollection[index], fileType);
 
                 if (uploadConfig.FileBase == null) continue;
+
+                var existingRecords = _fileRepository.FindAll(x => x.Candidate.Id == dto.Id).Select(x => new
+                {
+                    x.Id,
+                    x.RelativePath
+                }).ToList();
+                foreach (var record in existingRecords)
+                {
+                    FileHelper.Delete(record.RelativePath);
+                    _fileRepository.Delete(record.Id);
+                }
+                _fileRepository.Save();
 
                 var file = new File
                 {
@@ -129,51 +142,15 @@ namespace RecruitmentManagementSystem.Core.Services
                     FileType = fileType,
                     ObjectState = ObjectState.Added,
                     CreatedAt = DateTime.UtcNow,
-                    CreatedBy = HttpContext.Current.User.Identity.GetUserId()
+                    UpdatedAt = DateTime.UtcNow,
+                    CreatedBy = HttpContext.Current.User.Identity.GetUserId(),
+                    UpdatedBy = HttpContext.Current.User.Identity.GetUserId()
                 };
 
                 files.Add(file);
             }
 
             return files;
-        }
-
-        private static UploadConfig UploadFile(HttpPostedFile fileBase, FileType fileType)
-        {
-            var fileName = $"{Guid.NewGuid()}.{Path.GetFileName(fileBase.FileName)}";
-
-            var filePath = string.Empty;
-
-            switch (fileType)
-            {
-                case FileType.Avatar:
-                    filePath = FilePath.AvatarRelativePath;
-                    break;
-                case FileType.Resume:
-                    filePath = FilePath.ResumeRelativePath;
-                    break;
-                case FileType.Document:
-                    filePath = FilePath.DocumentRelativePath;
-                    break;
-            }
-
-            var uploadConfig = new UploadConfig
-            {
-                FileBase = fileBase,
-                FileName = fileName,
-                FilePath = filePath
-            };
-
-            try
-            {
-                FileHelper.SaveFile(uploadConfig);
-            }
-            catch (Exception)
-            {
-                return new UploadConfig();
-            }
-
-            return uploadConfig;
         }
 
         #endregion

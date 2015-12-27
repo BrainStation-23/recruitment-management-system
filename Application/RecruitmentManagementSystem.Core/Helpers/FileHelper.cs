@@ -2,7 +2,7 @@
 using System.IO;
 using System.Web;
 using RecruitmentManagementSystem.Core.Constants;
-using File = RecruitmentManagementSystem.Model.File;
+using RecruitmentManagementSystem.Model;
 
 namespace RecruitmentManagementSystem.Core.Helpers
 {
@@ -17,7 +17,53 @@ namespace RecruitmentManagementSystem.Core.Helpers
 
     public class FileHelper
     {
-        public static void SaveFile(UploadConfig config)
+        public static UploadConfig Upload(HttpPostedFile fileBase, FileType fileType)
+        {
+            var fileName = $"{Guid.NewGuid()}.{Path.GetFileName(fileBase.FileName)}";
+
+            var filePath = string.Empty;
+
+            switch (fileType)
+            {
+                case FileType.Avatar:
+                    filePath = FilePath.AvatarRelativePath;
+                    break;
+                case FileType.Resume:
+                    filePath = FilePath.ResumeRelativePath;
+                    break;
+                case FileType.Document:
+                    filePath = FilePath.DocumentRelativePath;
+                    break;
+            }
+
+            var uploadConfig = new UploadConfig
+            {
+                FileBase = fileBase,
+                FileName = fileName,
+                FilePath = filePath
+            };
+
+            try
+            {
+                SaveAs(uploadConfig);
+            }
+            catch (Exception)
+            {
+                return new UploadConfig();
+            }
+
+            return uploadConfig;
+        }
+
+        public static void Delete(string relativePath)
+        {
+            if (System.IO.File.Exists(HttpContext.Current.Server.MapPath(relativePath)))
+            {
+                System.IO.File.Delete(HttpContext.Current.Server.MapPath(relativePath));
+            }
+        }
+
+        private static void SaveAs(UploadConfig config)
         {
             if (config.FileBase == null || config.FileBase.ContentLength <= 0)
             {
@@ -44,20 +90,6 @@ namespace RecruitmentManagementSystem.Core.Helpers
             }
 
             config.FileBase.SaveAs(fullPath);
-        }
-
-        public static void DeleteFile(File file)
-        {
-            var fullPath = HttpContext.Current.Server.MapPath(file.RelativePath);
-
-            try
-            {
-                System.IO.File.Delete(fullPath);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
         }
     }
 }

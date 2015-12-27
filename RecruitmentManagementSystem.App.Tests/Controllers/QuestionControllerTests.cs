@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 using RecruitmentManagementSystem.Data.Interfaces;
 using RecruitmentManagementSystem.App.Controllers;
 using Xunit;
@@ -25,7 +23,6 @@ namespace RecruitmentManagementSystem.App.Tests.Controllers
             var controller = new QuestionController(_questionRepository, _fileRepository, _choiceRepository);
             var result = controller.Create() as ViewResult;
             Assert.NotNull(result);
-            Assert.Equal("Create", result.ViewName);
         }
     }
 }
