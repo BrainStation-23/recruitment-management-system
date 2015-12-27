@@ -3,29 +3,32 @@ using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
 using RecruitmentManagementSystem.Data.DbContext;
+using RecruitmentManagementSystem.Data.Interfaces;
+using RecruitmentManagementSystem.Model;
 
 namespace RecruitmentManagementSystem.Data.Repositories
 {
-    public class BaseRepository<TEntity> where TEntity : class
+    public class BaseRepository<T> : IRepository<T>
+        where T : BaseEntity
     {
         internal ApplicationDbContext Context;
-        internal DbSet<TEntity> DbSet;
+        internal DbSet<T> DbSet;
 
         public BaseRepository()
         {
             Context = new ApplicationDbContext();
-            DbSet = Context.Set<TEntity>();
+            DbSet = Context.Set<T>();
         }
 
-        public virtual void Insert(TEntity entity)
+        public virtual void Insert(T entity)
         {
             DbSet.Add(entity);
         }
 
-        public virtual void Update(TEntity entityToUpdate)
+        public virtual void Update(T entity)
         {
-            DbSet.Attach(entityToUpdate);
-            Context.Entry(entityToUpdate).State = EntityState.Modified;
+            Context.Entry(entity).State = EntityState.Modified;
+            Context.ApplyStateChanges();
         }
 
         public virtual void Delete(object id)
@@ -34,13 +37,13 @@ namespace RecruitmentManagementSystem.Data.Repositories
             Delete(entityToDelete);
         }
 
-        public virtual void Delete(TEntity entityToDelete)
+        public virtual void Delete(T entity)
         {
-            if (Context.Entry(entityToDelete).State == EntityState.Detached)
+            if (Context.Entry(entity).State == EntityState.Detached)
             {
-                DbSet.Attach(entityToDelete);
+                DbSet.Attach(entity);
             }
-            DbSet.Remove(entityToDelete);
+            DbSet.Remove(entity);
         }
 
         public virtual void Save()
@@ -48,29 +51,44 @@ namespace RecruitmentManagementSystem.Data.Repositories
             Context.SaveChanges();
         }
 
-        public virtual TEntity Find(Expression<Func<TEntity, bool>> predicate)
-        {
-            return DbSet.Where(predicate).FirstOrDefault();
-        }
-
-        public virtual TEntity FindById(object id)
+        public virtual T Find(object id)
         {
             return DbSet.Find(id);
         }
 
-        public virtual IQueryable<TEntity> FindAll()
+        public virtual T Find(Expression<Func<T, bool>> filter)
         {
-            return DbSet;
+            return DbSet.Where(filter).AsNoTracking().FirstOrDefault();
         }
 
-        public virtual IQueryable<TEntity> FindAll(Expression<Func<TEntity, bool>> predicate)
+        public virtual T FindIncluding(Expression<Func<T, bool>> filter = null,
+            params Expression<Func<T, object>>[] includeProperties)
         {
-            return DbSet.Where(predicate);
+            IQueryable<T> query = DbSet;
+
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+
+            query = includeProperties.Aggregate(query, (current, includeProperty) => current.Include(includeProperty));
+
+            return query.AsNoTracking().FirstOrDefault();
         }
 
-        public virtual IQueryable<TEntity> FindAllIncluding(params Expression<Func<TEntity, object>>[] includeProperties)
+        public virtual IQueryable<T> FindAll()
         {
-            return includeProperties.Aggregate<Expression<Func<TEntity, object>>, IQueryable<TEntity>>(DbSet,
+            return DbSet.AsNoTracking();
+        }
+
+        public virtual IQueryable<T> FindAll(Expression<Func<T, bool>> filter)
+        {
+            return DbSet.Where(filter).AsNoTracking();
+        }
+
+        public virtual IQueryable<T> FindAllIncluding(params Expression<Func<T, object>>[] includeProperties)
+        {
+            return includeProperties.Aggregate<Expression<Func<T, object>>, IQueryable<T>>(DbSet,
                 (current, property) => current.Include(property));
         }
     }

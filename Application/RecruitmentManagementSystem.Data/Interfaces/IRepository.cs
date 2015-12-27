@@ -1,23 +1,27 @@
 ﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
+using RecruitmentManagementSystem.Model;
 
 namespace RecruitmentManagementSystem.Data.Interfaces
 {
-    public interface IRepository<TEntity>
-        where TEntity : class
+    public interface IRepository<T>
+        where T : BaseEntity
     {
-        void Insert(TEntity entity);
-        void Update(TEntity entity);
+        void Insert(T entity);
+        void Update(T entity);
         void Delete(object id);
-        void Delete(TEntity entity);
+        void Delete(T entity);
         void Save();
 
-        TEntity Find(Expression<Func<TEntity, bool>> predicate);
-        TEntity FindById(object id);
+        T Find(object id);
+        T Find(Expression<Func<T, bool>> filter);
 
-        IQueryable<TEntity> FindAll();
-        IQueryable<TEntity> FindAll(Expression<Func<TEntity, bool>> predicate);
-        IQueryable<TEntity> FindAllIncluding(params Expression<Func<TEntity, object>>[] includeProperties);
+        T FindIncluding(Expression<Func<T, bool>> filter,
+            params Expression<Func<T, object>>[] includeProperties);
+
+        IQueryable<T> FindAll();
+        IQueryable<T> FindAll(Expression<Func<T, bool>> filter);
+        IQueryable<T> FindAllIncluding(params Expression<Func<T, object>>[] includeProperties);
     }
 }

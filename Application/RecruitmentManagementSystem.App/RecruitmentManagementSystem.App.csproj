@@ -129,7 +129,7 @@
       <HintPath>..\..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
     <Reference Include="WebActivatorEx, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\WebActivatorEx.2.0.6\lib\net40\WebActivatorEx.dll</HintPath>
+      <HintPath>..\..\packages\WebActivatorEx.2.1.0\lib\net40\WebActivatorEx.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="WebGrease, Version=1.6.5135.21930, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -185,7 +185,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_Start\AutoMapperConfig.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
@@ -211,38 +210,8 @@
     <Compile Include="Infrastructure\ActionResults\JsonResult.cs" />
     <Compile Include="Infrastructure\Constants\FilePath.cs" />
     <Compile Include="Infrastructure\Helpers\FileHelper.cs" />
-    <Compile Include="Infrastructure\Mappings\IHaveCustomMappings.cs" />
-    <Compile Include="Infrastructure\Mappings\IMapFrom.cs" />
-    <Compile Include="Infrastructure\Tasks\IRunAfterEachRequest.cs" />
-    <Compile Include="Infrastructure\Tasks\IRunAtInit.cs" />
-    <Compile Include="Infrastructure\Tasks\IRunAtStartup.cs" />
-    <Compile Include="Infrastructure\Tasks\IRunBeforeEachRequest.cs" />
-    <Compile Include="Infrastructure\Tasks\IRunOnEachRequest.cs" />
-    <Compile Include="Infrastructure\Tasks\IRunOnError.cs" />
-    <Compile Include="Infrastructure\Tasks\TaskRegistry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
-    <Compile Include="ViewModels\Account\AccountViewModels.cs" />
-    <Compile Include="ViewModels\Account\AccountDetailsViewModel.cs" />
-    <Compile Include="ViewModels\Account\RegisterViewModel.cs" />
-    <Compile Include="ViewModels\Account\ApplicationUserViewModel.cs" />
-    <Compile Include="ViewModels\Account\RoleViewModel.cs" />
-    <Compile Include="ViewModels\Candidate\CandidateBaseModel.cs" />
-    <Compile Include="ViewModels\Candidate\CandidateCreateModel.cs" />
-    <Compile Include="ViewModels\Candidate\CandidateModel.cs" />
-    <Compile Include="ViewModels\Account\ManageViewModels.cs" />
-    <Compile Include="ViewModels\Candidate\EducationModel.cs" />
-    <Compile Include="ViewModels\Candidate\ExperienceModel.cs" />
-    <Compile Include="ViewModels\Candidate\InstitutionModel.cs" />
-    <Compile Include="ViewModels\Candidate\ProjectModel.cs" />
-    <Compile Include="ViewModels\Candidate\SkillModel.cs" />
-    <Compile Include="ViewModels\Question\BaseQuestionModel.cs" />
-    <Compile Include="ViewModels\Question\QuestionCreateModel.cs" />
-    <Compile Include="ViewModels\Question\QuestionEditModel.cs" />
-    <Compile Include="ViewModels\Question\QuestionModel.cs" />
-    <Compile Include="ViewModels\Question\BaseQuestionCategoryModel.cs" />
-    <Compile Include="ViewModels\Question\QuestionCategoryModel.cs" />
-    <Compile Include="ViewModels\Shared\FileViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Images\default-avatar.jpg" />

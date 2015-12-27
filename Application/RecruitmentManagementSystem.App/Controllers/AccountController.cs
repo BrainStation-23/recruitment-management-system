@@ -11,7 +11,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using RecruitmentManagementSystem.App.Infrastructure.Constants;
 using RecruitmentManagementSystem.App.Infrastructure.Helpers;
-using RecruitmentManagementSystem.App.ViewModels.Account;
+using RecruitmentManagementSystem.Core.Models.Account;
 using RecruitmentManagementSystem.Data.DbContext;
 using RecruitmentManagementSystem.Data.Interfaces;
 using RecruitmentManagementSystem.Data.Repositories;
@@ -57,7 +57,7 @@ namespace RecruitmentManagementSystem.App.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-            var users = UserManager.Users.ProjectTo<ApplicationUserViewModel>().ToList();
+            var users = UserManager.Users.ProjectTo<ApplicationUserDto>().ToList();
 
             foreach (var user in users)
             {
@@ -152,7 +152,7 @@ namespace RecruitmentManagementSystem.App.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(RegisterViewModel model)
+        public async Task<ActionResult> Register(Register model)
         {
             if (!ModelState.IsValid) return View(model);
 
@@ -174,7 +174,7 @@ namespace RecruitmentManagementSystem.App.Controllers
 
                 if (model.Avatar != null && model.Avatar.ContentLength > 0)
                 {
-                    var fileName = string.Format("{0}.{1}", Guid.NewGuid(), Path.GetFileName(model.Avatar.FileName));
+                    var fileName = $"{Guid.NewGuid()}.{Path.GetFileName(model.Avatar.FileName)}";
 
                     FileHelper.SaveFile(new UploadConfig
                     {

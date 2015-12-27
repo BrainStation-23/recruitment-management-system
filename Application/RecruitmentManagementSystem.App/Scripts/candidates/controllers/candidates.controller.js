@@ -8,32 +8,6 @@
             vm.candidate = {};
             vm.candidate.skills = [];
 
-            vm.discardEducation = function($index) {
-                if (confirm("Are you sure?")) {
-                    vm.candidate.educations.splice($index, 1);
-                }
-            };
-
-            vm.discardExperience = function(index) {
-                if (confirm("Are you sure?")) {
-                    vm.candidate.experiences.splice(index, 1);
-                }
-            };
-
-            vm.discardProject = function(index) {
-                if (confirm("Are you sure?")) {
-                    vm.candidate.projects.splice(index, 1);
-                }
-            };
-
-            vm.getJobPositions = function() {
-                $http.get("/JobPosition/List").success(function(data) {
-                    vm.positions = data;
-                }).error(function() {
-                    notifierService.notifyError("Oops! Something happened.");
-                });
-            };
-
             var prepareFormData = function() {
                 if (vm.candidate.educations && vm.candidate.educations.length) {
                     vm.candidate.educations = _.map(vm.candidate.educations, function(r) {
@@ -43,15 +17,12 @@
                 }
 
                 vm.candidate.__RequestVerificationToken = angular.element(":input:hidden[name*='RequestVerificationToken']").val();
-                vm.candidate.files = [];
 
                 if (vm.candidate.avatar) {
-                    vm.candidate.files.push(vm.candidate.avatar);
                     vm.candidate.avatarFileName = vm.candidate.avatar.name;
                 }
 
                 if (vm.candidate.resume) {
-                    vm.candidate.files.push(vm.candidate.resume);
                     vm.candidate.resumeFileName = vm.candidate.resume.name;
                 }
             };
@@ -212,17 +183,19 @@
             vm.find = function(id) {
                 $http.get("/Candidate/Details/" + id).success(function(data) {
                     vm.candidate = data;
+                }).error(function(response) {
+                    notifierService.notifyError(response);
                 });
             };
 
-            vm.update = function(id) {
+            vm.update = function() {
                 vm.form.submitted = true;
 
                 if (vm.form.$valid) {
                     prepareFormData();
 
                     fileService.postMultipartForm({
-                        url: "/Candidate/Edit/" + id,
+                        url: "/Candidate/Edit/",
                         data: vm.candidate,
                         method: "PUT"
                     }).progress(function(evt) {
@@ -234,6 +207,34 @@
                     });
                 }
             };
+
+            vm.discardEducation = function($index) {
+                if (confirm("Are you sure?")) {
+                    vm.candidate.educations.splice($index, 1);
+                }
+            };
+
+            vm.discardExperience = function(index) {
+                if (confirm("Are you sure?")) {
+                    vm.candidate.experiences.splice(index, 1);
+                }
+            };
+
+            vm.discardProject = function(index) {
+                if (confirm("Are you sure?")) {
+                    vm.candidate.projects.splice(index, 1);
+                }
+            };
+
+            vm.getJobPositions = function() {
+                $http.get("/JobPosition/List").success(function(data) {
+                    vm.positions = data;
+                }).error(function() {
+                    notifierService.notifyError("Oops! Something happened.");
+                });
+            };
+
+
         }
     ]);
 })(angular.module("candidates"));

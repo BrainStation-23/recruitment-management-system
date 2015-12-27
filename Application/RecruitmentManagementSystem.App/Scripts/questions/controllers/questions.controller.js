@@ -2,7 +2,7 @@
     "use strict";
 
     app.controller("QuestionsController", [
-        "$http", "fileService", "notifierService", "questionConstants", "$scope", "$window", function ($http, fileService, notifierService, questionConstant, $scope, $window) {
+        "$http", "fileService", "notifierService", "questionConstants", "$scope", function ($http, fileService, notifierService, questionConstant, $scope) {
 
             var vm = this;
 
@@ -79,7 +79,6 @@
                         if (!document.hasOwnProperty("id")) {
                             model.files.push(document);
                         }
-
                     });
                     model.files = vm.allDocuments;
                 }
@@ -121,7 +120,6 @@
                     vm.allDocuments = vm.files;
                     vm.findCategories();
                 });
-
             };
 
             vm.findCategories = function () {

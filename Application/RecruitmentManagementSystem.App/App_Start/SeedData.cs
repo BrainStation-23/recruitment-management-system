@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
-using RecruitmentManagementSystem.App.Infrastructure.Tasks;
+using RecruitmentManagementSystem.Core.Tasks;
 using RecruitmentManagementSystem.Data.DbContext;
 using RecruitmentManagementSystem.Model;
 
@@ -11,6 +12,8 @@ namespace RecruitmentManagementSystem.App
 {
     public class SeedData : IRunAtInit
     {
+        private ApplicationUser _applicationUser;
+
         public void Execute()
         {
             using (var dbContext = new ApplicationDbContext())
@@ -22,7 +25,7 @@ namespace RecruitmentManagementSystem.App
 
                 if (!dbContext.Users.Any())
                 {
-                    SeedApplicationUser(dbContext);
+                    _applicationUser = SeedApplicationUser(dbContext);
                 }
 
                 if (!dbContext.QuestionCategories.Any())
@@ -54,7 +57,7 @@ namespace RecruitmentManagementSystem.App
             roleManager.Create(new IdentityRole {Name = "Candidate"});
         }
 
-        private static void SeedApplicationUser(DbContext dbContext)
+        private static ApplicationUser SeedApplicationUser(DbContext dbContext)
         {
             const string email = "admin-rms@bs-23.com";
             const string password = "HakunaMatata-23";
@@ -86,14 +89,16 @@ namespace RecruitmentManagementSystem.App
 
             var result = userManager.Create(user, password);
 
-            if (!result.Succeeded) return;
+            if (!result.Succeeded) return null;
 
             userManager.AddToRole(user.Id, "Admin");
+
+            return user;
         }
 
-        private static void SeedQuestionCategory(ApplicationDbContext dbContext)
+        private void SeedQuestionCategory(ApplicationDbContext dbContext)
         {
-            new List<QuestionCategory>
+            var collection = new List<QuestionCategory>
             {
                 new QuestionCategory
                 {
@@ -105,17 +110,26 @@ namespace RecruitmentManagementSystem.App
                     Name = "Database",
                     Description = "This section contains questions related to database."
                 }
-            }.ForEach(category => dbContext.QuestionCategories.Add(category));
+            };
+
+            foreach (var item in collection)
+            {
+                item.CreatedBy = _applicationUser.Id;
+                item.UpdatedBy = _applicationUser.Id;
+                item.CreatedAt = DateTime.UtcNow;
+                item.UpdatedAt = DateTime.UtcNow;
+                dbContext.QuestionCategories.Add(item);
+            }
         }
 
-        private static void SeedInstitution(ApplicationDbContext dbContext)
+        private void SeedInstitution(ApplicationDbContext dbContext)
         {
-            new List<Institution>
+            var collection = new List<Institution>
             {
                 new Institution
                 {
                     Name = "Ahsanullah University of Science & Technology",
-                    City = "Dhaka"
+                    City = "Dhaka",
                 },
                 new Institution
                 {
@@ -167,12 +181,21 @@ namespace RecruitmentManagementSystem.App
                     Name = "Stamford University Bangladesh",
                     City = "Dhaka"
                 }
-            }.ForEach(institution => dbContext.Institutions.Add(institution));
+            };
+
+            foreach (var item in collection)
+            {
+                item.CreatedBy = _applicationUser.Id;
+                item.UpdatedBy = _applicationUser.Id;
+                item.CreatedAt = DateTime.UtcNow;
+                item.UpdatedAt = DateTime.UtcNow;
+                dbContext.Institutions.Add(item);
+            }
         }
 
-        private static void SeedJobPosition(ApplicationDbContext dbContext)
+        private void SeedJobPosition(ApplicationDbContext dbContext)
         {
-            new List<JobPosition>
+            var collection = new List<JobPosition>
             {
                 new JobPosition
                 {
@@ -184,7 +207,16 @@ namespace RecruitmentManagementSystem.App
                     Name = "Senior Software Engineer",
                     Description = "Lorem Ipsum."
                 }
-            }.ForEach(row => dbContext.JobPositions.Add(row));
+            };
+
+            foreach (var item in collection)
+            {
+                item.CreatedBy = _applicationUser.Id;
+                item.UpdatedBy = _applicationUser.Id;
+                item.CreatedAt = DateTime.UtcNow;
+                item.UpdatedAt = DateTime.UtcNow;
+                dbContext.JobPositions.Add(item);
+            }
         }
     }
 }

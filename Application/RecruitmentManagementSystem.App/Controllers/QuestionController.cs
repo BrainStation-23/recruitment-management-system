@@ -9,7 +9,7 @@ using AutoMapper.QueryableExtensions;
 using Microsoft.AspNet.Identity;
 using RecruitmentManagementSystem.App.Infrastructure.Constants;
 using RecruitmentManagementSystem.App.Infrastructure.Helpers;
-using RecruitmentManagementSystem.App.ViewModels.Question;
+using RecruitmentManagementSystem.Core.Models.Question;
 using RecruitmentManagementSystem.Data.Interfaces;
 using RecruitmentManagementSystem.Model;
 using File = RecruitmentManagementSystem.Model.File;
@@ -24,7 +24,8 @@ namespace RecruitmentManagementSystem.App.Controllers
         private readonly IFileRepository _fileRepository;
         private readonly IChoiceRepository _choiceRepository;
 
-        public QuestionController(IQuestionRepository questionRepository, IFileRepository fileRepository, IChoiceRepository choiceRepository)
+        public QuestionController(IQuestionRepository questionRepository, IFileRepository fileRepository,
+            IChoiceRepository choiceRepository)
         {
             _questionRepository = questionRepository;
             _fileRepository = fileRepository;
@@ -65,7 +66,7 @@ namespace RecruitmentManagementSystem.App.Controllers
         {
             if (!ModelState.IsValid)
             {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                Response.StatusCode = (int) HttpStatusCode.BadRequest;
                 return new JsonResult(ModelState.Values.SelectMany(v => v.Errors));
             }
 
@@ -105,10 +106,10 @@ namespace RecruitmentManagementSystem.App.Controllers
         {
             if (!ModelState.IsValid)
             {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                Response.StatusCode = (int) HttpStatusCode.BadRequest;
                 return new JsonResult(ModelState.Values.SelectMany(v => v.Errors));
             }
-           
+
             if (model.DeletableFile != null)
             {
                 foreach (var file in model.DeletableFile)
@@ -119,7 +120,7 @@ namespace RecruitmentManagementSystem.App.Controllers
                 _fileRepository.Save();
             }
 
-            var choices= _choiceRepository.FindAll (x=> x.QuestionId == model.Id).ToList();
+            var choices = _choiceRepository.FindAll(x => x.QuestionId == model.Id).ToList();
 
             if (choices.Count > 0)
             {
@@ -129,23 +130,22 @@ namespace RecruitmentManagementSystem.App.Controllers
                 }
                 _choiceRepository.Save();
             }
-    
 
-            var entity = _questionRepository.FindById(model.Id);
+            var entity = _questionRepository.Find(model.Id);
+
             entity.Text = model.Text;
             entity.Answer = model.Answer;
-            entity.Category = model.Category;
             entity.CategoryId = model.CategoryId;
             entity.Notes = model.Notes;
             entity.QuestionType = model.QuestionType;
             entity.Files = ManageFiles(Request.Files);
             entity.Choices = model.Choices;
+
             _questionRepository.Update(entity);
             _questionRepository.Save();
 
             return Json(null);
         }
-
 
         [HttpGet]
         public ActionResult Delete(int? id)
@@ -227,7 +227,7 @@ namespace RecruitmentManagementSystem.App.Controllers
 
             return uploadConfig;
         }
-       
+
 
         #endregion
     }

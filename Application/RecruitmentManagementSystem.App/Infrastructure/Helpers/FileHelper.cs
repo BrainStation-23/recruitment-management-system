@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using System.Web;
 using RecruitmentManagementSystem.App.Infrastructure.Constants;
@@ -50,16 +49,15 @@ namespace RecruitmentManagementSystem.App.Infrastructure.Helpers
         public static void DeleteFile(File file)
         {
             var fullPath = HttpContext.Current.Server.MapPath(file.RelativePath);
+
             try
             {
                 System.IO.File.Delete(fullPath);
-
             }
-            catch (Exception exc)
+            catch (Exception ex)
             {
-                Trace.WriteLine("failed delete {0}", exc.Message);
+                throw new Exception(ex.Message);
             }
-            
         }
     }
 }
