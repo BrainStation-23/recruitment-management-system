@@ -56,7 +56,7 @@ namespace RecruitmentManagementSystem.App.Controllers
         [HttpGet]
         public ActionResult Create()
         {
-            return View();
+            return View("Create");
         }
 
         [HttpPost]
