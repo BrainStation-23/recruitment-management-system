@@ -69,7 +69,9 @@ namespace RecruitmentManagementSystem.App.Controllers
                 return new JsonResult(ModelState.Values.SelectMany(v => v.Errors), JsonRequestBehavior.AllowGet);
             }
 
-            ExtendCandidateModel(model);
+            model.Avatar = model.Files.SingleOrDefault(x => x.FileType == FileType.Avatar);
+            model.Resume = model.Files.SingleOrDefault(x => x.FileType == FileType.Resume);
+            model.Files = null;
 
             return new JsonResult(model, JsonRequestBehavior.AllowGet);
         }
@@ -125,16 +127,5 @@ namespace RecruitmentManagementSystem.App.Controllers
 
             return RedirectToAction("List");
         }
-
-        #region Private Methods
-
-        private static void ExtendCandidateModel(CandidateDto model)
-        {
-            model.Avatar = model.Files.SingleOrDefault(x => x.FileType == FileType.Avatar);
-            model.Resume = model.Files.SingleOrDefault(x => x.FileType == FileType.Resume);
-            model.Files = null;
-        }
-
-        #endregion
     }
 }

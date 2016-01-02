@@ -18,14 +18,27 @@ namespace RecruitmentManagementSystem.Core.Services
     {
         private readonly IModelFactory _modelFactory;
         private readonly ICandidateRepository _candidateRepository;
+        private readonly ISkillRepository _skillRepository;
         private static IFileRepository _fileRepository;
+        private readonly IProjectRepository _projectRepository;
+        private readonly IExperienceRepository _experienceRepository;
+        private readonly IEducationRepository _educationRepository;
 
         public CandidateService(ICandidateRepository candidateRepository,
-            IModelFactory modelFactory, IFileRepository fileRepository)
+            IModelFactory modelFactory,
+            IFileRepository fileRepository,
+            ISkillRepository skillRepository,
+            IProjectRepository projectRepository,
+            IExperienceRepository experienceRepository,
+            IEducationRepository educationRepository)
         {
             _candidateRepository = candidateRepository;
             _modelFactory = modelFactory;
             _fileRepository = fileRepository;
+            _skillRepository = skillRepository;
+            _projectRepository = projectRepository;
+            _experienceRepository = experienceRepository;
+            _educationRepository = educationRepository;
         }
 
         public IEnumerable<CandidateDto> GetPagedList()
@@ -39,10 +52,10 @@ namespace RecruitmentManagementSystem.Core.Services
         {
             var entity = _modelFactory.MapToDomain<CandidateCreateDto, Candidate>(model, null);
 
-            entity.Educations = _modelFactory.MapToDomain<EducationDto, Education>(model.Educations, null);
-            entity.Experiences = _modelFactory.MapToDomain<ExperienceDto, Experience>(model.Experiences, null);
-            entity.Projects = _modelFactory.MapToDomain<ProjectDto, Project>(model.Projects, null);
-            entity.Skills = _modelFactory.MapToDomain<SkillDto, Skill>(model.Skills, null);
+            entity.Educations = _modelFactory.MapToDomain<EducationDto, Education>(model.Educations);
+            entity.Experiences = _modelFactory.MapToDomain<ExperienceDto, Experience>(model.Experiences);
+            entity.Projects = _modelFactory.MapToDomain<ProjectDto, Project>(model.Projects);
+            entity.Skills = _modelFactory.MapToDomain<SkillDto, Skill>(model.Skills);
 
             entity.Files = ManageFiles(model);
 
@@ -52,8 +65,7 @@ namespace RecruitmentManagementSystem.Core.Services
 
         public void Update(CandidateCreateDto model)
         {
-            var entity = _candidateRepository.FindIncluding(x => x.Id == model.Id, x => x.Educations,
-                x => x.Experiences, x => x.Projects, x => x.Skills);
+            var entity = _candidateRepository.FindIncluding(x => x.Id == model.Id, x => x.Educations, x => x.Experiences, x => x.Projects, x => x.Skills);
 
             if (entity == null) return;
 
@@ -76,17 +88,36 @@ namespace RecruitmentManagementSystem.Core.Services
 
             var updatedEntity = _modelFactory.MapToDomain(model, entity);
 
-            updatedEntity.Educations = _modelFactory.MapToDomain<EducationDto, Education>(model.Educations,
-                entity.Educations);
-            updatedEntity.Experiences = _modelFactory.MapToDomain<ExperienceDto, Experience>(model.Experiences,
-                entity.Experiences);
-            updatedEntity.Projects = _modelFactory.MapToDomain<ProjectDto, Project>(model.Projects, entity.Projects);
-            updatedEntity.Skills = _modelFactory.MapToDomain<SkillDto, Skill>(model.Skills, entity.Skills);
-
+            updatedEntity.Educations = _modelFactory.MapToDomain<EducationDto, Education>(model.Educations);
+            updatedEntity.Experiences = _modelFactory.MapToDomain<ExperienceDto, Experience>(model.Experiences);
+            updatedEntity.Projects = _modelFactory.MapToDomain<ProjectDto, Project>(model.Projects);
+            updatedEntity.Skills = _modelFactory.MapToDomain<SkillDto, Skill>(model.Skills);
             updatedEntity.Files = ManageFiles(model);
 
             _candidateRepository.Update(updatedEntity);
+
+            foreach (var x in entity.Educations.Where(y => model.Educations.FirstOrDefault(z => z.Id == y.Id) == null))
+            {
+                _educationRepository.Delete(x.Id);
+            }
+            foreach (var x in entity.Experiences.Where(y => model.Experiences.FirstOrDefault(z => z.Id == y.Id) == null))
+            {
+                _experienceRepository.Delete(x.Id);
+            }
+            foreach (var x in entity.Projects.Where(y => model.Projects.FirstOrDefault(z => z.Id == y.Id) == null))
+            {
+                _projectRepository.Delete(x.Id);
+            }
+            foreach (var x in entity.Skills.Where(y => model.Skills.FirstOrDefault(z => z.Id == y.Id) == null))
+            {
+                _skillRepository.Delete(x.Id);
+            }
+
             _candidateRepository.Save();
+            _educationRepository.Save();
+            _experienceRepository.Save();
+            _projectRepository.Save();
+            _skillRepository.Save();
         }
 
         #region Private Methods

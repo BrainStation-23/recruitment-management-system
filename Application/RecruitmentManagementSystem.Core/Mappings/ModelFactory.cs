@@ -26,7 +26,7 @@ namespace RecruitmentManagementSystem.Core.Mappings
             return MapObjectState(dto, mappedEntity);
         }
 
-        public ICollection<TEntity> MapToDomain<TDto, TEntity>(ICollection<TDto> models, IEnumerable<TEntity> entities)
+        public ICollection<TEntity> MapToDomain<TDto, TEntity>(ICollection<TDto> models)
             where TEntity : BaseEntity
             where TDto : BaseDto
         {
@@ -37,16 +37,6 @@ namespace RecruitmentManagementSystem.Core.Mappings
             mappedEntities.AddRange(from dto in models
                 let entity = Mapper.Map<TDto, TEntity>(dto)
                 select MapObjectState(dto, entity));
-
-            if (entities != null)
-            {
-                foreach (var item in
-                    entities.Where(x => models.All(y => y.Id != x.Id)))
-                {
-                    item.ObjectState = ObjectState.Deleted;
-                    mappedEntities.Add(item);
-                }
-            }
 
             return mappedEntities;
         }
