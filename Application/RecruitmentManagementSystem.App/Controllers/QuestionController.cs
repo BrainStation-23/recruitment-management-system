@@ -14,6 +14,7 @@ using RecruitmentManagementSystem.Data.Interfaces;
 using RecruitmentManagementSystem.Model;
 using File = RecruitmentManagementSystem.Model.File;
 using JsonResult = RecruitmentManagementSystem.App.Infrastructure.ActionResults.JsonResult;
+using RecruitmentManagementSystem.Core.Interfaces;
 
 namespace RecruitmentManagementSystem.App.Controllers
 {
@@ -23,19 +24,21 @@ namespace RecruitmentManagementSystem.App.Controllers
         private readonly IQuestionRepository _questionRepository;
         private readonly IFileRepository _fileRepository;
         private readonly IChoiceRepository _choiceRepository;
+        private readonly IQuestionService _questionService;
 
         public QuestionController(IQuestionRepository questionRepository, IFileRepository fileRepository,
-            IChoiceRepository choiceRepository)
+            IChoiceRepository choiceRepository, IQuestionService questionService)
         {
             _questionRepository = questionRepository;
             _fileRepository = fileRepository;
             _choiceRepository = choiceRepository;
+            _questionService = questionService;
         }
 
         [HttpGet]
         public ActionResult List()
         {
-            var model = _questionRepository.FindAll().ProjectTo<QuestionModel>();
+            var model = _questionService.GetPagedList();
 
             return View(model);
         }

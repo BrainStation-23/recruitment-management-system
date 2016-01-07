@@ -1,4 +1,4 @@
-﻿@model IEnumerable<RecruitmentManagementSystem.Core.Models.Question.QuestionModel>
+﻿@model IEnumerable<RecruitmentManagementSystem.Core.Models.Question.QuestionDto>
 @{
     ViewBag.Title = "Questions";
 }
@@ -53,7 +53,7 @@ else
                     @Html.DisplayFor(modelItem => item.Notes)
                 </td>
                 <td>
-                    @Html.ActionLink(item.Category, "Details", "QuestionCategory", new {id = item.CategoryId}, null)
+                    @*Html.ActionLink(item.Category, "Details", "QuestionCategory", new {id = item.CategoryId}, null)*@
                 </td>
                 <td>
                     @Html.ActionLink("Edit", "Edit", new {id = item.Id}) |

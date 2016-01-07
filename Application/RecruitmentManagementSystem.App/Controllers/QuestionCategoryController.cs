@@ -5,6 +5,7 @@ using Microsoft.AspNet.Identity;
 using RecruitmentManagementSystem.Data.Interfaces;
 using JsonResult = RecruitmentManagementSystem.App.Infrastructure.ActionResults.JsonResult;
 using QuestionCategory = RecruitmentManagementSystem.Core.Models.Question.QuestionCategory;
+using RecruitmentManagementSystem.Core.Interfaces;
 
 namespace RecruitmentManagementSystem.App.Controllers
 {
@@ -13,20 +14,25 @@ namespace RecruitmentManagementSystem.App.Controllers
     {
         private readonly IQuestionCategoryRepository _questionCategoryRepository;
 
-        public QuestionCategoryController(IQuestionCategoryRepository questionCategoryRepository)
+        private readonly IQuestionCategoryService _questionCategoryService;
+
+        public QuestionCategoryController(IQuestionCategoryRepository questionCategoryRepository, IQuestionCategoryService questionCategoryService)
         {
             _questionCategoryRepository = questionCategoryRepository;
+
+            _questionCategoryService = questionCategoryService;
         }
 
         [HttpGet]
         public ActionResult Index()
         {
-            var model = _questionCategoryRepository.FindAll().ProjectTo<QuestionCategory>();
+            var model = _questionCategoryService.GetPagedList();
 
             if (Request.IsAjaxRequest())
             {
                 return new JsonResult(model, JsonRequestBehavior.AllowGet);
             }
+
             return View(model);
         }
 

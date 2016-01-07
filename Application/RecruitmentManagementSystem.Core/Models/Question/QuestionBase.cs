@@ -1,11 +1,19 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using RecruitmentManagementSystem.Model;
+using RecruitmentManagementSystem.Core.Models.Shared;
 
 namespace RecruitmentManagementSystem.Core.Models.Question
 {
-    public class QuestionBase
+    public class QuestionBase : BaseDto
     {
+        public QuestionBase()
+        {
+            QuestionType = new QuestionType();
+            Choices = new List<Choice>();
+            Files = new List<File>();
+        }
+
         public int Id { get; set; }
 
         [Required]
