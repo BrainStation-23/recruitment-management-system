@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using RecruitmentManagementSystem.Core.Models.Question;
 
 namespace RecruitmentManagementSystem.Core.Interfaces
 {
     public interface IQuestionCategoryService
     {
-        IEnumerable<Model.QuestionCategory> GetPagedList();
+        IEnumerable<QuestionCategory> GetPagedList();
 
-        void Insert(Model.QuestionCategory model);
+        void Insert(QuestionCategory model);
 
-        void Update(Model.QuestionCategory model);
+        void Update(QuestionCategory model);
     }
 }

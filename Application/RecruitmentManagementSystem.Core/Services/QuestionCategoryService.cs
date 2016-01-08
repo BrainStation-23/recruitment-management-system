@@ -1,9 +1,9 @@
 ﻿using RecruitmentManagementSystem.Core.Interfaces;
 using System;
 using System.Collections.Generic;
-using RecruitmentManagementSystem.Model;
 using RecruitmentManagementSystem.Data.Interfaces;
 using AutoMapper.QueryableExtensions;
+using RecruitmentManagementSystem.Core.Models.Question;
 
 namespace RecruitmentManagementSystem.Core.Services
 {
@@ -11,7 +11,7 @@ namespace RecruitmentManagementSystem.Core.Services
     {
         private readonly IQuestionCategoryRepository _questionCategoryRepository;
 
-        QuestionCategoryService(IQuestionCategoryRepository questionCategoryRepository)
+        public QuestionCategoryService(IQuestionCategoryRepository questionCategoryRepository)
         {
             _questionCategoryRepository = questionCategoryRepository;
         }
