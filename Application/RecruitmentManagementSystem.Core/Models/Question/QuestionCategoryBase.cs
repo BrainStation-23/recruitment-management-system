@@ -1,8 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using RecruitmentManagementSystem.Core.Models.Shared;
 
 namespace RecruitmentManagementSystem.Core.Models.Question
 {
-    public class QuestionCategoryBase
+    public class QuestionCategoryBase : BaseDto
     {
         public int Id { get; set; }
 

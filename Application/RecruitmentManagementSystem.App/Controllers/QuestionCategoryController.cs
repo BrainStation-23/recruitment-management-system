@@ -48,6 +48,8 @@ namespace RecruitmentManagementSystem.App.Controllers
         {
             if (!ModelState.IsValid) return View(question);
 
+            _questionCategoryService.Insert(question);
+
             _questionCategoryRepository.Insert(new Model.QuestionCategory
             {
                 Name = question.Name,
