@@ -1,11 +1,8 @@
 ﻿using RecruitmentManagementSystem.Core.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Web;
-using AutoMapper;
 using RecruitmentManagementSystem.Data.Interfaces;
 using AutoMapper.QueryableExtensions;
-using Microsoft.AspNet.Identity;
 using RecruitmentManagementSystem.Core.Mappings;
 using RecruitmentManagementSystem.Core.Models.Question;
 
@@ -22,23 +19,23 @@ namespace RecruitmentManagementSystem.Core.Services
             _modelFactory = modelFactory;
         }
 
-        public IEnumerable<QuestionCategory> GetPagedList()
+        public IEnumerable<QuestionCategoryDto> GetPagedList()
         {
-            var model = _questionCategoryRepository.FindAll().ProjectTo<QuestionCategory>();
+            var model = _questionCategoryRepository.FindAll().ProjectTo<QuestionCategoryDto>();
 
             return model;
         }
 
-        public void Insert(QuestionCategory model)
+        public void Insert(QuestionCategoryDto model)
         {
-            var entry = _modelFactory.MapToDomain<QuestionCategory, Model.QuestionCategory>(model, null);
+            var entry = _modelFactory.MapToDomain<QuestionCategoryDto, Model.QuestionCategory>(model, null);
 
             _questionCategoryRepository.Insert(entry);
 
             _questionCategoryRepository.Save();
         }
 
-        public void Update(QuestionCategory model)
+        public void Update(QuestionCategoryDto model)
         {
             throw new NotImplementedException();
         }

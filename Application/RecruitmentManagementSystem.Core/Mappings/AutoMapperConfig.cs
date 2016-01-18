@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using AutoMapper;
 using RecruitmentManagementSystem.Core.Models.Candidate;
+using RecruitmentManagementSystem.Core.Models.Question;
 using RecruitmentManagementSystem.Core.Tasks;
 using RecruitmentManagementSystem.Model;
 
@@ -73,6 +74,8 @@ namespace RecruitmentManagementSystem.Core.Mappings
             Mapper.CreateMap<EducationDto, Education>(MemberList.Source)
                 .ForMember(s => s.Institution, t => t.Ignore())
                 .ForMember(s => s.Candidate, t => t.Ignore());
+
+            Mapper.CreateMap<QuestionCategoryDto, QuestionCategory>();
         }
     }
 }

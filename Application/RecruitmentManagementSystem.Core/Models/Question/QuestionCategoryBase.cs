@@ -5,8 +5,6 @@ namespace RecruitmentManagementSystem.Core.Models.Question
 {
     public class QuestionCategoryBase : BaseDto
     {
-        public int Id { get; set; }
-
         [Required]
         [StringLength(30, ErrorMessage = "The {0} must be at most {1} characters long.")]
         public string Name { get; set; }

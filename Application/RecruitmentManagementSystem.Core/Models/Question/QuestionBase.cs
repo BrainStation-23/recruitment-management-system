@@ -14,8 +14,6 @@ namespace RecruitmentManagementSystem.Core.Models.Question
             Files = new List<File>();
         }
 
-        public int Id { get; set; }
-
         [Required]
         [Display(Name = "Text")]
         [StringLength(500, ErrorMessage = "The {0} must be at most {1} characters long.")]

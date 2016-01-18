@@ -4,7 +4,7 @@ using AutoMapper.QueryableExtensions;
 using Microsoft.AspNet.Identity;
 using RecruitmentManagementSystem.Data.Interfaces;
 using JsonResult = RecruitmentManagementSystem.App.Infrastructure.ActionResults.JsonResult;
-using QuestionCategory = RecruitmentManagementSystem.Core.Models.Question.QuestionCategory;
+using QuestionCategory = RecruitmentManagementSystem.Core.Models.Question.QuestionCategoryDto;
 using RecruitmentManagementSystem.Core.Interfaces;
 
 namespace RecruitmentManagementSystem.App.Controllers
@@ -24,7 +24,7 @@ namespace RecruitmentManagementSystem.App.Controllers
         }
 
         [HttpGet]
-        public ActionResult Index()
+        public ActionResult List()
         {
             var model = _questionCategoryService.GetPagedList();
 
@@ -50,15 +50,6 @@ namespace RecruitmentManagementSystem.App.Controllers
 
             _questionCategoryService.Insert(question);
 
-            _questionCategoryRepository.Insert(new Model.QuestionCategory
-            {
-                Name = question.Name,
-                Description = question.Description,
-                CreatedBy = User.Identity.GetUserId(),
-                UpdatedBy = User.Identity.GetUserId()
-            });
-
-            _questionCategoryRepository.Save();
             return RedirectToAction("Index");
         }
 

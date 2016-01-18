@@ -337,7 +337,7 @@
     <Content Include="Views\QuestionCategory\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\QuestionCategory\Index.cshtml" />
+    <Content Include="Views\QuestionCategory\List.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\QuestionCategory\Edit.cshtml" />
