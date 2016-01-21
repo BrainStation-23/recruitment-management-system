@@ -5,6 +5,7 @@ using RecruitmentManagementSystem.Data.Interfaces;
 using AutoMapper.QueryableExtensions;
 using RecruitmentManagementSystem.Core.Mappings;
 using RecruitmentManagementSystem.Core.Models.Question;
+using RecruitmentManagementSystem.Model;
 
 namespace RecruitmentManagementSystem.Core.Services
 {
@@ -37,7 +38,13 @@ namespace RecruitmentManagementSystem.Core.Services
 
         public void Update(QuestionCategoryDto model)
         {
-            throw new NotImplementedException();
+            QuestionCategory entry = _questionCategoryRepository.Find(qc => qc.Id == model.Id);
+
+            QuestionCategory updatedEntry = _modelFactory.MapToDomain(model, entry);
+
+            _questionCategoryRepository.Update(updatedEntry);
+
+            _questionCategoryRepository.Save();
         }
     }
 }

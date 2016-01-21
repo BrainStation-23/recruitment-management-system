@@ -50,7 +50,7 @@ namespace RecruitmentManagementSystem.App.Controllers
 
             _questionCategoryService.Insert(question);
 
-            return RedirectToAction("Index");
+            return RedirectToAction("List");
         }
 
         [HttpGet]
@@ -85,15 +85,18 @@ namespace RecruitmentManagementSystem.App.Controllers
         {
             if (!ModelState.IsValid) return View(model);
 
-            _questionCategoryRepository.Update(new Model.QuestionCategory
-            {
-                Id = model.Id,
-                Name = model.Name,
-                Description = model.Description
-            });
+            _questionCategoryService.Update(model);
 
+            return RedirectToAction("List");
+        }
+
+        [HttpGet]
+        public ActionResult Delete(int id)
+        {
+            _questionCategoryRepository.Delete(id);
             _questionCategoryRepository.Save();
-            return RedirectToAction("Index");
+
+            return RedirectToAction("List");
         }
     }
 }
