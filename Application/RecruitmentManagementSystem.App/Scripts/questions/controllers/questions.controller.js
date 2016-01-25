@@ -123,7 +123,7 @@
             };
 
             vm.findCategories = function () {
-                $http.get("/QuestionCategory/").success(function (data) {
+                $http.get("/QuestionCategory/List/").success(function (data) {
                     vm.categories = data;
                 });
             };

@@ -30,7 +30,7 @@ namespace RecruitmentManagementSystem.Core.Models.Question
         [Required]
         public int CategoryId { get; set; }
 
-        public QuestionCategory Category { get; set; }
+        public QuestionCategoryDto Category { get; set; }
 
         public ICollection<File> DeletableFile { get; set; }
     }

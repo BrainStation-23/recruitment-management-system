@@ -4,7 +4,7 @@ using AutoMapper.QueryableExtensions;
 using Microsoft.AspNet.Identity;
 using RecruitmentManagementSystem.Data.Interfaces;
 using JsonResult = RecruitmentManagementSystem.App.Infrastructure.ActionResults.JsonResult;
-using QuestionCategory = RecruitmentManagementSystem.Core.Models.Question.QuestionCategory;
+using QuestionCategory = RecruitmentManagementSystem.Core.Models.Question.QuestionCategoryDto;
 using RecruitmentManagementSystem.Core.Interfaces;
 
 namespace RecruitmentManagementSystem.App.Controllers
@@ -24,7 +24,7 @@ namespace RecruitmentManagementSystem.App.Controllers
         }
 
         [HttpGet]
-        public ActionResult Index()
+        public ActionResult List()
         {
             var model = _questionCategoryService.GetPagedList();
 
@@ -48,16 +48,9 @@ namespace RecruitmentManagementSystem.App.Controllers
         {
             if (!ModelState.IsValid) return View(question);
 
-            _questionCategoryRepository.Insert(new Model.QuestionCategory
-            {
-                Name = question.Name,
-                Description = question.Description,
-                CreatedBy = User.Identity.GetUserId(),
-                UpdatedBy = User.Identity.GetUserId()
-            });
+            _questionCategoryService.Insert(question);
 
-            _questionCategoryRepository.Save();
-            return RedirectToAction("Index");
+            return RedirectToAction("List");
         }
 
         [HttpGet]
@@ -92,15 +85,18 @@ namespace RecruitmentManagementSystem.App.Controllers
         {
             if (!ModelState.IsValid) return View(model);
 
-            _questionCategoryRepository.Update(new Model.QuestionCategory
-            {
-                Id = model.Id,
-                Name = model.Name,
-                Description = model.Description
-            });
+            _questionCategoryService.Update(model);
 
+            return RedirectToAction("List");
+        }
+
+        [HttpGet]
+        public ActionResult Delete(int id)
+        {
+            _questionCategoryRepository.Delete(id);
             _questionCategoryRepository.Save();
-            return RedirectToAction("Index");
+
+            return RedirectToAction("List");
         }
     }
 }

@@ -6,8 +6,8 @@ namespace RecruitmentManagementSystem.Core.Models.Question
 {
     public class QuestionDto : QuestionBase, IMapFrom<Model.Question>
     {
-        public ICollection<FileDto> Files { get; set; }
+        public ICollection<FileDto> FileDtos { get; set; }
 
-        public QuestionCategory Category { get; set; }
+        public QuestionCategoryDto Category { get; set; }
     }
 }

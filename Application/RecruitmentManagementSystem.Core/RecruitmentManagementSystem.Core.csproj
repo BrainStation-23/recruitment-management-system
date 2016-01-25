@@ -90,9 +90,10 @@
     <Compile Include="Models\Candidate\ProjectDto.cs" />
     <Compile Include="Models\Candidate\SkillDto.cs" />
     <Compile Include="Models\Institution\InstitutionDto.cs" />
+    <Compile Include="Models\Question\ChoiceDto.cs" />
     <Compile Include="Models\Question\QuestionCategoryBase.cs" />
     <Compile Include="Models\Question\QuestionBase.cs" />
-    <Compile Include="Models\Question\QuestionCategory.cs" />
+    <Compile Include="Models\Question\QuestionCategoryDto.cs" />
     <Compile Include="Models\Question\QuestionCreateDto.cs" />
     <Compile Include="Models\Question\QuestionCreateModel.cs" />
     <Compile Include="Models\Question\QuestionDto.cs" />
