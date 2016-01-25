@@ -355,7 +355,7 @@
     <Content Include="Views\Question\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Account\Index.cshtml" />
+    <Content Include="Views\Account\List.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Scripts\candidates\templates\education-modal.html" />

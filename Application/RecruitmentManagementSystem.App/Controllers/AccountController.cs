@@ -55,7 +55,7 @@ namespace RecruitmentManagementSystem.App.Controllers
         }
 
         [HttpGet]
-        public ActionResult Index()
+        public ActionResult List()
         {
             var users = UserManager.Users.ProjectTo<ApplicationUserDto>().ToList();
 
