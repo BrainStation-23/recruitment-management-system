@@ -5,7 +5,7 @@
 <h3>Edit Candidate</h3>
 <hr />
 
-<div ng-controller="CandidatesController as ctrl" ng-init="ctrl.getJobPositions(); ctrl.find(@ViewData["Id"])">
+<div ng-controller="CandidatesController as ctrl" ng-init="ctrl.find(@ViewData["Id"])">
 
     <form name="ctrl.form" ng-submit="ctrl.update()" novalidate>
 

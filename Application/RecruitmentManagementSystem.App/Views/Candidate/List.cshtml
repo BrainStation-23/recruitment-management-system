@@ -1,4 +1,4 @@
-﻿@model IEnumerable<RecruitmentManagementSystem.Core.Models.Candidate.CandidateDto>
+﻿@model IEnumerable<RecruitmentManagementSystem.Core.Models.Candidate.CandidateModel>
 
 @{
     ViewBag.Title = "Candidate List";
@@ -40,9 +40,6 @@ else
                 @Html.DisplayNameFor(model => model.PhoneNumber)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.JobPositionId)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.Website)
             </th>
             <th></th>
@@ -62,9 +59,6 @@ else
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.PhoneNumber)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.JobPosition.Name)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Website)

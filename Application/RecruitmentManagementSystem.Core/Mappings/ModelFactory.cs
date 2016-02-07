@@ -11,11 +11,11 @@ namespace RecruitmentManagementSystem.Core.Mappings
 {
     public class ModelFactory : IModelFactory
     {
-        public TEntity MapToDomain<TDto, TEntity>(TDto dto, TEntity entity)
+        public TEntity MapToDomain<TModel, TEntity>(TModel model, TEntity entity)
             where TEntity : BaseEntity
-            where TDto : BaseDto
+            where TModel : BaseModel
         {
-            var mappedEntity = Mapper.Map<TDto, TEntity>(dto);
+            var mappedEntity = Mapper.Map<TModel, TEntity>(model);
 
             if (entity != null)
             {
@@ -23,29 +23,29 @@ namespace RecruitmentManagementSystem.Core.Mappings
                 mappedEntity.CreatedAt = entity.CreatedAt;
             }
 
-            return MapObjectState(dto, mappedEntity);
+            return MapObjectState(model, mappedEntity);
         }
 
-        public ICollection<TEntity> MapToDomain<TDto, TEntity>(ICollection<TDto> models)
+        public ICollection<TEntity> MapToDomain<TModel, TEntity>(ICollection<TModel> models)
             where TEntity : BaseEntity
-            where TDto : BaseDto
+            where TModel : BaseModel
         {
             var mappedEntities = new List<TEntity>();
 
             if (models == null) return mappedEntities;
 
-            mappedEntities.AddRange(from dto in models
-                let entity = Mapper.Map<TDto, TEntity>(dto)
-                select MapObjectState(dto, entity));
+            mappedEntities.AddRange(from model in models
+                let entity = Mapper.Map<TModel, TEntity>(model)
+                select MapObjectState(model, entity));
 
             return mappedEntities;
         }
 
-        private static TEntity MapObjectState<TDto, TEntity>(TDto dto, TEntity entity)
+        private static TEntity MapObjectState<TModel, TEntity>(TModel model, TEntity entity)
             where TEntity : BaseEntity
-            where TDto : BaseDto
+            where TModel : BaseModel
         {
-            if (dto.Id == default(int))
+            if (model.Id == default(int))
             {
                 entity.ObjectState = ObjectState.Added;
                 entity.CreatedAt = DateTime.UtcNow;

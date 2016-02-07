@@ -22,6 +22,7 @@ namespace RecruitmentManagementSystem.Data.DbContext
         public DbSet<Question> Questions { get; set; }
         public DbSet<Institution> Institutions { get; set; }
         public DbSet<QuestionCategory> QuestionCategories { get; set; }
-        public DbSet<JobPosition> JobPositions { get; set; }
+        public DbSet<Course> Courses { get; set; }
+        public DbSet<Quiz> Quizzes { get; set; }
     }
 }

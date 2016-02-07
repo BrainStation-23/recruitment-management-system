@@ -1,0 +1,37 @@
+﻿<div class="panel panel-success" ng-repeat="page in ctrl.pages">
+    <div class="panel-heading">Page {{ $index + 1 }}</div>
+
+    <div class="panel-body">
+        <div ng-hide="page.questions && page.questions.length">
+            <i class="fa fa-lg fa-exclamation-triangle"></i>
+            No questions are added yet.
+        </div>
+
+        <div class="table-responsive" ng-show="page.questions && page.questions.length">
+            <table class="table">
+                <tr>
+                    <th>Text</th>
+                    <th>Category</th>
+                    <th></th>
+                </tr>
+                <tr ng-repeat="question in page.questions track by $index">
+                    <td>
+                        <div ng-bind="question.text"></div>
+                    </td>
+                    <td>
+                        <div ng-bind="question.category.name"></div>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-danger" ng-click="ctrl.discardQuestion($index)">
+                            <i class="fa fa-trash fa-lg"></i>
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="panel-footer">
+        <button type="button" class="btn btn-primary" ng-click="ctrl.openQuestionModal(page)">Add questions</button>
+    </div>
+</div>

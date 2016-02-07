@@ -32,10 +32,6 @@ namespace RecruitmentManagementSystem.Model
         [StringLength(50, ErrorMessage = "The {0} must be at most {1} characters long.")]
         public string Website { get; set; }
 
-        public int JobPositionId { get; set; }
-
-        public JobPosition JobPosition { get; set; }
-
         public ICollection<Education> Educations { get; set; }
 
         public ICollection<Experience> Experiences { get; set; }

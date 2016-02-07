@@ -69,18 +69,6 @@
             </div>
 
             <div class="form-group">
-                <label class="control-label col-md-2 required">Job Position</label>
-                <div class="col-md-5">
-                    <select name="jobPosition" class="form-control" ng-model="ctrl.candidate.jobPositionId" ng-options="option.id as option.name for option in ctrl.positions" required>
-                        <option value="">Select One</option>
-                    </select>
-                    <div class="text-danger field-validation-error" ng-messages="ctrl.form.submitted && ctrl.form.jobPosition.$error">
-                        <span ng-message="required">This field is required.</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group">
                 <label class="control-label col-md-2">Resume</label>
                 <div class="col-md-5">
                     <input type="file" title="Select Resume" ng-model="ctrl.candidate.resume" ngf-select accept=".pdf,.doc,.docx"/>

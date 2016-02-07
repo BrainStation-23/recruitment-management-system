@@ -5,10 +5,10 @@ namespace RecruitmentManagementSystem.Core.Interfaces
 {
     public interface ICandidateService
     {
-        IEnumerable<CandidateDto> GetPagedList();
+        IEnumerable<CandidateModel> GetPagedList();
 
-        void Insert(CandidateCreateDto model);
+        void Insert(CandidateCreateModel model);
 
-        void Update(CandidateCreateDto model);
+        void Update(CandidateCreateModel model);
     }
 }

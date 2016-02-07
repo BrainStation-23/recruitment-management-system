@@ -20,19 +20,19 @@ namespace RecruitmentManagementSystem.Core.Services
             _choiceRepository = choiceRepository;
         }
 
-        public IEnumerable<QuestionDto> GetPagedList()
+        public IEnumerable<QuestionModel> GetPagedList()
         {
-            var model = _questionRepository.FindAll().ProjectTo<QuestionDto>();
+            var model = _questionRepository.FindAll().ProjectTo<QuestionModel>();
 
             return model;
         }
 
-        public void Insert(QuestionCreateDto model)
+        public void Insert(QuestionCreateModel model)
         {
             throw new NotImplementedException();
         }
 
-        public void Update(QuestionCreateDto model)
+        public void Update(QuestionCreateModel model)
         {
             throw new NotImplementedException();
         }

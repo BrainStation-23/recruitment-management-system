@@ -5,7 +5,7 @@ using RecruitmentManagementSystem.Core.Models.Shared;
 
 namespace RecruitmentManagementSystem.Core.Models.Question
 {
-    public class QuestionBase : BaseDto
+    public class QuestionBase : BaseModel
     {
         public QuestionBase()
         {

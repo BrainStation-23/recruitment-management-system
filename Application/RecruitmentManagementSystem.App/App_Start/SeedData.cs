@@ -38,11 +38,6 @@ namespace RecruitmentManagementSystem.App
                     SeedInstitution(dbContext);
                 }
 
-                if (!dbContext.JobPositions.Any())
-                {
-                    SeedJobPosition(dbContext);
-                }
-
                 dbContext.SaveChanges();
             }
         }
@@ -190,32 +185,6 @@ namespace RecruitmentManagementSystem.App
                 item.CreatedAt = DateTime.UtcNow;
                 item.UpdatedAt = DateTime.UtcNow;
                 dbContext.Institutions.Add(item);
-            }
-        }
-
-        private void SeedJobPosition(ApplicationDbContext dbContext)
-        {
-            var collection = new List<JobPosition>
-            {
-                new JobPosition
-                {
-                    Name = "Junior Software Engineer",
-                    Description = "Lorem Ipsum."
-                },
-                new JobPosition
-                {
-                    Name = "Senior Software Engineer",
-                    Description = "Lorem Ipsum."
-                }
-            };
-
-            foreach (var item in collection)
-            {
-                item.CreatedBy = _applicationUser.Id;
-                item.UpdatedBy = _applicationUser.Id;
-                item.CreatedAt = DateTime.UtcNow;
-                item.UpdatedAt = DateTime.UtcNow;
-                dbContext.JobPositions.Add(item);
             }
         }
     }

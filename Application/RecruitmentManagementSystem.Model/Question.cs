@@ -32,6 +32,8 @@ namespace RecruitmentManagementSystem.Model
         [StringLength(500, ErrorMessage = "The {0} must be at most {1} characters long.")]
         public string Answer { get; set; }
 
+        public decimal DefaultPoint { get; set; }
+
         [Required]
         public int CategoryId { get; set; }
 
@@ -43,8 +45,6 @@ namespace RecruitmentManagementSystem.Model
         [Required]
         [StringLength(200, ErrorMessage = "The {0} must be at most {1} characters long.")]
         public string Text { get; set; }
-
-        public bool IsValid { get; set; }
 
         public int QuestionId { get; set; }
 

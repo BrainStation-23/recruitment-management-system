@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Web;
-using RecruitmentManagementSystem.App.Infrastructure.Constants;
+using RecruitmentManagementSystem.Core.Constants;
 using File = RecruitmentManagementSystem.Model.File;
 
 namespace RecruitmentManagementSystem.App.Infrastructure.Helpers

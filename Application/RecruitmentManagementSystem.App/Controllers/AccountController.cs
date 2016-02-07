@@ -9,8 +9,8 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
-using RecruitmentManagementSystem.App.Infrastructure.Constants;
 using RecruitmentManagementSystem.App.Infrastructure.Helpers;
+using RecruitmentManagementSystem.Core.Constants;
 using RecruitmentManagementSystem.Core.Models.Account;
 using RecruitmentManagementSystem.Data.DbContext;
 using RecruitmentManagementSystem.Data.Interfaces;
@@ -57,7 +57,7 @@ namespace RecruitmentManagementSystem.App.Controllers
         [HttpGet]
         public ActionResult List()
         {
-            var users = UserManager.Users.ProjectTo<ApplicationUserDto>().ToList();
+            var users = UserManager.Users.ProjectTo<ApplicationUserModel>().ToList();
 
             foreach (var user in users)
             {
@@ -206,7 +206,7 @@ namespace RecruitmentManagementSystem.App.Controllers
                 // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                 // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
                 // if role = canidate view ()
-                return RedirectToAction("Index", "Account");
+                return RedirectToAction("List", "Account");
             }
             AddErrors(result);
 

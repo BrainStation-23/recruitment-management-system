@@ -5,10 +5,10 @@ namespace RecruitmentManagementSystem.Core.Interfaces
 {
     public interface IQuestionCategoryService
     {
-        IEnumerable<QuestionCategoryDto> GetPagedList();
+        IEnumerable<QuestionCategoryModel> GetPagedList();
 
-        void Insert(QuestionCategoryDto model);
+        void Insert(QuestionCategoryModel model);
 
-        void Update(QuestionCategoryDto model);
+        void Update(QuestionCategoryModel model);
     }
 }

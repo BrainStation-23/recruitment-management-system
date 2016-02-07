@@ -8,8 +8,8 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
-using RecruitmentManagementSystem.App.Infrastructure.Constants;
 using RecruitmentManagementSystem.App.Infrastructure.Helpers;
+using RecruitmentManagementSystem.Core.Constants;
 using RecruitmentManagementSystem.Core.Models.Account;
 using RecruitmentManagementSystem.Data.Interfaces;
 using RecruitmentManagementSystem.Data.Repositories;
@@ -267,7 +267,7 @@ namespace RecruitmentManagementSystem.App.Controllers
         {
             var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
 
-            var viewModel = new ApplicationUserDto
+            var viewModel = new ApplicationUserModel
             {
                 Id = user.Id,
                 FirstName = user.FirstName,

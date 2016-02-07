@@ -225,16 +225,6 @@
                     vm.candidate.projects.splice(index, 1);
                 }
             };
-
-            vm.getJobPositions = function() {
-                $http.get("/JobPosition/List").success(function(data) {
-                    vm.positions = data;
-                }).error(function() {
-                    notifierService.notifyError("Oops! Something happened.");
-                });
-            };
-
-
         }
     ]);
 })(angular.module("candidates"));

@@ -41,21 +41,21 @@ namespace RecruitmentManagementSystem.Core.Services
             _educationRepository = educationRepository;
         }
 
-        public IEnumerable<CandidateDto> GetPagedList()
+        public IEnumerable<CandidateModel> GetPagedList()
         {
-            var model = _candidateRepository.FindAll().ProjectTo<CandidateDto>();
+            var model = _candidateRepository.FindAll().ProjectTo<CandidateModel>();
 
             return model;
         }
 
-        public void Insert(CandidateCreateDto model)
+        public void Insert(CandidateCreateModel model)
         {
-            var entity = _modelFactory.MapToDomain<CandidateCreateDto, Candidate>(model, null);
+            var entity = _modelFactory.MapToDomain<CandidateCreateModel, Candidate>(model, null);
 
-            entity.Educations = _modelFactory.MapToDomain<EducationDto, Education>(model.Educations);
-            entity.Experiences = _modelFactory.MapToDomain<ExperienceDto, Experience>(model.Experiences);
-            entity.Projects = _modelFactory.MapToDomain<ProjectDto, Project>(model.Projects);
-            entity.Skills = _modelFactory.MapToDomain<SkillDto, Skill>(model.Skills);
+            entity.Educations = _modelFactory.MapToDomain<EducationModel, Education>(model.Educations);
+            entity.Experiences = _modelFactory.MapToDomain<ExperienceModel, Experience>(model.Experiences);
+            entity.Projects = _modelFactory.MapToDomain<ProjectModel, Project>(model.Projects);
+            entity.Skills = _modelFactory.MapToDomain<SkillModel, Skill>(model.Skills);
 
             entity.Files = ManageFiles(model);
 
@@ -63,54 +63,54 @@ namespace RecruitmentManagementSystem.Core.Services
             _candidateRepository.Save();
         }
 
-        public void Update(CandidateCreateDto model)
+        public void Update(CandidateCreateModel model)
         {
             var entity = _candidateRepository.FindIncluding(x => x.Id == model.Id, x => x.Educations, x => x.Experiences, x => x.Projects, x => x.Skills);
 
             if (entity == null) return;
 
-            foreach (var dto in model.Educations.Where(dto => dto.CandidateId == default(int)))
+            foreach (var m in model.Educations.Where(x => x.CandidateId == default(int)))
             {
-                dto.CandidateId = model.Id;
+                m.CandidateId = model.Id;
             }
-            foreach (var dto in model.Experiences.Where(dto => dto.CandidateId == default(int)))
+            foreach (var m in model.Experiences.Where(x => x.CandidateId == default(int)))
             {
-                dto.CandidateId = model.Id;
+                m.CandidateId = model.Id;
             }
-            foreach (var dto in model.Projects.Where(dto => dto.CandidateId == default(int)))
+            foreach (var m in model.Projects.Where(x => x.CandidateId == default(int)))
             {
-                dto.CandidateId = model.Id;
+                m.CandidateId = model.Id;
             }
-            foreach (var dto in model.Skills.Where(dto => dto.CandidateId == default(int)))
+            foreach (var m in model.Skills.Where(x => x.CandidateId == default(int)))
             {
-                dto.CandidateId = model.Id;
+                m.CandidateId = model.Id;
             }
 
             var updatedEntity = _modelFactory.MapToDomain(model, entity);
 
-            updatedEntity.Educations = _modelFactory.MapToDomain<EducationDto, Education>(model.Educations);
-            updatedEntity.Experiences = _modelFactory.MapToDomain<ExperienceDto, Experience>(model.Experiences);
-            updatedEntity.Projects = _modelFactory.MapToDomain<ProjectDto, Project>(model.Projects);
-            updatedEntity.Skills = _modelFactory.MapToDomain<SkillDto, Skill>(model.Skills);
+            updatedEntity.Educations = _modelFactory.MapToDomain<EducationModel, Education>(model.Educations);
+            updatedEntity.Experiences = _modelFactory.MapToDomain<ExperienceModel, Experience>(model.Experiences);
+            updatedEntity.Projects = _modelFactory.MapToDomain<ProjectModel, Project>(model.Projects);
+            updatedEntity.Skills = _modelFactory.MapToDomain<SkillModel, Skill>(model.Skills);
             updatedEntity.Files = ManageFiles(model);
 
             _candidateRepository.Update(updatedEntity);
 
-            foreach (var x in entity.Educations.Where(y => model.Educations.FirstOrDefault(z => z.Id == y.Id) == null))
+            foreach (var m in entity.Educations.Where(y => model.Educations.FirstOrDefault(x => x.Id == y.Id) == null))
             {
-                _educationRepository.Delete(x.Id);
+                _educationRepository.Delete(m.Id);
             }
-            foreach (var x in entity.Experiences.Where(y => model.Experiences.FirstOrDefault(z => z.Id == y.Id) == null))
+            foreach (var m in entity.Experiences.Where(y => model.Experiences.FirstOrDefault(x => x.Id == y.Id) == null))
             {
-                _experienceRepository.Delete(x.Id);
+                _experienceRepository.Delete(m.Id);
             }
-            foreach (var x in entity.Projects.Where(y => model.Projects.FirstOrDefault(z => z.Id == y.Id) == null))
+            foreach (var m in entity.Projects.Where(y => model.Projects.FirstOrDefault(x => x.Id == y.Id) == null))
             {
-                _projectRepository.Delete(x.Id);
+                _projectRepository.Delete(m.Id);
             }
-            foreach (var x in entity.Skills.Where(y => model.Skills.FirstOrDefault(z => z.Id == y.Id) == null))
+            foreach (var m in entity.Skills.Where(y => model.Skills.FirstOrDefault(x => x.Id == y.Id) == null))
             {
-                _skillRepository.Delete(x.Id);
+                _skillRepository.Delete(m.Id);
             }
 
             _candidateRepository.Save();
@@ -122,7 +122,7 @@ namespace RecruitmentManagementSystem.Core.Services
 
         #region Private Methods
 
-        private static ICollection<File> ManageFiles(CandidateBase dto)
+        private static ICollection<File> ManageFiles(CandidateBase model)
         {
             var files = new List<File>();
             var fileCollection = HttpContext.Current.Request.Files;
@@ -135,11 +135,11 @@ namespace RecruitmentManagementSystem.Core.Services
                 }
 
                 FileType fileType;
-                if (fileCollection[index].FileName == dto.AvatarFileName)
+                if (fileCollection[index].FileName == model.AvatarFileName)
                 {
                     fileType = FileType.Avatar;
                 }
-                else if (fileCollection[index].FileName == dto.ResumeFileName)
+                else if (fileCollection[index].FileName == model.ResumeFileName)
                 {
                     fileType = FileType.Resume;
                 }
@@ -152,7 +152,7 @@ namespace RecruitmentManagementSystem.Core.Services
 
                 if (uploadConfig.FileBase == null) continue;
 
-                var existingRecords = _fileRepository.FindAll(x => x.Candidate.Id == dto.Id).Select(x => new
+                var existingRecords = _fileRepository.FindAll(x => x.Candidate.Id == model.Id).Select(x => new
                 {
                     x.Id,
                     x.RelativePath

@@ -4,14 +4,14 @@ using RecruitmentManagementSystem.Core.Models.Shared;
 
 namespace RecruitmentManagementSystem.Core.Models.Candidate
 {
-    public class CandidateBase : BaseDto
+    public class CandidateBase : BaseModel
     {
         public CandidateBase()
         {
-            Educations = new List<EducationDto>();
-            Experiences = new List<ExperienceDto>();
-            Projects = new List<ProjectDto>();
-            Skills = new List<SkillDto>();
+            Educations = new List<EducationModel>();
+            Experiences = new List<ExperienceModel>();
+            Projects = new List<ProjectModel>();
+            Skills = new List<SkillModel>();
         }
 
         [Required]
@@ -43,17 +43,13 @@ namespace RecruitmentManagementSystem.Core.Models.Candidate
         [StringLength(50, ErrorMessage = "The {0} must be at most {1} characters long.")]
         public string Website { get; set; }
 
-        [Required]
-        [Display(Name = "Job Position")]
-        public int JobPositionId { get; set; }
+        public ICollection<EducationModel> Educations { get; set; }
 
-        public ICollection<EducationDto> Educations { get; set; }
+        public ICollection<ExperienceModel> Experiences { get; set; }
 
-        public ICollection<ExperienceDto> Experiences { get; set; }
+        public ICollection<ProjectModel> Projects { get; set; }
 
-        public ICollection<ProjectDto> Projects { get; set; }
-
-        public ICollection<SkillDto> Skills { get; set; }
+        public ICollection<SkillModel> Skills { get; set; }
 
         public string AvatarFileName { get; set; }
 

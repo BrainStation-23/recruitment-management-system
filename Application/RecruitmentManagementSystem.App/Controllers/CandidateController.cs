@@ -38,7 +38,7 @@ namespace RecruitmentManagementSystem.App.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(CandidateCreateDto dto)
+        public ActionResult Create(CandidateCreateModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -46,7 +46,7 @@ namespace RecruitmentManagementSystem.App.Controllers
                 return new JsonResult(ModelState.Values.SelectMany(v => v.Errors));
             }
 
-            _candidateService.Insert(dto);
+            _candidateService.Insert(model);
 
             return new JsonResult(null);
         }
@@ -60,7 +60,7 @@ namespace RecruitmentManagementSystem.App.Controllers
                 return View();
             }
 
-            var model = _candidateRepository.FindAll().ProjectTo<CandidateDto>().SingleOrDefault(x => x.Id == id);
+            var model = _candidateRepository.FindAll().ProjectTo<CandidateModel>().SingleOrDefault(x => x.Id == id);
 
             if (model == null)
             {
@@ -85,9 +85,9 @@ namespace RecruitmentManagementSystem.App.Controllers
 
         [HttpPut]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(CandidateCreateDto dto)
+        public ActionResult Edit(CandidateCreateModel model)
         {
-            var entity = _candidateRepository.Find(x => x.Id == dto.Id);
+            var entity = _candidateRepository.Find(x => x.Id == model.Id);
 
             if (entity == null)
             {
@@ -102,7 +102,7 @@ namespace RecruitmentManagementSystem.App.Controllers
                 return new JsonResult(ModelState.Values.SelectMany(v => v.Errors));
             }
 
-            _candidateService.Update(dto);
+            _candidateService.Update(model);
 
             return Json(null);
         }
@@ -111,7 +111,7 @@ namespace RecruitmentManagementSystem.App.Controllers
         public ActionResult Delete(int? id)
         {
             var model =
-                _candidateRepository.FindAll().ProjectTo<CandidateDto>().SingleOrDefault(x => x.Id == id);
+                _candidateRepository.FindAll().ProjectTo<CandidateModel>().SingleOrDefault(x => x.Id == id);
 
             if (model == null) return new HttpNotFoundResult();
 

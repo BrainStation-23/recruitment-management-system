@@ -71,8 +71,8 @@
       <HintPath>..\..\packages\Unity.4.0.1\lib\net45\Microsoft.Practices.Unity.RegistrationByConvention.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -197,18 +197,18 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CandidateController.cs" />
+    <Compile Include="Controllers\CourseController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InstitutionController.cs" />
-    <Compile Include="Controllers\JobPositionController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\QuestionCategoryController.cs" />
     <Compile Include="Controllers\QuestionController.cs" />
+    <Compile Include="Controllers\QuizController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Infrastructure\ActionResults\JsonResult.cs" />
-    <Compile Include="Infrastructure\Constants\FilePath.cs" />
     <Compile Include="Infrastructure\Helpers\FileHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -237,6 +237,10 @@
     <Content Include="Scripts\questions\controllers\questions.controller.js" />
     <Content Include="Scripts\questions\questions.module.js" />
     <Content Include="Scripts\questions\templates\question-type.html" />
+    <Content Include="Scripts\quiz\controllers\quiz.controller.js" />
+    <Content Include="Scripts\quiz\controllers\quiz.question.controller.js" />
+    <Content Include="Scripts\quiz\quiz.module.js" />
+    <Content Include="Scripts\quiz\templates\question-modal.html" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Scripts\candidates\templates\experience-modal.html" />
     <Content Include="Web.config">
@@ -268,7 +272,7 @@
     <Content Include="Views\Manage\SetPassword.cshtml" />
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
-    <Content Include="Views\Shared\_NavigationPartial.cshtml" />
+    <Content Include="Views\Shared\_Navigation.cshtml" />
     <Content Include="Content\Sass\main.scss" />
   </ItemGroup>
   <ItemGroup>
@@ -428,6 +432,18 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Candidate\_FormBody.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Course\Create.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Course\List.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Quiz\Create.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Quiz\_Question.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

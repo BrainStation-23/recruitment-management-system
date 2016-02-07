@@ -7,14 +7,15 @@ using System.Web;
 using System.Web.Mvc;
 using AutoMapper.QueryableExtensions;
 using Microsoft.AspNet.Identity;
-using RecruitmentManagementSystem.App.Infrastructure.Constants;
 using RecruitmentManagementSystem.App.Infrastructure.Helpers;
+using RecruitmentManagementSystem.Core.Constants;
 using RecruitmentManagementSystem.Core.Models.Question;
 using RecruitmentManagementSystem.Data.Interfaces;
 using RecruitmentManagementSystem.Model;
 using File = RecruitmentManagementSystem.Model.File;
 using JsonResult = RecruitmentManagementSystem.App.Infrastructure.ActionResults.JsonResult;
 using RecruitmentManagementSystem.Core.Interfaces;
+using RecruitmentManagementSystem.Core.Mappings;
 
 namespace RecruitmentManagementSystem.App.Controllers
 {
@@ -25,20 +26,27 @@ namespace RecruitmentManagementSystem.App.Controllers
         private readonly IFileRepository _fileRepository;
         private readonly IChoiceRepository _choiceRepository;
         private readonly IQuestionService _questionService;
+        private readonly IModelFactory _modelFactory;
 
         public QuestionController(IQuestionRepository questionRepository, IFileRepository fileRepository,
-            IChoiceRepository choiceRepository, IQuestionService questionService)
+            IChoiceRepository choiceRepository, IQuestionService questionService, IModelFactory modelFactory)
         {
             _questionRepository = questionRepository;
             _fileRepository = fileRepository;
             _choiceRepository = choiceRepository;
             _questionService = questionService;
+            _modelFactory = modelFactory;
         }
 
         [HttpGet]
         public ActionResult List()
         {
             var model = _questionService.GetPagedList();
+
+            if (Request.IsAjaxRequest())
+            {
+                return new JsonResult(model, JsonRequestBehavior.AllowGet);
+            }
 
             return View(model);
         }
@@ -65,7 +73,7 @@ namespace RecruitmentManagementSystem.App.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(QuestionCreateModel viewModel)
+        public ActionResult Create(QuestionCreateModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -73,18 +81,9 @@ namespace RecruitmentManagementSystem.App.Controllers
                 return new JsonResult(ModelState.Values.SelectMany(v => v.Errors));
             }
 
-            var question = new Question
-            {
-                Text = viewModel.Text,
-                QuestionType = viewModel.QuestionType,
-                Answer = viewModel.Answer,
-                Notes = viewModel.Notes,
-                CategoryId = viewModel.CategoryId,
-                Choices = viewModel.Choices,
-                Files = ManageFiles(Request.Files),
-                CreatedBy = User.Identity.GetUserId(),
-                UpdatedBy = User.Identity.GetUserId()
-            };
+            var question = _modelFactory.MapToDomain<QuestionCreateModel, Question>(model, null);
+            question.Choices = _modelFactory.MapToDomain<ChoiceModel, Choice>(model.Choices);
+            question.Files = ManageFiles(Request.Files);
 
             _questionRepository.Insert(question);
 
@@ -142,7 +141,7 @@ namespace RecruitmentManagementSystem.App.Controllers
             entity.Notes = model.Notes;
             entity.QuestionType = model.QuestionType;
             entity.Files = ManageFiles(Request.Files);
-            entity.Choices = model.Choices;
+            entity.Choices = _modelFactory.MapToDomain<ChoiceModel, Choice>(model.Choices);
 
             _questionRepository.Update(entity);
             _questionRepository.Save();

@@ -4,7 +4,7 @@ using AutoMapper.QueryableExtensions;
 using Microsoft.AspNet.Identity;
 using RecruitmentManagementSystem.Data.Interfaces;
 using JsonResult = RecruitmentManagementSystem.App.Infrastructure.ActionResults.JsonResult;
-using QuestionCategory = RecruitmentManagementSystem.Core.Models.Question.QuestionCategoryDto;
+using QuestionCategory = RecruitmentManagementSystem.Core.Models.Question.QuestionCategoryModel;
 using RecruitmentManagementSystem.Core.Interfaces;
 
 namespace RecruitmentManagementSystem.App.Controllers
