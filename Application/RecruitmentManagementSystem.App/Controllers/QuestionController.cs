@@ -81,13 +81,7 @@ namespace RecruitmentManagementSystem.App.Controllers
                 return new JsonResult(ModelState.Values.SelectMany(v => v.Errors));
             }
 
-            var question = _modelFactory.MapToDomain<QuestionCreateModel, Question>(model, null);
-            question.Choices = _modelFactory.MapToDomain<ChoiceModel, Choice>(model.Choices);
-            question.Files = ManageFiles(Request.Files);
-
-            _questionRepository.Insert(question);
-
-            _questionRepository.Save();
+            _questionService.Insert(model);
 
             return Json(null);
         }
