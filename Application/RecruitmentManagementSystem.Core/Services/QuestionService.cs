@@ -49,17 +49,6 @@ namespace RecruitmentManagementSystem.Core.Services
             _questionRepository.Insert(entity);
 
             _questionRepository.Save();
-
-
-            /*var question = _modelFactory.MapToDomain<QuestionCreateModel, Question>(model, null);
-            question.Choices = _modelFactory.MapToDomain<ChoiceModel, Choice>(model.Choices);
-            question.Files = ManageFiles(Request.Files);
-
-            _questionRepository.Insert(question);
-
-            _questionRepository.Save();
-
-            return Json(null);*/
         }
 
         public void Update(QuestionCreateModel model)
