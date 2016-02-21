@@ -1,9 +1,9 @@
 ﻿using System.Linq;
 using System.Net;
 using System.Web.Mvc;
+using RecruitmentManagementSystem.App.Infrastructure.ActionResults;
 using RecruitmentManagementSystem.Core.Interfaces;
 using RecruitmentManagementSystem.Core.Models.Quiz;
-using JsonResult = RecruitmentManagementSystem.App.Infrastructure.ActionResults.JsonResult;
 
 namespace RecruitmentManagementSystem.App.Controllers
 {
@@ -30,12 +30,12 @@ namespace RecruitmentManagementSystem.App.Controllers
             if (!ModelState.IsValid)
             {
                 Response.StatusCode = (int) HttpStatusCode.BadRequest;
-                return new JsonResult(ModelState.Values.SelectMany(v => v.Errors));
+                return new EnhancedJsonResult(ModelState.Values.SelectMany(v => v.Errors));
             }
 
             _quizService.CreateQuiz(model);
 
-            return new JsonResult(null);
+            return new EnhancedJsonResult(null);
         }
     }
 }

@@ -19,8 +19,8 @@
                 };
 
                 if (vm.form.$valid) {
-                    angular.forEach(model.quizPages, function (p) {
-                        p.quizQuestions = _.map(p.quizQuestions, function (x) {
+                    angular.forEach(model.quizPages, function(p) {
+                        p.questions = _.map(p.questions, function(x) {
                             return {
                                 questionId: x.id,
                                 point: x.point
@@ -35,7 +35,7 @@
 
             vm.addNewPage = function() {
                 vm.pages.push({
-                    quizQuestions: []
+                    questions: []
                 });
             };
 
@@ -45,18 +45,41 @@
                 });
             };
 
-            vm.openQuestionModal = function(page) {
+            vm.openQuestionModal = function(pageIndex) {
+                var questionsInAllPages = [];
+
+                vm.pages.forEach(function(p) {
+                    questionsInAllPages.push.apply(questionsInAllPages, p.questions);
+                });
+
                 var modalInstance = $uibModal.open({
                     animation: true,
                     backdrop: "static",
                     templateUrl: "/Scripts/quiz/templates/question-modal.html",
                     controller: "QuestionModalController",
-                    controllerAs: "modalCtrl"
+                    controllerAs: "modalCtrl",
+                    resolve: {
+                        questionsInAllPages: function() { return questionsInAllPages; }
+                    }
                 });
 
                 modalInstance.result.then(function(questions) {
-                    page.quizQuestions = questions;
+                    var questionsInAllButThisPage = [];
+                    for (var i = 0; i < vm.pages.length; i++) {
+                        if (i === pageIndex) {
+                            continue;
+                        }
+                        questionsInAllButThisPage.push.apply(questionsInAllButThisPage, vm.pages[i].questions);
+                    }
+
+                    vm.pages[pageIndex].questions = _.filter(questions, function(q) {
+                        return !_.find(questionsInAllButThisPage, { id: q.id });
+                    });
                 });
+            };
+
+            vm.discardQuestion = function(page, index) {
+                page.questions.splice(index, 1);
             };
         }
     ]);

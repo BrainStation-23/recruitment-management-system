@@ -2,11 +2,11 @@
 using System.Net;
 using System.Web.Mvc;
 using AutoMapper.QueryableExtensions;
+using RecruitmentManagementSystem.App.Infrastructure.ActionResults;
 using RecruitmentManagementSystem.Core.Interfaces;
 using RecruitmentManagementSystem.Core.Models.Candidate;
 using RecruitmentManagementSystem.Model;
 using RecruitmentManagementSystem.Data.Interfaces;
-using JsonResult = RecruitmentManagementSystem.App.Infrastructure.ActionResults.JsonResult;
 
 namespace RecruitmentManagementSystem.App.Controllers
 {
@@ -43,12 +43,12 @@ namespace RecruitmentManagementSystem.App.Controllers
             if (!ModelState.IsValid)
             {
                 Response.StatusCode = (int) HttpStatusCode.BadRequest;
-                return new JsonResult(ModelState.Values.SelectMany(v => v.Errors));
+                return new EnhancedJsonResult(ModelState.Values.SelectMany(v => v.Errors));
             }
 
             _candidateService.Insert(model);
 
-            return new JsonResult(null);
+            return new EnhancedJsonResult(null);
         }
 
         [HttpGet]
@@ -66,14 +66,14 @@ namespace RecruitmentManagementSystem.App.Controllers
             {
                 Response.StatusCode = (int) HttpStatusCode.NotFound;
                 ModelState.AddModelError("", "Candidate not found.");
-                return new JsonResult(ModelState.Values.SelectMany(v => v.Errors), JsonRequestBehavior.AllowGet);
+                return new EnhancedJsonResult(ModelState.Values.SelectMany(v => v.Errors), JsonRequestBehavior.AllowGet);
             }
 
             model.Avatar = model.Files.SingleOrDefault(x => x.FileType == FileType.Avatar);
             model.Resume = model.Files.SingleOrDefault(x => x.FileType == FileType.Resume);
             model.Files = null;
 
-            return new JsonResult(model, JsonRequestBehavior.AllowGet);
+            return new EnhancedJsonResult(model, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]
@@ -93,13 +93,13 @@ namespace RecruitmentManagementSystem.App.Controllers
             {
                 Response.StatusCode = (int) HttpStatusCode.NotFound;
                 ModelState.AddModelError("", "Candidate not found.");
-                return new JsonResult(ModelState.Values.SelectMany(v => v.Errors));
+                return new EnhancedJsonResult(ModelState.Values.SelectMany(v => v.Errors));
             }
 
             if (!ModelState.IsValid)
             {
                 Response.StatusCode = (int) HttpStatusCode.BadRequest;
-                return new JsonResult(ModelState.Values.SelectMany(v => v.Errors));
+                return new EnhancedJsonResult(ModelState.Values.SelectMany(v => v.Errors));
             }
 
             _candidateService.Update(model);

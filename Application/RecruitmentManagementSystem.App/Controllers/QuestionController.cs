@@ -7,13 +7,13 @@ using System.Web;
 using System.Web.Mvc;
 using AutoMapper.QueryableExtensions;
 using Microsoft.AspNet.Identity;
+using RecruitmentManagementSystem.App.Infrastructure.ActionResults;
 using RecruitmentManagementSystem.App.Infrastructure.Helpers;
 using RecruitmentManagementSystem.Core.Constants;
 using RecruitmentManagementSystem.Core.Models.Question;
 using RecruitmentManagementSystem.Data.Interfaces;
 using RecruitmentManagementSystem.Model;
 using File = RecruitmentManagementSystem.Model.File;
-using JsonResult = RecruitmentManagementSystem.App.Infrastructure.ActionResults.JsonResult;
 using RecruitmentManagementSystem.Core.Interfaces;
 using RecruitmentManagementSystem.Core.Mappings;
 
@@ -45,7 +45,7 @@ namespace RecruitmentManagementSystem.App.Controllers
 
             if (Request.IsAjaxRequest())
             {
-                return new JsonResult(model, JsonRequestBehavior.AllowGet);
+                return new EnhancedJsonResult(model, JsonRequestBehavior.AllowGet);
             }
 
             return View(model);
@@ -59,7 +59,7 @@ namespace RecruitmentManagementSystem.App.Controllers
 
             if (Request.IsAjaxRequest())
             {
-                return new JsonResult(viewModel, JsonRequestBehavior.AllowGet);
+                return new EnhancedJsonResult(viewModel, JsonRequestBehavior.AllowGet);
             }
 
             return View(viewModel);
@@ -78,7 +78,7 @@ namespace RecruitmentManagementSystem.App.Controllers
             if (!ModelState.IsValid)
             {
                 Response.StatusCode = (int) HttpStatusCode.BadRequest;
-                return new JsonResult(ModelState.Values.SelectMany(v => v.Errors));
+                return new EnhancedJsonResult(ModelState.Values.SelectMany(v => v.Errors));
             }
 
             _questionService.Insert(model);
@@ -103,7 +103,7 @@ namespace RecruitmentManagementSystem.App.Controllers
             if (!ModelState.IsValid)
             {
                 Response.StatusCode = (int) HttpStatusCode.BadRequest;
-                return new JsonResult(ModelState.Values.SelectMany(v => v.Errors));
+                return new EnhancedJsonResult(ModelState.Values.SelectMany(v => v.Errors));
             }
 
             if (model.DeletableFile != null)

@@ -19,11 +19,14 @@
                         <div ng-bind="question.text"></div>
                     </td>
                     <td>
-                        <div ng-bind="question.category.name"></div>
+                        <div ng-bind="question.category"></div>
                     </td>
                     <td>
-                        <button type="button" class="btn btn-danger" ng-click="ctrl.discardQuestion($index)">
-                            <i class="fa fa-trash fa-lg"></i>
+                        <button type="button" class="btn btn-info btn-sm" ng-click="ctrl.viewQuestion(page, $index)">
+                            View
+                        </button>
+                        <button type="button" class="btn btn-danger btn-sm" ng-click="ctrl.discardQuestion(page, $index)">
+                            Remove
                         </button>
                     </td>
                 </tr>
@@ -32,6 +35,6 @@
     </div>
 
     <div class="panel-footer">
-        <button type="button" class="btn btn-primary" ng-click="ctrl.openQuestionModal(page)">Add questions</button>
+        <button type="button" class="btn btn-primary" ng-click="ctrl.openQuestionModal($index)">Add questions</button>
     </div>
 </div>

@@ -1,8 +1,8 @@
 ﻿using System.Web.Mvc;
 using AutoMapper.QueryableExtensions;
+using RecruitmentManagementSystem.App.Infrastructure.ActionResults;
 using RecruitmentManagementSystem.Core.Models.Institution;
 using RecruitmentManagementSystem.Data.Interfaces;
-using JsonResult = RecruitmentManagementSystem.App.Infrastructure.ActionResults.JsonResult;
 
 namespace RecruitmentManagementSystem.App.Controllers
 {
@@ -21,7 +21,7 @@ namespace RecruitmentManagementSystem.App.Controllers
         {
             var model = _institutionRepository.FindAll().ProjectTo<InstitutionModel>();
 
-            return new JsonResult(model, JsonRequestBehavior.AllowGet);
+            return new EnhancedJsonResult(model, JsonRequestBehavior.AllowGet);
         }
     }
 }

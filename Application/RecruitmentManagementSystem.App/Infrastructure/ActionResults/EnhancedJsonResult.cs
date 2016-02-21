@@ -6,9 +6,9 @@ using Newtonsoft.Json.Serialization;
 
 namespace RecruitmentManagementSystem.App.Infrastructure.ActionResults
 {
-    public class JsonResult : ActionResult
+    public class EnhancedJsonResult : ActionResult
     {
-        public JsonResult(object data, JsonRequestBehavior jsonRequestBehavior = JsonRequestBehavior.DenyGet)
+        public EnhancedJsonResult(object data, JsonRequestBehavior jsonRequestBehavior = JsonRequestBehavior.DenyGet)
         {
             Data = data;
             JsonRequestBehavior = jsonRequestBehavior;

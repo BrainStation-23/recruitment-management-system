@@ -1,9 +1,8 @@
 ﻿using System.Linq;
 using System.Web.Mvc;
 using AutoMapper.QueryableExtensions;
-using Microsoft.AspNet.Identity;
+using RecruitmentManagementSystem.App.Infrastructure.ActionResults;
 using RecruitmentManagementSystem.Data.Interfaces;
-using JsonResult = RecruitmentManagementSystem.App.Infrastructure.ActionResults.JsonResult;
 using QuestionCategory = RecruitmentManagementSystem.Core.Models.Question.QuestionCategoryModel;
 using RecruitmentManagementSystem.Core.Interfaces;
 
@@ -30,7 +29,7 @@ namespace RecruitmentManagementSystem.App.Controllers
 
             if (Request.IsAjaxRequest())
             {
-                return new JsonResult(model, JsonRequestBehavior.AllowGet);
+                return new EnhancedJsonResult(model, JsonRequestBehavior.AllowGet);
             }
 
             return View(model);

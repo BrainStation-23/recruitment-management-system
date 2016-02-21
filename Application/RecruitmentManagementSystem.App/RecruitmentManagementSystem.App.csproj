@@ -208,14 +208,13 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Infrastructure\ActionResults\JsonResult.cs" />
+    <Compile Include="Infrastructure\ActionResults\EnhancedJsonResult.cs" />
     <Compile Include="Infrastructure\Helpers\FileHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\Images\default-avatar.jpg" />
-    <Content Include="Content\Themes\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="gulpfile.js" />
     <Content Include="Scripts\accounts\accounts.module.js" />
@@ -378,15 +377,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Candidate\_Skill.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Content\Themes\Superhero\bootstrap.css" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Content\Themes\fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="Content\Themes\fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="Content\Themes\fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="Content\Themes\fonts\glyphicons-halflings-regular.woff2" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="package.json" />

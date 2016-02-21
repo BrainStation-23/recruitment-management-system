@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+using RecruitmentManagementSystem.App.Infrastructure.ActionResults;
 using RecruitmentManagementSystem.App.Infrastructure.Helpers;
 using RecruitmentManagementSystem.Core.Constants;
 using RecruitmentManagementSystem.Core.Models.Account;
@@ -15,7 +16,6 @@ using RecruitmentManagementSystem.Data.Interfaces;
 using RecruitmentManagementSystem.Data.Repositories;
 using RecruitmentManagementSystem.Model;
 using File = RecruitmentManagementSystem.Model.File;
-using JsonResult = RecruitmentManagementSystem.App.Infrastructure.ActionResults.JsonResult;
 
 namespace RecruitmentManagementSystem.App.Controllers
 {
@@ -276,7 +276,7 @@ namespace RecruitmentManagementSystem.App.Controllers
                 Avatar = _fileRepository.Find(x => x.ApplicationUserId == user.Id)
             };
 
-            return new JsonResult(viewModel, JsonRequestBehavior.AllowGet);
+            return new EnhancedJsonResult(viewModel, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
@@ -285,7 +285,7 @@ namespace RecruitmentManagementSystem.App.Controllers
             if (!ModelState.IsValid)
             {
                 Response.StatusCode = (int) HttpStatusCode.BadRequest;
-                return new JsonResult(ModelState.Values.SelectMany(v => v.Errors));
+                return new EnhancedJsonResult(ModelState.Values.SelectMany(v => v.Errors));
             }
 
             var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
@@ -296,7 +296,7 @@ namespace RecruitmentManagementSystem.App.Controllers
 
             await UserManager.UpdateAsync(user);
 
-            return new JsonResult(viewModel);
+            return new EnhancedJsonResult(viewModel);
         }
 
         [HttpPost]
@@ -314,7 +314,7 @@ namespace RecruitmentManagementSystem.App.Controllers
             UserManager.AddToRole(user.Id, roleViewModel.Name);
             await UserManager.UpdateAsync(user);
 
-            return new JsonResult(user);
+            return new EnhancedJsonResult(user);
         }
 
         [HttpPost]
@@ -327,7 +327,7 @@ namespace RecruitmentManagementSystem.App.Controllers
                 ModelState.AddModelError("", "Invalid file for avatar");
 
                 Response.StatusCode = (int) HttpStatusCode.BadRequest;
-                return new JsonResult(ModelState.Values.SelectMany(v => v.Errors));
+                return new EnhancedJsonResult(ModelState.Values.SelectMany(v => v.Errors));
             }
 
             var fileBase = Request.Files[0];
@@ -370,7 +370,7 @@ namespace RecruitmentManagementSystem.App.Controllers
             _fileRepository.Insert(file);
             _fileRepository.Save();
 
-            return new JsonResult(file);
+            return new EnhancedJsonResult(file);
         }
 
         [HttpPost]
