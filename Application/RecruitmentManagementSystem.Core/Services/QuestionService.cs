@@ -53,7 +53,65 @@ namespace RecruitmentManagementSystem.Core.Services
 
         public void Update(QuestionCreateModel model)
         {
-            throw new NotImplementedException();
+            var entity = _questionRepository.FindIncluding(q => q.Id == model.Id, q => q.Choices, q => q.Files);
+
+            if (entity == null) return;
+
+            if (model.Choices != null)
+            {
+                foreach (var choice in model.Choices.Where(c => c.QuestionId == default(int)))
+                {
+                    choice.QuestionId = model.Id;
+                }
+            }
+
+            var updatedEntity = _modelFactory.MapToDomain(model, entity);
+
+            updatedEntity.Choices = _modelFactory.MapToDomain<ChoiceModel, Choice>(model.Choices);
+            updatedEntity.Files = ManageFiles(model);
+
+            _questionRepository.Update(updatedEntity);
+
+            foreach (var choice in entity.Choices.Where(y => model.Choices.FirstOrDefault(x => x.Id == y.Id) == null))
+            {
+                _choiceRepository.Delete(choice.Id);
+            }
+
+            _questionRepository.Save();
+            _choiceRepository.Save();
+
+            /*            if (model.DeletableFile != null)
+                        {
+                            foreach (var file in model.DeletableFile)
+                            {
+                                _fileRepository.Delete(file.Id);
+                                FileHelper.DeleteFile(file);
+                            }
+                            _fileRepository.Save();
+                        }
+
+                        var choices = _choiceRepository.FindAll(x => x.QuestionId == model.Id).ToList();
+
+                        if (choices.Count > 0)
+                        {
+                            foreach (var choice in choices)
+                            {
+                                _choiceRepository.Delete(choice);
+                            }
+                            _choiceRepository.Save();
+                        }
+
+                        entity.Text = model.Text;
+                        entity.Answer = model.Answer;
+                        entity.CategoryId = model.CategoryId;
+                        entity.Notes = model.Notes;
+                        entity.QuestionType = model.QuestionType;
+                        entity.Files = ManageFiles(Request.Files);
+                        entity.Choices = _modelFactory.MapToDomain<ChoiceModel, Choice>(model.Choices);
+
+                        _questionRepository.Update(entity);
+                        _questionRepository.Save();*/
+
         }
 
         #region Private methodes
@@ -75,7 +133,7 @@ namespace RecruitmentManagementSystem.Core.Services
 
                 if (uploadConfig.FileBase == null) continue;
 
-                var existingRecords = _fileRepository.FindAll(x => x.Candidate.Id == model.Id).Select(x => new
+                var existingRecords = _fileRepository.FindAll(x => x.Question.Id == model.Id).Select(x => new
                 {
                     x.Id,
                     x.RelativePath

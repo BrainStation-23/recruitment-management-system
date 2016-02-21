@@ -100,45 +100,22 @@ namespace RecruitmentManagementSystem.App.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(QuestionCreateModel model)
         {
+            var entity = _questionRepository.Find(model.Id);
+
+            if (entity == null)
+            {
+                Response.StatusCode = (int) HttpStatusCode.NotFound;
+                ModelState.AddModelError("", "Question not found.");
+                return new EnhancedJsonResult(ModelState.Values.SelectMany(v => v.Errors));
+            }
+
             if (!ModelState.IsValid)
             {
                 Response.StatusCode = (int) HttpStatusCode.BadRequest;
                 return new EnhancedJsonResult(ModelState.Values.SelectMany(v => v.Errors));
             }
 
-            if (model.DeletableFile != null)
-            {
-                foreach (var file in model.DeletableFile)
-                {
-                    _fileRepository.Delete(file.Id);
-                    FileHelper.DeleteFile(file);
-                }
-                _fileRepository.Save();
-            }
-
-            var choices = _choiceRepository.FindAll(x => x.QuestionId == model.Id).ToList();
-
-            if (choices.Count > 0)
-            {
-                foreach (var choice in choices)
-                {
-                    _choiceRepository.Delete(choice);
-                }
-                _choiceRepository.Save();
-            }
-
-            var entity = _questionRepository.Find(model.Id);
-
-            entity.Text = model.Text;
-            entity.Answer = model.Answer;
-            entity.CategoryId = model.CategoryId;
-            entity.Notes = model.Notes;
-            entity.QuestionType = model.QuestionType;
-            entity.Files = ManageFiles(Request.Files);
-            entity.Choices = _modelFactory.MapToDomain<ChoiceModel, Choice>(model.Choices);
-
-            _questionRepository.Update(entity);
-            _questionRepository.Save();
+            _questionService.Update(model);
 
             return Json(null);
         }
