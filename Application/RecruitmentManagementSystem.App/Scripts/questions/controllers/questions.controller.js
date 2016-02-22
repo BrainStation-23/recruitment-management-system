@@ -145,6 +145,10 @@
                 vm.allDocuments.splice(index, 1);
             };
 
+            vm.getOriginalFileName = function(dbFileName) {
+                return fileService.getOriginalFileName(dbFileName);
+            };
+
             //Watchers
             //$scope.$watch(function () {
             //    return vm.questionType;

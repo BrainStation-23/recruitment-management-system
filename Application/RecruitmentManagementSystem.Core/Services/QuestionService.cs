@@ -139,13 +139,13 @@ namespace RecruitmentManagementSystem.Core.Services
                     x.RelativePath
                 }).ToList();
 
-                foreach (var record in existingRecords)
+                /*foreach (var record in existingRecords)
                 {
                     FileHelper.Delete(record.RelativePath);
                     _fileRepository.Delete(record.Id);
                 }
 
-                _fileRepository.Save();
+                _fileRepository.Save();*/
 
                 var file = new File
                 {
