@@ -9,9 +9,11 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+using RecruitmentManagementSystem.App.Infrastructure.ActionResults;
 using RecruitmentManagementSystem.App.Infrastructure.Helpers;
 using RecruitmentManagementSystem.Core.Constants;
 using RecruitmentManagementSystem.Core.Models.Account;
+using RecruitmentManagementSystem.Core.Models.User;
 using RecruitmentManagementSystem.Data.DbContext;
 using RecruitmentManagementSystem.Data.Interfaces;
 using RecruitmentManagementSystem.Data.Repositories;
@@ -103,6 +105,98 @@ namespace RecruitmentManagementSystem.App.Controllers
             }
         }
 
+        [HttpGet]
+        public ActionResult Register()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Register(UserCreateModel model)
+        {
+            if (!ModelState.IsValid) return View(model);
+
+            var user = new ApplicationUser
+            {
+                UserName = model.PersonalInformation.Email,
+                Email = model.PersonalInformation.Email,
+                FirstName = model.PersonalInformation.FirstName,
+                LastName = model.PersonalInformation.LastName,
+                PhoneNumber = model.PersonalInformation.PhoneNumber
+            };
+
+            var result = await UserManager.CreateAsync(user, model.SecurityModel.Password);
+            if (result.Succeeded)
+            {
+                var role = await _roleManager.FindByIdAsync(model.SecurityModel.RoleId);
+
+                await UserManager.AddToRoleAsync(user.Id, role.Name);
+
+                if (model.PersonalInformation.Avatar != null && model.PersonalInformation.Avatar.ContentLength > 0)
+                {
+                    var fileName = string.Format("{0}{1}", Guid.NewGuid(), Path.GetFileName(model.PersonalInformation.Avatar.FileName));
+
+                    FileHelper.SaveFile(new UploadConfig
+                    {
+                        FileBase = model.PersonalInformation.Avatar,
+                        FileName = fileName,
+                        FilePath = FilePath.AvatarRelativePath
+                    });
+
+                    var file = new File
+                    {
+                        Name = fileName,
+                        MimeType = model.PersonalInformation.Avatar.ContentType,
+                        Size = model.PersonalInformation.Avatar.ContentLength,
+                        RelativePath = FilePath.AvatarRelativePath + fileName,
+                        FileType = FileType.Avatar,
+                        ApplicationUserId = user.Id,
+                        CreatedBy = User.Identity.GetUserId(),
+                        UpdatedBy = User.Identity.GetUserId()
+                    };
+
+                    _fileRepository.Insert(file);
+                    _fileRepository.Save();
+                }
+
+                // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
+                // Send an email with this link
+                // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                // if role = canidate view ()
+                return RedirectToAction("Details", "Account", new {userId = user.Id});
+            }
+            AddErrors(result);
+
+            return View(model);
+        }
+
+        public ActionResult Details(string userId)
+        {
+            ViewData["UserId"] = userId;
+
+            if (!Request.IsAjaxRequest()) return View();
+
+            var user = UserManager.FindById(userId);
+
+            var userViewModel = new User
+            {
+                PersonalInformation = new PersonalInformation
+                {
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    Email = user.Email,
+                    PhoneNumber = user.PhoneNumber
+                }
+            };
+
+            return new EnhancedJsonResult(userViewModel, JsonRequestBehavior.AllowGet);
+        }
+
+        #region Reset Password
+
         [AllowAnonymous]
         public async Task<ActionResult> VerifyCode(string provider, string returnUrl, bool rememberMe)
         {
@@ -142,76 +236,6 @@ namespace RecruitmentManagementSystem.App.Controllers
                     ModelState.AddModelError("", "Invalid code.");
                     return View(model);
             }
-        }
-
-        [HttpGet]
-        public ActionResult Register()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(Register model)
-        {
-            if (!ModelState.IsValid) return View(model);
-
-            var user = new ApplicationUser
-            {
-                UserName = model.Email,
-                Email = model.Email,
-                FirstName = model.FirstName,
-                LastName = model.LastName,
-                PhoneNumber = model.PhoneNumber
-            };
-
-            var result = await UserManager.CreateAsync(user, model.Password);
-            if (result.Succeeded)
-            {
-                var role = await _roleManager.FindByIdAsync(model.RoleId);
-
-                await UserManager.AddToRoleAsync(user.Id, role.Name);
-
-                if (model.Avatar != null && model.Avatar.ContentLength > 0)
-                {
-                    //var fileName = $"{Guid.NewGuid()}.{Path.GetFileName(model.Avatar.FileName)}";
-                    var fileName = String.Format("{0}{1}", Guid.NewGuid(), Path.GetFileName(model.Avatar.FileName));
-
-                    FileHelper.SaveFile(new UploadConfig
-                    {
-                        FileBase = model.Avatar,
-                        FileName = fileName,
-                        FilePath = FilePath.AvatarRelativePath
-                    });
-
-                    var file = new File
-                    {
-                        Name = fileName,
-                        MimeType = model.Avatar.ContentType,
-                        Size = model.Avatar.ContentLength,
-                        RelativePath = FilePath.AvatarRelativePath + fileName,
-                        FileType = FileType.Avatar,
-                        ApplicationUserId = user.Id,
-                        CreatedBy = User.Identity.GetUserId(),
-                        UpdatedBy = User.Identity.GetUserId()
-                    };
-
-                    _fileRepository.Insert(file);
-                    _fileRepository.Save();
-                }
-
-                // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
-                // Send an email with this link
-                // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
-                // if role = canidate view ()
-                return RedirectToAction("List", "Account");
-            }
-            AddErrors(result);
-
-            // If we got this far, something failed, redisplay form
-            return View(model);
         }
 
         [HttpGet]
@@ -335,6 +359,8 @@ namespace RecruitmentManagementSystem.App.Controllers
             return RedirectToAction("VerifyCode",
                 new {Provider = model.SelectedProvider, model.ReturnUrl, model.RememberMe});
         }
+
+        #endregion
 
         [HttpPost]
         [ValidateAntiForgeryToken]

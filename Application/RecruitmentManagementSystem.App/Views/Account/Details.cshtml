@@ -1,51 +1,20 @@
-﻿@using Microsoft.AspNet.Identity
-@model RecruitmentManagementSystem.Core.Models.Account.ApplicationUserModel
-
-@{
-    ViewBag.Title = "Details";
+﻿@{
+    ViewBag.Title = "User Details";
 }
 
-<h2>Details</h2>
+<h2>User Details</h2>
+<hr/>
 
-<div>
-    <hr/>
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.FirstName)
-        </dt>
+<div ng-controller="UsersController as userCtrl" ng-init="userCtrl.find('@ViewData["UserId"]')">
+    <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active"><a data-target="#personal" aria-controls="personal" role="tab" data-toggle="tab">Personal Information</a></li>
+        <li role="presentation"><a data-target="#security" aria-controls="security" role="tab" data-toggle="tab">Security</a></li>
+        <li role="presentation"><a data-target="#educations" aria-controls="educations" role="tab" data-toggle="tab">Educations</a></li>
+    </ul>
 
-        <dd>
-            @Html.DisplayFor(model => model.FirstName)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.LastName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.LastName)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.PhoneNumber)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.PhoneNumber)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Email)
-        </dd>
-
-    </dl>
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane fade in active" id="personal"></div>
+        <div role="tabpanel" class="tab-pane fade" id="security">...</div>
+        <div role="tabpanel" class="tab-pane fade" id="educations">...</div>
+    </div>
 </div>
-
-<p>
-    @Html.ActionLink("Edit", "Edit", new {id = User.Identity.GetUserId()})
-    @Html.ActionLink("Back to List", "Index")
-</p>

@@ -12,10 +12,10 @@
                 });
             };
 
-            var getOriginalFileName = function (dbFileName) {
+            var getOriginalFileName = function(dbFileName) {
                 var newGuidLength = 36;
                 return dbFileName.substring(newGuidLength);
-            }
+            };
 
             return {
                 postMultipartForm: postMultipartForm,

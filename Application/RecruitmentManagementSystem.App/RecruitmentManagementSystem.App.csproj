@@ -240,6 +240,8 @@
     <Content Include="Scripts\quiz\controllers\quiz.question.controller.js" />
     <Content Include="Scripts\quiz\quiz.module.js" />
     <Content Include="Scripts\quiz\templates\question-modal.html" />
+    <Content Include="Scripts\users\controllers\users.controller.js" />
+    <Content Include="Scripts\users\users.module.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Scripts\candidates\templates\experience-modal.html" />
     <Content Include="Web.config">

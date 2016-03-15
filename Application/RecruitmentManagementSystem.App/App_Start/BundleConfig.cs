@@ -40,7 +40,10 @@ namespace RecruitmentManagementSystem.App
                 "~/Scripts/accounts/controllers/accounts.profile.controller.js",
                 "~/Scripts/quiz/quiz.module.js",
                 "~/Scripts/quiz/controllers/quiz.controller.js",
-                "~/Scripts/quiz/controllers/quiz.question.controller.js"));
+                "~/Scripts/quiz/controllers/quiz.question.controller.js",
+
+                "~/Scripts/users/users.module.js",
+                "~/Scripts/users/controllers/users.controller.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                 "~/bower_components/bootstrap/dist/css/bootstrap.css",

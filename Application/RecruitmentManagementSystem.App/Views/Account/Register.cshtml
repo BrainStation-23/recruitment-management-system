@@ -1,4 +1,4 @@
-﻿@model RecruitmentManagementSystem.Core.Models.Account.Register
+﻿@model RecruitmentManagementSystem.Core.Models.User.UserCreateModel
 @{
     ViewBag.Title = "Register new acccount";
 }
@@ -7,7 +7,7 @@
 <hr />
 
 <div class="row">
-    <div class="col-sm-5">
+    <div class="col-sm-6">
 
         @using (Html.BeginForm("Register", "Account", FormMethod.Post, new {@class = "form-horizontal", role = "form", enctype = "multipart/form-data"}))
         {
@@ -16,65 +16,65 @@
             @Html.ValidationSummary(true, "", new {@class = "text-danger"})
 
             <div class="form-group">
-                @Html.LabelFor(m => m.FirstName, new {@class = "col-sm-4 control-label required"})
+                @Html.LabelFor(m => m.PersonalInformation.FirstName, new {@class = "col-sm-4 control-label required"})
                 <div class="col-sm-8">
-                    @Html.EditorFor(m => m.FirstName)
-                    @Html.ValidationMessageFor(m => m.FirstName, "", new {@class = "text-danger"})
+                    @Html.EditorFor(m => m.PersonalInformation.FirstName)
+                    @Html.ValidationMessageFor(m => m.PersonalInformation.FirstName, "", new {@class = "text-danger"})
                 </div>
             </div>
 
             <div class="form-group">
-                @Html.LabelFor(m => m.LastName, new {@class = "col-sm-4 control-label required"})
+                @Html.LabelFor(m => m.PersonalInformation.LastName, new {@class = "col-sm-4 control-label required"})
                 <div class="col-sm-8">
-                    @Html.EditorFor(m => m.LastName)
-                    @Html.ValidationMessageFor(m => m.LastName, "", new {@class = "text-danger"})
+                    @Html.EditorFor(m => m.PersonalInformation.LastName)
+                    @Html.ValidationMessageFor(m => m.PersonalInformation.LastName, "", new {@class = "text-danger"})
                 </div>
             </div>
 
             <div class="form-group">
-                @Html.LabelFor(m => m.Email, new {@class = "col-sm-4 control-label required"})
+                @Html.LabelFor(m => m.PersonalInformation.Email, new {@class = "col-sm-4 control-label required"})
                 <div class="col-sm-8">
-                    @Html.EditorFor(m => m.Email)
-                    @Html.ValidationMessageFor(m => m.Email, "", new {@class = "text-danger"})
+                    @Html.EditorFor(m => m.PersonalInformation.Email)
+                    @Html.ValidationMessageFor(m => m.PersonalInformation.Email, "", new {@class = "text-danger"})
                 </div>
             </div>
 
             <div class="form-group">
-                @Html.LabelFor(m => m.PhoneNumber, new {@class = "col-sm-4 control-label"})
+                @Html.LabelFor(m => m.PersonalInformation.PhoneNumber, new {@class = "col-sm-4 control-label"})
                 <div class="col-sm-8">
-                    @Html.EditorFor(m => m.PhoneNumber)
-                    @Html.ValidationMessageFor(m => m.PhoneNumber, "", new {@class = "text-danger"})
+                    @Html.EditorFor(m => m.PersonalInformation.PhoneNumber)
+                    @Html.ValidationMessageFor(m => m.PersonalInformation.PhoneNumber, "", new {@class = "text-danger"})
                 </div>
             </div>
 
             <div class="form-group">
-                @Html.LabelFor(m => m.Password, new {@class = "col-sm-4 control-label required"})
+                @Html.LabelFor(m => m.SecurityModel.Password, new {@class = "col-sm-4 control-label required"})
                 <div class="col-sm-8">
-                    @Html.EditorFor(m => m.Password)
-                    @Html.ValidationMessageFor(m => m.Password, "", new {@class = "text-danger"})
+                    @Html.EditorFor(m => m.SecurityModel.Password)
+                    @Html.ValidationMessageFor(m => m.SecurityModel.Password, "", new {@class = "text-danger"})
                 </div>
             </div>
 
             <div class="form-group">
-                @Html.LabelFor(m => m.ConfirmPassword, new {@class = "col-sm-4 control-label required"})
+                @Html.LabelFor(m => m.SecurityModel.ConfirmPassword, new {@class = "col-sm-4 control-label required"})
                 <div class="col-sm-8">
-                    @Html.EditorFor(m => m.ConfirmPassword)
-                    @Html.ValidationMessageFor(m => m.ConfirmPassword, "", new {@class = "text-danger"})
+                    @Html.EditorFor(m => m.SecurityModel.ConfirmPassword)
+                    @Html.ValidationMessageFor(m => m.SecurityModel.ConfirmPassword, "", new {@class = "text-danger"})
                 </div>
             </div>
 
             <div class="form-group">
-                @Html.LabelFor(m => m.RoleId, new {@class = "col-sm-4 control-label required"})
+                @Html.LabelFor(m => m.SecurityModel.RoleId, new {@class = "col-sm-4 control-label required"})
                 <div class="col-sm-8">
-                    @Html.EditorFor(m => m.RoleId)
-                    @Html.ValidationMessageFor(m => m.RoleId, "", new { @class = "text-danger" })
+                    @Html.EditorFor(m => m.SecurityModel.RoleId)
+                    @Html.ValidationMessageFor(m => m.SecurityModel.RoleId, "", new { @class = "text-danger" })
                 </div>
             </div>
 
             <div class="form-group">
-                @Html.LabelFor(model => model.Avatar, new {@class = "control-label col-sm-4"})
+                @Html.LabelFor(model => model.PersonalInformation.Avatar, new {@class = "control-label col-sm-4"})
                 <div class="col-sm-8">
-                    @Html.EditorFor(model => model.Avatar)
+                    @Html.EditorFor(model => model.PersonalInformation.Avatar)
                 </div>
             </div>
 

@@ -90,6 +90,8 @@
     <Compile Include="Models\Candidate\ExperienceModel.cs" />
     <Compile Include="Models\Candidate\ProjectModel.cs" />
     <Compile Include="Models\Candidate\SkillModel.cs" />
+    <Compile Include="Models\User\SecurityModel.cs" />
+    <Compile Include="Models\User\PersonalInformation.cs" />
     <Compile Include="Models\Course\CourseModel.cs" />
     <Compile Include="Models\Institution\InstitutionModel.cs" />
     <Compile Include="Models\Question\AnswerModel.cs" />
@@ -105,6 +107,8 @@
     <Compile Include="Models\Quiz\QuizQuestionModel.cs" />
     <Compile Include="Models\Shared\BaseModel.cs" />
     <Compile Include="Models\Shared\FileModel.cs" />
+    <Compile Include="Models\User\User.cs" />
+    <Compile Include="Models\User\UserCreateModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\CandidateService.cs" />
     <Compile Include="Services\QuestionCategoryService.cs" />
