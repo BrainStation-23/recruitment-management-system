@@ -76,7 +76,7 @@ namespace RecruitmentManagementSystem.Core.Mappings
                 .ForMember(s => s.Institution, t => t.Ignore())
                 .ForMember(s => s.Candidate, t => t.Ignore());
 
-            Mapper.CreateMap<ChoiceModel, Choice>();
+            Mapper.CreateMap<AnswerModel, Answer>();
 
             Mapper.CreateMap<QuestionCreateModel, Question>();
             Mapper.CreateMap<QuestionCategoryModel, QuestionCategory>();

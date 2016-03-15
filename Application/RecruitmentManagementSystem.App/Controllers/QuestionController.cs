@@ -24,16 +24,16 @@ namespace RecruitmentManagementSystem.App.Controllers
     {
         private readonly IQuestionRepository _questionRepository;
         private readonly IFileRepository _fileRepository;
-        private readonly IChoiceRepository _choiceRepository;
+        private readonly IAnswerRepository _answerRepository;
         private readonly IQuestionService _questionService;
         private readonly IModelFactory _modelFactory;
 
         public QuestionController(IQuestionRepository questionRepository, IFileRepository fileRepository,
-            IChoiceRepository choiceRepository, IQuestionService questionService, IModelFactory modelFactory)
+            IAnswerRepository answerRepository, IQuestionService questionService, IModelFactory modelFactory)
         {
             _questionRepository = questionRepository;
             _fileRepository = fileRepository;
-            _choiceRepository = choiceRepository;
+            _answerRepository = answerRepository;
             _questionService = questionService;
             _modelFactory = modelFactory;
         }

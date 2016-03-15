@@ -10,7 +10,7 @@ namespace RecruitmentManagementSystem.Core.Models.Question
         public QuestionBase()
         {
             QuestionType = new QuestionType();
-            Choices = new List<Choice>();
+            Answers = new List<Answer>();
             Files = new List<File>();
         }
 
@@ -23,8 +23,8 @@ namespace RecruitmentManagementSystem.Core.Models.Question
         [Display(Name = "Question Type")]
         public QuestionType QuestionType { get; set; }
 
-        [Display(Name = "Choices")]
-        public ICollection<Choice> Choices { get; set; }
+        [Display(Name = "Answers")]
+        public ICollection<Answer> Answers { get; set; }
 
         public ICollection<File> Files { get; set; }
 

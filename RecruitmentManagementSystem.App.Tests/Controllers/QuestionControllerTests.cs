@@ -9,7 +9,7 @@ namespace RecruitmentManagementSystem.App.Tests.Controllers
     {
         private readonly IQuestionRepository _questionRepository;
         private readonly IFileRepository _fileRepository;
-        private readonly IChoiceRepository _choiceRepository;
+        private readonly IAnswerRepository _answerRepository;
 
         [Fact]
         public void List()

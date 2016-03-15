@@ -21,14 +21,14 @@ namespace RecruitmentManagementSystem.Core.Services
         private readonly IModelFactory _modelFactory;
         private readonly IQuestionRepository _questionRepository;
         private readonly IFileRepository _fileRepository;
-        private readonly IChoiceRepository _choiceRepository;
+        private readonly IAnswerRepository _answerRepository;
 
-        public QuestionService(IModelFactory modelFactory, IQuestionRepository questionRepository, IFileRepository fileRepository, IChoiceRepository choiceRepository)
+        public QuestionService(IModelFactory modelFactory, IQuestionRepository questionRepository, IFileRepository fileRepository, IAnswerRepository answerRepository)
         {
             _modelFactory = modelFactory;
             _questionRepository = questionRepository;
             _fileRepository = fileRepository;
-            _choiceRepository = choiceRepository;
+            _answerRepository = answerRepository;
         }
 
         public IEnumerable<QuestionModel> GetPagedList()
@@ -42,7 +42,7 @@ namespace RecruitmentManagementSystem.Core.Services
         {
             var entity = _modelFactory.MapToDomain<QuestionCreateModel, Question>(model, null);
 
-            entity.Choices = _modelFactory.MapToDomain<ChoiceModel, Choice>(model.Choices);
+            entity.Answers = _modelFactory.MapToDomain<AnswerModel, Answer>(model.Answers);
 
             entity.Files = ManageFiles(model);
 
@@ -53,13 +53,13 @@ namespace RecruitmentManagementSystem.Core.Services
 
         public void Update(QuestionCreateModel model)
         {
-            var entity = _questionRepository.FindIncluding(q => q.Id == model.Id, q => q.Choices, q => q.Files);
+            var entity = _questionRepository.FindIncluding(q => q.Id == model.Id, q => q.Answers, q => q.Files);
 
             if (entity == null) return;
 
-            if (model.Choices != null)
+            if (model.Answers != null)
             {
-                foreach (var choice in model.Choices.Where(c => c.QuestionId == default(int)))
+                foreach (var choice in model.Answers.Where(c => c.QuestionId == default(int)))
                 {
                     choice.QuestionId = model.Id;
                 }
@@ -67,18 +67,18 @@ namespace RecruitmentManagementSystem.Core.Services
 
             var updatedEntity = _modelFactory.MapToDomain(model, entity);
 
-            updatedEntity.Choices = _modelFactory.MapToDomain<ChoiceModel, Choice>(model.Choices);
+            updatedEntity.Answers = _modelFactory.MapToDomain<AnswerModel, Answer>(model.Answers);
             updatedEntity.Files = ManageFiles(model);
 
             _questionRepository.Update(updatedEntity);
 
-            foreach (var choice in entity.Choices.Where(y => model.Choices.FirstOrDefault(x => x.Id == y.Id) == null))
+            foreach (var choice in entity.Answers.Where(y => model.Answers.FirstOrDefault(x => x.Id == y.Id) == null))
             {
-                _choiceRepository.Delete(choice.Id);
+                _answerRepository.Delete(choice.Id);
             }
 
             _questionRepository.Save();
-            _choiceRepository.Save();
+            _answerRepository.Save();
 
             /*            if (model.DeletableFile != null)
                         {

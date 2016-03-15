@@ -3,7 +3,7 @@ using RecruitmentManagementSystem.Model;
 
 namespace RecruitmentManagementSystem.Data.Repositories
 {
-    public class ChoiceRepository : BaseRepository<Choice>, IChoiceRepository
+    public class AnswerRepository : BaseRepository<Answer>, IAnswerRepository
     {
     }
 }

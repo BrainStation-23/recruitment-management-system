@@ -5,15 +5,19 @@ using RecruitmentManagementSystem.Model;
 
 namespace RecruitmentManagementSystem.Core.Models.Question
 {
-    public class ChoiceModel : BaseModel, IMapFrom<Choice>
+    public class AnswerModel : BaseModel, IMapFrom<Answer>
     {
-        [Required]
-        [StringLength(200, ErrorMessage = "The {0} must be at most {1} characters long.")]
-        public string Text { get; set; }
+        public AnswerModel()
+        {
+            
+        }
 
         public int QuestionId { get; set; }
 
-        public bool IsValid { get; set; }
+        public bool IsCorrect { get; set; }
+
+        [StringLength(200, ErrorMessage = "The {0} must be at most {1} characters long.")]
+        public string AnswerText { get; set; }
 
         public QuestionModel Question { get; set; }
     }

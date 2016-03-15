@@ -2,7 +2,7 @@
 
 namespace RecruitmentManagementSystem.Data.Interfaces
 {
-    public interface IChoiceRepository : IRepository<Choice>
+    public interface IAnswerRepository : IRepository<Answer>
     {
     }
 }

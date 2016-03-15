@@ -92,7 +92,7 @@
     <Compile Include="Models\Candidate\SkillModel.cs" />
     <Compile Include="Models\Course\CourseModel.cs" />
     <Compile Include="Models\Institution\InstitutionModel.cs" />
-    <Compile Include="Models\Question\ChoiceModel.cs" />
+    <Compile Include="Models\Question\AnswerModel.cs" />
     <Compile Include="Models\Question\QuestionCategoryBase.cs" />
     <Compile Include="Models\Question\QuestionBase.cs" />
     <Compile Include="Models\Question\QuestionCategoryModel.cs" />
