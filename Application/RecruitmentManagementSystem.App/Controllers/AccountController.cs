@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
@@ -119,11 +120,11 @@ namespace RecruitmentManagementSystem.App.Controllers
 
             var user = new ApplicationUser
             {
-                UserName = model.PersonalInformation.Email,
-                Email = model.PersonalInformation.Email,
-                FirstName = model.PersonalInformation.FirstName,
-                LastName = model.PersonalInformation.LastName,
-                PhoneNumber = model.PersonalInformation.PhoneNumber
+                UserName = model.Email,
+                Email = model.Email,
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                PhoneNumber = model.PhoneNumber
             };
 
             var result = await UserManager.CreateAsync(user, model.SecurityModel.Password);
@@ -133,13 +134,13 @@ namespace RecruitmentManagementSystem.App.Controllers
 
                 await UserManager.AddToRoleAsync(user.Id, role.Name);
 
-                if (model.PersonalInformation.Avatar != null && model.PersonalInformation.Avatar.ContentLength > 0)
+                if (model.Avatar != null && model.Avatar.ContentLength > 0)
                 {
-                    var fileName = string.Format("{0}{1}", Guid.NewGuid(), Path.GetFileName(model.PersonalInformation.Avatar.FileName));
+                    var fileName = string.Format("{0}{1}", Guid.NewGuid(), Path.GetFileName(model.Avatar.FileName));
 
                     FileHelper.SaveFile(new UploadConfig
                     {
-                        FileBase = model.PersonalInformation.Avatar,
+                        FileBase = model.Avatar,
                         FileName = fileName,
                         FilePath = FilePath.AvatarRelativePath
                     });
@@ -147,8 +148,8 @@ namespace RecruitmentManagementSystem.App.Controllers
                     var file = new File
                     {
                         Name = fileName,
-                        MimeType = model.PersonalInformation.Avatar.ContentType,
-                        Size = model.PersonalInformation.Avatar.ContentLength,
+                        MimeType = model.Avatar.ContentType,
+                        Size = model.Avatar.ContentLength,
                         RelativePath = FilePath.AvatarRelativePath + fileName,
                         FileType = FileType.Avatar,
                         ApplicationUserId = user.Id,
@@ -177,23 +178,74 @@ namespace RecruitmentManagementSystem.App.Controllers
         {
             ViewData["UserId"] = userId;
 
-            if (!Request.IsAjaxRequest()) return View();
+            return View();
+        }
 
-            var user = UserManager.FindById(userId);
+        public async Task<ActionResult> PersonalInformation(string userId)
+        {
+            var user = await UserManager.FindByIdAsync(userId);
 
-            var userViewModel = new User
+            var userViewModel = new UserModel
             {
-                PersonalInformation = new PersonalInformation
-                {
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
-                    Email = user.Email,
-                    PhoneNumber = user.PhoneNumber
-                }
+                Id = user.Id,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber
             };
 
             return new EnhancedJsonResult(userViewModel, JsonRequestBehavior.AllowGet);
         }
+
+        [HttpPost]
+        //[ValidateAntiForgeryToken]
+        public async Task<ActionResult> PersonalInformation(UserModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                Response.StatusCode = (int) HttpStatusCode.BadRequest;
+                return new EnhancedJsonResult(ModelState.Values.SelectMany(v => v.Errors));
+            }
+
+            var user = await UserManager.FindByIdAsync(model.Id);
+
+            if (user == null)
+            {
+                Response.StatusCode = (int) HttpStatusCode.NotFound;
+                ModelState.AddModelError("", "No user is found.");
+                return new EnhancedJsonResult(ModelState.Values.SelectMany(v => v.Errors));
+            }
+
+            user.UserName = model.Email;
+            user.FirstName = model.FirstName;
+            user.LastName = model.LastName;
+            user.Email = model.Email;
+            user.PhoneNumber = user.PhoneNumber;
+
+            await UserManager.UpdateAsync(user);
+
+            return new EnhancedJsonResult(model);
+        }
+
+        [HttpPost]
+        //[ValidateAntiForgeryToken]
+        public async Task<ActionResult> ChangePassword(ChangePasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                Response.StatusCode = (int) HttpStatusCode.BadRequest;
+                return new EnhancedJsonResult(ModelState.Values.SelectMany(v => v.Errors));
+            }
+            var result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.NewPassword);
+            if (result.Succeeded)
+            {
+                return new EnhancedJsonResult(model);
+            }
+            AddErrors(result);
+            Response.StatusCode = (int) HttpStatusCode.BadRequest;
+            return new EnhancedJsonResult(ModelState.Values.SelectMany(v => v.Errors));
+        }
+
 
         #region Reset Password
 

@@ -3,8 +3,10 @@ using System.Web;
 
 namespace RecruitmentManagementSystem.Core.Models.User
 {
-    public class PersonalInformation
+    public class UserModel
     {
+        public string Id { get; set; }
+
         [Required]
         [Display(Name = "First Name")]
         [StringLength(30, ErrorMessage = "The {0} must be at least {2} characters long.")]
