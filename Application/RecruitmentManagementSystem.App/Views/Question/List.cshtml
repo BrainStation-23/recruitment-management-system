@@ -35,7 +35,10 @@ else
                 @Html.DisplayNameFor(model => model.Notes)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Category)
+                @Html.DisplayNameFor(model => model.DefaultPoint)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CategoryId)
             </th>
             <th></th>
         </tr>
@@ -53,8 +56,14 @@ else
                     @Html.DisplayFor(modelItem => item.Notes)
                 </td>
                 <td>
-                    @*Html.ActionLink(item.Category, "Details", "QuestionCategory", new {id = item.CategoryId}, null)*@
+                    @Html.DisplayFor(modelItem => item.DefaultPoint)
                 </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Category.Name)
+                </td>
+                @*<td>
+                     Html.ActionLink(item.Category, "Details", "QuestionCategory", new {id = item.CategoryId}, null)
+                </td>*@
                 <td>
                     @Html.ActionLink("Edit", "Edit", new {id = item.Id}) |
                     @Html.ActionLink("Details", "Details", new {id = item.Id}) |

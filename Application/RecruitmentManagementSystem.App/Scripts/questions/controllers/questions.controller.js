@@ -2,7 +2,7 @@
     "use strict";
 
     app.controller("QuestionsController", [
-        "$http", "fileService", "notifierService", "questionConstants", "$scope", function ($http, fileService, notifierService, questionConstant, $scope) {
+        "$http", "fileService", "notifierService", "questionConstants", function ($http, fileService, notifierService, questionConstant) {
 
             var vm = this;
 
@@ -38,8 +38,9 @@
                 var model = {
                     text: vm.text,
                     questionType: vm.questionType,
-                    answers: vm.questionType === vm.constants.questionType.descriptive ? descAnswer : vm.choices,
+                    answers: vm.questionType === vm.constants.questionType.descriptive ? descAnswer : vm.answers,
                     notes: vm.notes,
+                    defaultPoint : vm.defaultPoint,
                     categoryId: vm.categoryId,
                     files: [],
                     __RequestVerificationToken: angular.element(":input:hidden[name*='RequestVerificationToken']").val()
