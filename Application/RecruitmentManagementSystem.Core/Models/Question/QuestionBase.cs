@@ -12,6 +12,7 @@ namespace RecruitmentManagementSystem.Core.Models.Question
             QuestionType = new QuestionType();
             Answers = new List<Answer>();
             Files = new List<File>();
+            Category = new QuestionCategory();
         }
 
         [Required]
@@ -32,11 +33,13 @@ namespace RecruitmentManagementSystem.Core.Models.Question
         [StringLength(500, ErrorMessage = "The {0} must be at most {1} characters long.")]
         public string Notes { get; set; }
 
-        [StringLength(300, ErrorMessage = "The {0} must be at most {1} characters long.")]
-        public string Answer { get; set; }
+        [Display(Name = "Default Mark")]
+        public decimal DefaultPoint { get; set; }
 
         [Required]
         [Display(Name = "Category")]
         public int CategoryId { get; set; }
+
+        public QuestionCategory Category { get; set; }
     }
 }
