@@ -38,7 +38,7 @@
                 var model = {
                     text: vm.text,
                     questionType: vm.questionType,
-                    answers: vm.questionType === vm.constants.questionType.descriptive ? descAnswer : vm.choices,
+                    answers: vm.questionType === vm.constants.questionType.descriptive ? descAnswer : vm.answers,
                     notes: vm.notes,
                     defaultPoint : vm.defaultPoint,
                     categoryId: vm.categoryId,
