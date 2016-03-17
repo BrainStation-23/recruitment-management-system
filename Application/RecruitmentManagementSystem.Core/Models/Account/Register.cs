@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Web;
 
 namespace RecruitmentManagementSystem.Core.Models.Account
 {
@@ -16,11 +15,6 @@ namespace RecruitmentManagementSystem.Core.Models.Account
         [Display(Name = "Last Name")]
         [StringLength(30, ErrorMessage = "The {0} must be at least {2} characters long.")]
         public string LastName { get; set; }
-
-        [Phone]
-        [DataType(DataType.PhoneNumber)]
-        [Display(Name = "Phone Number")]
-        public string PhoneNumber { get; set; }
 
         [Required]
         [EmailAddress]
@@ -42,8 +36,5 @@ namespace RecruitmentManagementSystem.Core.Models.Account
         [Display(Name = "Role")]
         [DataType("IdentityRole")]
         public string RoleId { get; set; }
-
-        [DataType(DataType.Upload)]
-        public HttpPostedFileBase Avatar { get; set; }
     }
 }

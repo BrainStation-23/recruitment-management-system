@@ -9,8 +9,8 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using RecruitmentManagementSystem.App.Infrastructure.ActionResults;
-using RecruitmentManagementSystem.App.Infrastructure.Helpers;
 using RecruitmentManagementSystem.Core.Constants;
+using RecruitmentManagementSystem.Core.Helpers;
 using RecruitmentManagementSystem.Core.Models.Account;
 using RecruitmentManagementSystem.Data.Interfaces;
 using RecruitmentManagementSystem.Data.Repositories;
@@ -273,7 +273,7 @@ namespace RecruitmentManagementSystem.App.Controllers
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Email = user.Email,
-                Avatar = _fileRepository.Find(x => x.ApplicationUserId == user.Id)
+                Avatar = user.Files.SingleOrDefault(x => x.FileType == FileType.Avatar)
             };
 
             return new EnhancedJsonResult(viewModel, JsonRequestBehavior.AllowGet);
@@ -330,22 +330,17 @@ namespace RecruitmentManagementSystem.App.Controllers
                 return new EnhancedJsonResult(ModelState.Values.SelectMany(v => v.Errors));
             }
 
-            var fileBase = Request.Files[0];
+            var fileBase = System.Web.HttpContext.Current.Request.Files[0];
 
             var fileName = string.Format("{0}.{1}", Guid.NewGuid(), Path.GetFileName(fileBase.FileName));
 
-            FileHelper.SaveFile(new UploadConfig
-            {
-                FileBase = fileBase,
-                FileName = fileName,
-                FilePath = FilePath.AvatarRelativePath
-            });
+            FileHelper.Upload(fileBase, FileType.Avatar);
 
             var userId = User.Identity.GetUserId();
-            var previousFile = _fileRepository.Find(x => x.ApplicationUserId == userId);
+            var previousFile = _fileRepository.Find(x => x.User.Id == userId);
             if (previousFile != null)
             {
-                _fileRepository.Delete(_fileRepository.Find(x => x.ApplicationUserId == userId));
+                _fileRepository.Delete(_fileRepository.Find(x => x.User.Id == userId));
 
                 var fullPath = Request.MapPath(previousFile.RelativePath);
 
@@ -362,13 +357,9 @@ namespace RecruitmentManagementSystem.App.Controllers
                 Size = fileBase.ContentLength,
                 RelativePath = FilePath.AvatarRelativePath + fileName,
                 FileType = FileType.Avatar,
-                ApplicationUserId = User.Identity.GetUserId(),
                 CreatedBy = User.Identity.GetUserId(),
                 UpdatedBy = User.Identity.GetUserId()
             };
-
-            _fileRepository.Insert(file);
-            _fileRepository.Save();
 
             return new EnhancedJsonResult(file);
         }
@@ -378,7 +369,7 @@ namespace RecruitmentManagementSystem.App.Controllers
         public ActionResult RemoveAvatar()
         {
             var userId = User.Identity.GetUserId();
-            var file = _fileRepository.Find(x => x.ApplicationUserId == userId);
+            var file = _fileRepository.Find(x => x.User.Id == userId);
 
             if (file == null)
             {

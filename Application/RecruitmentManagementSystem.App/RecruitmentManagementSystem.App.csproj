@@ -196,7 +196,6 @@
     <Compile Include="App_Start\UnityMvcActivator.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
-    <Compile Include="Controllers\CandidateController.cs" />
     <Compile Include="Controllers\CourseController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -209,7 +208,6 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Infrastructure\ActionResults\EnhancedJsonResult.cs" />
-    <Compile Include="Infrastructure\Helpers\FileHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -221,11 +219,6 @@
     <Content Include="Scripts\accounts\controllers\accounts.controller.js" />
     <Content Include="Scripts\accounts\controllers\accounts.profile.controller.js" />
     <Content Include="Scripts\accounts\templates\account-modal.html" />
-    <Content Include="Scripts\candidates\controllers\candidates.controller.js" />
-    <Content Include="Scripts\candidates\candidates.module.js" />
-    <Content Include="Scripts\candidates\controllers\candidates.project.controller.js" />
-    <Content Include="Scripts\candidates\controllers\candidates.experience.controller.js" />
-    <Content Include="Scripts\candidates\templates\project-modal.html" />
     <Content Include="Scripts\core\config\config.js" />
     <Content Include="Scripts\core\config\init.js" />
     <Content Include="Scripts\core\core.module.js" />
@@ -240,12 +233,13 @@
     <Content Include="Scripts\quiz\controllers\quiz.question.controller.js" />
     <Content Include="Scripts\quiz\quiz.module.js" />
     <Content Include="Scripts\quiz\templates\question-modal.html" />
-    <Content Include="Scripts\users\controllers\users.password.controller.js" />
-    <Content Include="Scripts\users\controllers\users.profile.controller.js" />
+    <Content Include="Scripts\users\controllers\users.education.modal.controller.js" />
     <Content Include="Scripts\users\controllers\users.controller.js" />
+    <Content Include="Scripts\users\templates\education-modal.html" />
+    <Content Include="Scripts\users\templates\experience-modal.html" />
+    <Content Include="Scripts\users\templates\project-modal.html" />
     <Content Include="Scripts\users\users.module.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Scripts\candidates\templates\experience-modal.html" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -305,12 +299,6 @@
     <Content Include="bower.json" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Candidate\List.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Candidate\Delete.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\Account\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -326,16 +314,7 @@
     <Content Include="Views\Question\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Candidate\Create.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Candidate\Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\Error\PageNotFound.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Candidate\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Question\Create.cshtml" />
@@ -363,24 +342,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Account\List.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Scripts\candidates\templates\education-modal.html" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Candidate\_Education.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Candidate\_Experience.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Scripts\candidates\controllers\candidates.education.controller.js" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Candidate\_Project.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Candidate\_Skill.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="package.json" />
@@ -425,9 +386,6 @@
     <Content Include="favicon.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Candidate\_FormBody.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\Course\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -438,6 +396,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Quiz\_Question.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Account\_PersonalInformation.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Account\_Education.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

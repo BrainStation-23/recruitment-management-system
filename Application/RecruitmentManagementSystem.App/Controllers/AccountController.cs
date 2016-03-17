@@ -1,5 +1,5 @@
 ﻿using System;
-using System.IO;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -11,15 +11,15 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using RecruitmentManagementSystem.App.Infrastructure.ActionResults;
-using RecruitmentManagementSystem.App.Infrastructure.Helpers;
-using RecruitmentManagementSystem.Core.Constants;
+using RecruitmentManagementSystem.Core.Helpers;
+using RecruitmentManagementSystem.Core.Mappings;
 using RecruitmentManagementSystem.Core.Models.Account;
+using RecruitmentManagementSystem.Core.Models.Candidate;
 using RecruitmentManagementSystem.Core.Models.User;
 using RecruitmentManagementSystem.Data.DbContext;
 using RecruitmentManagementSystem.Data.Interfaces;
 using RecruitmentManagementSystem.Data.Repositories;
 using RecruitmentManagementSystem.Model;
-using File = RecruitmentManagementSystem.Model.File;
 
 namespace RecruitmentManagementSystem.App.Controllers
 {
@@ -28,21 +28,24 @@ namespace RecruitmentManagementSystem.App.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
-        private readonly IFileRepository _fileRepository;
+        private static IFileRepository _fileRepository;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IModelFactory _modelFactory;
 
         public AccountController()
         {
+            _modelFactory = new ModelFactory();
             _fileRepository = new FileRepository();
             _roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(new ApplicationDbContext()));
         }
 
         public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager,
-            IFileRepository fileRepository)
+            IFileRepository fileRepository, IModelFactory modelFactory)
         {
             UserManager = userManager;
             SignInManager = signInManager;
             _fileRepository = fileRepository;
+            _modelFactory = modelFactory;
         }
 
         public ApplicationSignInManager SignInManager
@@ -114,52 +117,24 @@ namespace RecruitmentManagementSystem.App.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(UserCreateModel model)
+        public async Task<ActionResult> Register(Register model)
         {
             if (!ModelState.IsValid) return View(model);
 
-            var user = new ApplicationUser
+            var user = new User
             {
                 UserName = model.Email,
                 Email = model.Email,
                 FirstName = model.FirstName,
-                LastName = model.LastName,
-                PhoneNumber = model.PhoneNumber
+                LastName = model.LastName
             };
 
-            var result = await UserManager.CreateAsync(user, model.SecurityModel.Password);
+            var result = await UserManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
             {
-                var role = await _roleManager.FindByIdAsync(model.SecurityModel.RoleId);
+                var role = await _roleManager.FindByIdAsync(model.RoleId);
 
                 await UserManager.AddToRoleAsync(user.Id, role.Name);
-
-                if (model.Avatar != null && model.Avatar.ContentLength > 0)
-                {
-                    var fileName = string.Format("{0}{1}", Guid.NewGuid(), Path.GetFileName(model.Avatar.FileName));
-
-                    FileHelper.SaveFile(new UploadConfig
-                    {
-                        FileBase = model.Avatar,
-                        FileName = fileName,
-                        FilePath = FilePath.AvatarRelativePath
-                    });
-
-                    var file = new File
-                    {
-                        Name = fileName,
-                        MimeType = model.Avatar.ContentType,
-                        Size = model.Avatar.ContentLength,
-                        RelativePath = FilePath.AvatarRelativePath + fileName,
-                        FileType = FileType.Avatar,
-                        ApplicationUserId = user.Id,
-                        CreatedBy = User.Identity.GetUserId(),
-                        UpdatedBy = User.Identity.GetUserId()
-                    };
-
-                    _fileRepository.Insert(file);
-                    _fileRepository.Save();
-                }
 
                 // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                 // Send an email with this link
@@ -178,28 +153,30 @@ namespace RecruitmentManagementSystem.App.Controllers
         {
             ViewData["UserId"] = userId;
 
-            return View();
-        }
-
-        public async Task<ActionResult> PersonalInformation(string userId)
-        {
-            var user = await UserManager.FindByIdAsync(userId);
-
-            var userViewModel = new UserModel
+            if (!Request.IsAjaxRequest())
             {
-                Id = user.Id,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Email = user.Email,
-                PhoneNumber = user.PhoneNumber
-            };
+                return View();
+            }
 
-            return new EnhancedJsonResult(userViewModel, JsonRequestBehavior.AllowGet);
+            var user = UserManager.Users.ProjectTo<UserModel>().SingleOrDefault(x => x.Id == userId);
+
+            if (user == null)
+            {
+                Response.StatusCode = (int)HttpStatusCode.NotFound;
+                ModelState.AddModelError("", "No record found!");
+                return new EnhancedJsonResult(ModelState.Values.SelectMany(v => v.Errors));
+            }
+
+            user.Avatar = user.Files.SingleOrDefault(x => x.FileType == FileType.Avatar);
+            user.Resume = user.Files.SingleOrDefault(x => x.FileType == FileType.Resume);
+            user.Files = null;
+
+            return new EnhancedJsonResult(user, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
         //[ValidateAntiForgeryToken]
-        public async Task<ActionResult> PersonalInformation(UserModel model)
+        public async Task<ActionResult> Update(UserCreateModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -212,7 +189,7 @@ namespace RecruitmentManagementSystem.App.Controllers
             if (user == null)
             {
                 Response.StatusCode = (int) HttpStatusCode.NotFound;
-                ModelState.AddModelError("", "No user is found.");
+                ModelState.AddModelError("", "No record found!");
                 return new EnhancedJsonResult(ModelState.Values.SelectMany(v => v.Errors));
             }
 
@@ -220,32 +197,23 @@ namespace RecruitmentManagementSystem.App.Controllers
             user.FirstName = model.FirstName;
             user.LastName = model.LastName;
             user.Email = model.Email;
-            user.PhoneNumber = user.PhoneNumber;
+            user.PhoneNumber = model.PhoneNumber;
+            user.Address = model.Address;
+            user.Others = model.Others;
+            user.Website = model.Website;
+            user.Files = ManageFiles(model);
+
+            user.Educations = _modelFactory.MapToDomain<EducationModel, Education>(model.Educations);
+
+            //foreach (var m in model.Educations.Where(x => x.UserId == string.Empty))
+            //{
+            //    m.UserId = model.Id;
+            //}
 
             await UserManager.UpdateAsync(user);
 
             return new EnhancedJsonResult(model);
         }
-
-        [HttpPost]
-        //[ValidateAntiForgeryToken]
-        public async Task<ActionResult> ChangePassword(ChangePasswordViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                Response.StatusCode = (int) HttpStatusCode.BadRequest;
-                return new EnhancedJsonResult(ModelState.Values.SelectMany(v => v.Errors));
-            }
-            var result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.NewPassword);
-            if (result.Succeeded)
-            {
-                return new EnhancedJsonResult(model);
-            }
-            AddErrors(result);
-            Response.StatusCode = (int) HttpStatusCode.BadRequest;
-            return new EnhancedJsonResult(ModelState.Values.SelectMany(v => v.Errors));
-        }
-
 
         #region Reset Password
 
@@ -499,5 +467,68 @@ namespace RecruitmentManagementSystem.App.Controllers
         }
 
         #endregion
+
+        private ICollection<File> ManageFiles(UserCreateModel model)
+        {
+            var files = new List<File>();
+
+            var httpFileCollection = System.Web.HttpContext.Current.Request.Files;
+
+            for (var index = 0; index < httpFileCollection.Count; index++)
+            {
+                if (httpFileCollection[index] == null || httpFileCollection[index].ContentLength <= 0)
+                {
+                    continue;
+                }
+
+                FileType fileType;
+                if (httpFileCollection[index].FileName == model.AvatarFileName)
+                {
+                    fileType = FileType.Avatar;
+                }
+                else if (httpFileCollection[index].FileName == model.ResumeFileName)
+                {
+                    fileType = FileType.Resume;
+                }
+                else
+                {
+                    fileType = FileType.Document;
+                }
+
+                var uploadConfig = FileHelper.Upload(httpFileCollection[index], fileType);
+
+                if (uploadConfig.FileBase == null) continue;
+
+                var existingRecords = _fileRepository.FindAll(x => x.User.Id == model.Id).Select(x => new
+                {
+                    x.Id,
+                    x.RelativePath
+                }).ToList();
+                foreach (var record in existingRecords)
+                {
+                    FileHelper.Delete(record.RelativePath);
+                    _fileRepository.Delete(record.Id);
+                }
+                _fileRepository.Save();
+
+                var file = new File
+                {
+                    Name = uploadConfig.FileName,
+                    MimeType = uploadConfig.FileBase.ContentType,
+                    Size = uploadConfig.FileBase.ContentLength,
+                    RelativePath = uploadConfig.FilePath + uploadConfig.FileName,
+                    FileType = fileType,
+                    ObjectState = ObjectState.Added,
+                    CreatedAt = DateTime.UtcNow,
+                    UpdatedAt = DateTime.UtcNow,
+                    CreatedBy = User.Identity.GetUserId(),
+                    UpdatedBy = User.Identity.GetUserId()
+                };
+
+                files.Add(file);
+            }
+
+            return files;
+        }
     }
 }

@@ -68,7 +68,6 @@
     <Compile Include="Interfaces\IEducationRepository.cs" />
     <Compile Include="Interfaces\IQuizRepository.cs" />
     <Compile Include="Interfaces\ISkillRepository.cs" />
-    <Compile Include="Interfaces\ICandidateRepository.cs" />
     <Compile Include="Interfaces\IAnswerRepository.cs" />
     <Compile Include="Interfaces\IFileRepository.cs" />
     <Compile Include="Interfaces\IInstitutionRepository.cs" />
@@ -84,7 +83,6 @@
     <Compile Include="Repositories\ExperienceRepository.cs" />
     <Compile Include="Repositories\ProjectRepository.cs" />
     <Compile Include="Repositories\SkillRepository.cs" />
-    <Compile Include="Repositories\CandidateRepository.cs" />
     <Compile Include="Repositories\AnswerRepository.cs" />
     <Compile Include="Repositories\FileRepository.cs" />
     <Compile Include="Repositories\InstitutionRepository.cs" />

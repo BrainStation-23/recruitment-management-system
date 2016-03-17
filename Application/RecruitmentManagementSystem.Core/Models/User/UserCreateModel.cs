@@ -1,7 +1,11 @@
-﻿namespace RecruitmentManagementSystem.Core.Models.User
+﻿using RecruitmentManagementSystem.Core.Mappings;
+
+namespace RecruitmentManagementSystem.Core.Models.User
 {
-    public class UserCreateModel : UserModel
+    public class UserCreateModel: UserBaseModel, IMapFrom<Model.User>
     {
-        public SecurityModel SecurityModel { get; set; }
+        public string AvatarFileName { get; set; }
+
+        public string ResumeFileName { get; set; }
     }
 }

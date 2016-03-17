@@ -8,9 +8,9 @@ using Microsoft.AspNet.Identity.EntityFramework;
 namespace RecruitmentManagementSystem.Model
 {
     // You can add profile data for the user by adding more properties to your ApplicationUser class, please visit http://go.microsoft.com/fwlink/?LinkID=317594 to learn more.
-    public class ApplicationUser : IdentityUser
+    public class User : IdentityUser
     {
-        public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
+        public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<User> manager)
         {
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
             var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
@@ -26,10 +26,26 @@ namespace RecruitmentManagementSystem.Model
         [StringLength(30, ErrorMessage = "The {0} must be at most {1} characters long.")]
         public string LastName { get; set; }
 
+        [Url]
+        [StringLength(50, ErrorMessage = "The {0} must be at most {1} characters long.")]
+        public string Website { get; set; }
+
+        [DataType(DataType.MultilineText)]
+        [StringLength(2000, ErrorMessage = "The {0} must be at most {1} characters long.")]
+        public string Address { get; set; }
+
+        [DataType(DataType.MultilineText)]
+        [StringLength(3000, ErrorMessage = "The {0} must be at most {1} characters long.")]
+        public string Others { get; set; }
+
         public ICollection<File> Files { get; set; }
 
-        public int? CandidateId { get; set; }
+        public ICollection<Education> Educations { get; set; }
 
-        public Candidate Candidate { get; set; }
+        public ICollection<Experience> Experiences { get; set; }
+
+        public ICollection<Skill> Skills { get; set; }
+
+        public ICollection<Project> Projects { get; set; }
     }
 }

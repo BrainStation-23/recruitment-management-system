@@ -69,7 +69,6 @@
     <Compile Include="Constants\FilePath.cs" />
     <Compile Include="Helpers\FileHelper.cs" />
     <Compile Include="Interfaces\IQuizService.cs" />
-    <Compile Include="Interfaces\ICandidateService.cs" />
     <Compile Include="Interfaces\IQuestionCategoryService.cs" />
     <Compile Include="Interfaces\IQuestionService.cs" />
     <Compile Include="Mappings\AutoMapperConfig.cs" />
@@ -83,14 +82,10 @@
     <Compile Include="Models\Account\ManageModel.cs" />
     <Compile Include="Models\Account\Register.cs" />
     <Compile Include="Models\Account\Role.cs" />
-    <Compile Include="Models\Candidate\CandidateBase.cs" />
-    <Compile Include="Models\Candidate\CandidateCreateModel.cs" />
-    <Compile Include="Models\Candidate\CandidateModel.cs" />
     <Compile Include="Models\Candidate\EducationModel.cs" />
     <Compile Include="Models\Candidate\ExperienceModel.cs" />
     <Compile Include="Models\Candidate\ProjectModel.cs" />
     <Compile Include="Models\Candidate\SkillModel.cs" />
-    <Compile Include="Models\User\SecurityModel.cs" />
     <Compile Include="Models\Course\CourseModel.cs" />
     <Compile Include="Models\Institution\InstitutionModel.cs" />
     <Compile Include="Models\Question\AnswerModel.cs" />
@@ -106,10 +101,10 @@
     <Compile Include="Models\Quiz\QuizQuestionModel.cs" />
     <Compile Include="Models\Shared\BaseModel.cs" />
     <Compile Include="Models\Shared\FileModel.cs" />
-    <Compile Include="Models\User\UserModel.cs" />
     <Compile Include="Models\User\UserCreateModel.cs" />
+    <Compile Include="Models\User\UserBaseModel.cs" />
+    <Compile Include="Models\User\UserModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\CandidateService.cs" />
     <Compile Include="Services\QuestionCategoryService.cs" />
     <Compile Include="Services\QuestionService.cs" />
     <Compile Include="Services\QuizService.cs" />

@@ -35,8 +35,8 @@ namespace RecruitmentManagementSystem.Core.Models.Account
 
         public void CreateMappings(IConfiguration configuration)
         {
-            configuration.CreateMap<ApplicationUser, ApplicationUserModel>()
-                .ForMember(dest => dest.Roles, opt => opt.Ignore());
+            configuration.CreateMap<Model.User, ApplicationUserModel>()
+                .ForMember(dest => dest.Roles, (IMemberConfigurationExpression<Model.User> opt) => opt.Ignore());
         }
     }
 }

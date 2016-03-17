@@ -12,7 +12,7 @@ namespace RecruitmentManagementSystem.App
 {
     public class SeedData : IRunAtInit
     {
-        private ApplicationUser _applicationUser;
+        private User _applicationUser;
 
         public void Execute()
         {
@@ -52,14 +52,14 @@ namespace RecruitmentManagementSystem.App
             roleManager.Create(new IdentityRole {Name = "Candidate"});
         }
 
-        private static ApplicationUser SeedApplicationUser(DbContext dbContext)
+        private static User SeedApplicationUser(DbContext dbContext)
         {
             const string email = "admin-rms@bs-23.com";
             const string password = "HakunaMatata-23";
 
-            var userManager = new ApplicationUserManager(new UserStore<ApplicationUser>(dbContext));
+            var userManager = new ApplicationUserManager(new UserStore<User>(dbContext));
 
-            userManager.UserValidator = new UserValidator<ApplicationUser>(userManager)
+            userManager.UserValidator = new UserValidator<User>(userManager)
             {
                 AllowOnlyAlphanumericUserNames = false,
                 RequireUniqueEmail = true
@@ -74,7 +74,7 @@ namespace RecruitmentManagementSystem.App
                 RequireUppercase = true,
             };
 
-            var user = new ApplicationUser
+            var user = new User
             {
                 Email = email,
                 UserName = email,

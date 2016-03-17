@@ -57,7 +57,7 @@ namespace RecruitmentManagementSystem.Core.Services
             entity.Projects = _modelFactory.MapToDomain<ProjectModel, Project>(model.Projects);
             entity.Skills = _modelFactory.MapToDomain<SkillModel, Skill>(model.Skills);
 
-            entity.Files = ManageFiles(model);
+            //entity.Files = ManageFiles(model);
 
             _candidateRepository.Insert(entity);
             _candidateRepository.Save();
@@ -92,7 +92,7 @@ namespace RecruitmentManagementSystem.Core.Services
             updatedEntity.Experiences = _modelFactory.MapToDomain<ExperienceModel, Experience>(model.Experiences);
             updatedEntity.Projects = _modelFactory.MapToDomain<ProjectModel, Project>(model.Projects);
             updatedEntity.Skills = _modelFactory.MapToDomain<SkillModel, Skill>(model.Skills);
-            updatedEntity.Files = ManageFiles(model);
+            //updatedEntity.Files = ManageFiles(model);
 
             _candidateRepository.Update(updatedEntity);
 
@@ -122,67 +122,67 @@ namespace RecruitmentManagementSystem.Core.Services
 
         #region Private Methods
 
-        private static ICollection<File> ManageFiles(CandidateBase model)
-        {
-            var files = new List<File>();
-            var fileCollection = HttpContext.Current.Request.Files;
+        //private static ICollection<File> ManageFiles(CandidateBase model)
+        //{
+        //    var files = new List<File>();
+        //    var fileCollection = HttpContext.Current.Request.Files;
 
-            for (var index = 0; index < fileCollection.Count; index++)
-            {
-                if (fileCollection[index].ContentLength <= 0)
-                {
-                    continue;
-                }
+        //    for (var index = 0; index < fileCollection.Count; index++)
+        //    {
+        //        if (fileCollection[index].ContentLength <= 0)
+        //        {
+        //            continue;
+        //        }
 
-                FileType fileType;
-                if (fileCollection[index].FileName == model.AvatarFileName)
-                {
-                    fileType = FileType.Avatar;
-                }
-                else if (fileCollection[index].FileName == model.ResumeFileName)
-                {
-                    fileType = FileType.Resume;
-                }
-                else
-                {
-                    fileType = FileType.Document;
-                }
+        //        FileType fileType;
+        //        if (fileCollection[index].FileName == model.AvatarFileName)
+        //        {
+        //            fileType = FileType.Avatar;
+        //        }
+        //        else if (fileCollection[index].FileName == model.ResumeFileName)
+        //        {
+        //            fileType = FileType.Resume;
+        //        }
+        //        else
+        //        {
+        //            fileType = FileType.Document;
+        //        }
 
-                var uploadConfig = FileHelper.Upload(fileCollection[index], fileType);
+        //        var uploadConfig = FileHelper.Upload(fileCollection[index], fileType);
 
-                if (uploadConfig.FileBase == null) continue;
+        //        if (uploadConfig.FileBase == null) continue;
 
-                var existingRecords = _fileRepository.FindAll(x => x.Candidate.Id == model.Id).Select(x => new
-                {
-                    x.Id,
-                    x.RelativePath
-                }).ToList();
-                foreach (var record in existingRecords)
-                {
-                    FileHelper.Delete(record.RelativePath);
-                    _fileRepository.Delete(record.Id);
-                }
-                _fileRepository.Save();
+        //        var existingRecords = _fileRepository.FindAll(x => x.App.Id == model.Id).Select(x => new
+        //        {
+        //            x.Id,
+        //            x.RelativePath
+        //        }).ToList();
+        //        foreach (var record in existingRecords)
+        //        {
+        //            FileHelper.Delete(record.RelativePath);
+        //            _fileRepository.Delete(record.Id);
+        //        }
+        //        _fileRepository.Save();
 
-                var file = new File
-                {
-                    Name = uploadConfig.FileName,
-                    MimeType = uploadConfig.FileBase.ContentType,
-                    Size = uploadConfig.FileBase.ContentLength,
-                    RelativePath = uploadConfig.FilePath + uploadConfig.FileName,
-                    FileType = fileType,
-                    ObjectState = ObjectState.Added,
-                    CreatedAt = DateTime.UtcNow,
-                    UpdatedAt = DateTime.UtcNow,
-                    CreatedBy = HttpContext.Current.User.Identity.GetUserId(),
-                    UpdatedBy = HttpContext.Current.User.Identity.GetUserId()
-                };
+        //        var file = new File
+        //        {
+        //            Name = uploadConfig.FileName,
+        //            MimeType = uploadConfig.FileBase.ContentType,
+        //            Size = uploadConfig.FileBase.ContentLength,
+        //            RelativePath = uploadConfig.FilePath + uploadConfig.FileName,
+        //            FileType = fileType,
+        //            ObjectState = ObjectState.Added,
+        //            CreatedAt = DateTime.UtcNow,
+        //            UpdatedAt = DateTime.UtcNow,
+        //            CreatedBy = HttpContext.Current.User.Identity.GetUserId(),
+        //            UpdatedBy = HttpContext.Current.User.Identity.GetUserId()
+        //        };
 
-                files.Add(file);
-            }
+        //        files.Add(file);
+        //    }
 
-            return files;
-        }
+        //    return files;
+        //}
 
         #endregion
     }

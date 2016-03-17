@@ -35,8 +35,8 @@ namespace RecruitmentManagementSystem.Model
 
         public Institution Institution { get; set; }
 
-        public int CandidateId { get; set; }
+        public string UserId { get; set; }
 
-        public Candidate Candidate { get; set; }
+        public User User { get; set; }
     }
 }

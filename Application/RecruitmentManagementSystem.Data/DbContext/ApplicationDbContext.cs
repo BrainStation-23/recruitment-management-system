@@ -5,7 +5,7 @@ using RecruitmentManagementSystem.Model;
 
 namespace RecruitmentManagementSystem.Data.DbContext
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    public class ApplicationDbContext : IdentityDbContext<User>
     {
         public ApplicationDbContext()
             : base(WebConfigurationManager.ConnectionStrings["DbConnection"].ConnectionString, false)
@@ -18,7 +18,7 @@ namespace RecruitmentManagementSystem.Data.DbContext
             return new ApplicationDbContext();
         }
 
-        public DbSet<Candidate> Candidates { get; set; }
+        //public DbSet<Candidate> Candidates { get; set; }
         public DbSet<Question> Questions { get; set; }
         public DbSet<Institution> Institutions { get; set; }
         public DbSet<QuestionCategory> QuestionCategories { get; set; }

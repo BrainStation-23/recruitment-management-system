@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using RecruitmentManagementSystem.Core.Mappings;
 using RecruitmentManagementSystem.Core.Models.Institution;
 using RecruitmentManagementSystem.Core.Models.Shared;
+using RecruitmentManagementSystem.Core.Models.User;
 using RecruitmentManagementSystem.Model;
 
 namespace RecruitmentManagementSystem.Core.Models.Candidate
@@ -38,8 +39,5 @@ namespace RecruitmentManagementSystem.Core.Models.Candidate
         public int InstitutionId { get; set; }
 
         public InstitutionModel Institution { get; set; }
-
-        [Required]
-        public int CandidateId { get; set; }
     }
 }
