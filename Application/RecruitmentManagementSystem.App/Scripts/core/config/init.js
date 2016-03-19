@@ -15,9 +15,6 @@ angular.module(ApplicationConfiguration.applicationModuleName).config([
                     if (rejection.status === 401) {
                         window.location = "/Account/Login";
                     }
-                    if (rejection.status === 404) {
-                        window.location = "/Error/PageNotFound";
-                    }
                     return $q.reject(rejection);
                 }
             };

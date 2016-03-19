@@ -50,7 +50,39 @@
       <HintPath>..\..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.1\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Owin, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AspNet.Identity.Owin.2.2.1\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.Build.Framework" />
+    <Reference Include="Microsoft.Owin, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Owin.3.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Host.SystemWeb, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Owin.Host.SystemWeb.3.0.1\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Owin.Security.3.0.1\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Cookies, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Owin.Security.Cookies.3.0.1\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.OAuth, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Owin.Security.OAuth.3.0.1\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -68,24 +100,23 @@
   <ItemGroup>
     <Compile Include="Constants\FilePath.cs" />
     <Compile Include="Helpers\FileHelper.cs" />
+    <Compile Include="Infrastructure\IdentityConfig.cs" />
     <Compile Include="Interfaces\IQuizService.cs" />
     <Compile Include="Interfaces\IQuestionCategoryService.cs" />
     <Compile Include="Interfaces\IQuestionService.cs" />
+    <Compile Include="Interfaces\IUserService.cs" />
     <Compile Include="Mappings\AutoMapperConfig.cs" />
     <Compile Include="Mappings\IHaveCustomMappings.cs" />
     <Compile Include="Mappings\IMapFrom.cs" />
     <Compile Include="Mappings\IModelFactory.cs" />
     <Compile Include="Mappings\ModelFactory.cs" />
-    <Compile Include="Models\Account\AccountDetails.cs" />
-    <Compile Include="Models\Account\AccountModels.cs" />
-    <Compile Include="Models\Account\ApplicationUserModel.cs" />
-    <Compile Include="Models\Account\ManageModel.cs" />
-    <Compile Include="Models\Account\Register.cs" />
-    <Compile Include="Models\Account\Role.cs" />
-    <Compile Include="Models\Candidate\EducationModel.cs" />
-    <Compile Include="Models\Candidate\ExperienceModel.cs" />
-    <Compile Include="Models\Candidate\ProjectModel.cs" />
-    <Compile Include="Models\Candidate\SkillModel.cs" />
+    <Compile Include="Models\User\SecurityModels.cs" />
+    <Compile Include="Models\User\ManageModel.cs" />
+    <Compile Include="Models\User\Register.cs" />
+    <Compile Include="Models\User\EducationModel.cs" />
+    <Compile Include="Models\User\ExperienceModel.cs" />
+    <Compile Include="Models\User\ProjectModel.cs" />
+    <Compile Include="Models\User\SkillModel.cs" />
     <Compile Include="Models\Course\CourseModel.cs" />
     <Compile Include="Models\Institution\InstitutionModel.cs" />
     <Compile Include="Models\Question\AnswerModel.cs" />
@@ -101,6 +132,7 @@
     <Compile Include="Models\Quiz\QuizQuestionModel.cs" />
     <Compile Include="Models\Shared\BaseModel.cs" />
     <Compile Include="Models\Shared\FileModel.cs" />
+    <Compile Include="Models\User\UserBasicModel.cs" />
     <Compile Include="Models\User\UserCreateModel.cs" />
     <Compile Include="Models\User\UserBaseModel.cs" />
     <Compile Include="Models\User\UserModel.cs" />
@@ -108,6 +140,7 @@
     <Compile Include="Services\QuestionCategoryService.cs" />
     <Compile Include="Services\QuestionService.cs" />
     <Compile Include="Services\QuizService.cs" />
+    <Compile Include="Services\UserService.cs" />
     <Compile Include="Tasks\IRunAfterEachRequest.cs" />
     <Compile Include="Tasks\IRunAtInit.cs" />
     <Compile Include="Tasks\IRunAtStartup.cs" />

@@ -20,6 +20,19 @@ namespace RecruitmentManagementSystem.Data.Repositories
             DbSet = Context.Set<T>();
         }
 
+        public virtual void InsertOrUpdate(T entity)
+        {
+            if (entity.Id == default(int))
+            {
+                DbSet.Add(entity);
+            }
+            else
+            {
+                Context.Entry(entity).State = EntityState.Modified;
+                Context.ApplyStateChanges();
+            }
+        }
+
         public virtual void Insert(T entity)
         {
             DbSet.Add(entity);

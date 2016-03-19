@@ -1,8 +1,13 @@
 using System;
 using System.Linq;
+using System.Web;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.Owin.Security;
 using Microsoft.Practices.Unity;
-using RecruitmentManagementSystem.App.Controllers;
 using RecruitmentManagementSystem.Core.Tasks;
+using RecruitmentManagementSystem.Data.DbContext;
+using RecruitmentManagementSystem.Model;
 
 namespace RecruitmentManagementSystem.App
 {
@@ -39,9 +44,6 @@ namespace RecruitmentManagementSystem.App
             // NOTE: To load from web.config uncomment the line below. Make sure to add a Microsoft.Practices.Unity.Configuration to the using statements.
             // container.LoadConfiguration();
 
-            container.RegisterType<AccountController>(new InjectionConstructor());
-            container.RegisterType<ManageController>(new InjectionConstructor());
-
             container.RegisterTypes(
                 AllClasses.FromLoadedAssemblies(),
                 WithMappings.FromMatchingInterface,
@@ -60,6 +62,13 @@ namespace RecruitmentManagementSystem.App
                             typeof (IRunBeforeEachRequest).IsAssignableFrom(type)),
                 WithMappings.FromAllInterfaces,
                 WithName.TypeName);
+
+            container.RegisterType<IAuthenticationManager>(new InjectionFactory(c => HttpContext.Current.GetOwinContext().Authentication));
+
+            container.RegisterType<IUserStore<User>, UserStore<User>>(new InjectionConstructor(typeof (ApplicationDbContext)));
+
+            container.RegisterType<IRoleStore<IdentityRole, string>, RoleStore<IdentityRole, string, IdentityUserRole>>(
+                new InjectionConstructor(typeof (ApplicationDbContext)));
         }
     }
 }

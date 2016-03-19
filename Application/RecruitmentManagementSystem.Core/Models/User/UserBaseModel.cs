@@ -1,12 +1,19 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using RecruitmentManagementSystem.Core.Models.Candidate;
 using RecruitmentManagementSystem.Core.Models.Shared;
 
 namespace RecruitmentManagementSystem.Core.Models.User
 {
     public class UserBaseModel
     {
+        public UserBaseModel()
+        {
+            Educations = new List<EducationModel>();
+            Experiences = new List<ExperienceModel>();
+            Projects = new List<ProjectModel>();
+            Skills = new List<SkillModel>();
+        }
+
         public string Id { get; set; }
 
         [Required]

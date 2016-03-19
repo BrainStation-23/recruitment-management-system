@@ -57,4 +57,4 @@
             };
         }
     ]);
-})(angular.module("candidates"));
+})(angular.module("users"));

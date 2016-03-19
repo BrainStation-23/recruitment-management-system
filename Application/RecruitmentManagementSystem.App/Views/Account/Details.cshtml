@@ -19,6 +19,24 @@
             </div>
             @Html.Partial("_Education")
         </div>
+        <div uib-tab index="2">
+            <div uib-tab-heading>
+                <i class="fa fa-certificate fa-lg"></i> Experiences
+            </div>
+            @Html.Partial("_Experience")
+        </div>
+        <div uib-tab index="3">
+            <div uib-tab-heading>
+                <i class="fa fa-lightbulb-o fa-lg"></i> Skills
+            </div>
+            @Html.Partial("_Skill")
+        </div>
+        <div uib-tab index="3">
+            <div uib-tab-heading>
+                <i class="fa fa-terminal fa-lg"></i> Projects
+            </div>
+            @Html.Partial("_Project")
+        </div>
     </div>
     <hr />
     <input type="button" class="btn btn-success" value="Save" ng-click="userCtrl.save()" />

@@ -4,6 +4,7 @@ using System.Data.Entity;
 using System.Linq;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using RecruitmentManagementSystem.Core.Infrastructure;
 using RecruitmentManagementSystem.Core.Tasks;
 using RecruitmentManagementSystem.Data.DbContext;
 using RecruitmentManagementSystem.Model;

@@ -1,24 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using AutoMapper.QueryableExtensions;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using RecruitmentManagementSystem.App.Infrastructure.ActionResults;
-using RecruitmentManagementSystem.Core.Helpers;
-using RecruitmentManagementSystem.Core.Mappings;
-using RecruitmentManagementSystem.Core.Models.Account;
-using RecruitmentManagementSystem.Core.Models.Candidate;
+using RecruitmentManagementSystem.Core.Infrastructure;
+using RecruitmentManagementSystem.Core.Interfaces;
 using RecruitmentManagementSystem.Core.Models.User;
-using RecruitmentManagementSystem.Data.DbContext;
-using RecruitmentManagementSystem.Data.Interfaces;
-using RecruitmentManagementSystem.Data.Repositories;
 using RecruitmentManagementSystem.Model;
 
 namespace RecruitmentManagementSystem.App.Controllers
@@ -28,46 +20,28 @@ namespace RecruitmentManagementSystem.App.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
-        private static IFileRepository _fileRepository;
-        private readonly RoleManager<IdentityRole> _roleManager;
-        private readonly IModelFactory _modelFactory;
+        private readonly IUserService _userService;
+        private readonly ApplicationRoleManager _roleManager;
 
-        public AccountController()
+        public AccountController(ApplicationUserManager userManager,
+            ApplicationSignInManager signInManager,
+            ApplicationRoleManager roleManager,
+            IUserService userService)
         {
-            _modelFactory = new ModelFactory();
-            _fileRepository = new FileRepository();
-            _roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(new ApplicationDbContext()));
-        }
-
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager,
-            IFileRepository fileRepository, IModelFactory modelFactory)
-        {
-            UserManager = userManager;
-            SignInManager = signInManager;
-            _fileRepository = fileRepository;
-            _modelFactory = modelFactory;
-        }
-
-        public ApplicationSignInManager SignInManager
-        {
-            get { return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>(); }
-            private set { _signInManager = value; }
-        }
-
-        public ApplicationUserManager UserManager
-        {
-            get { return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>(); }
-            private set { _userManager = value; }
+            _roleManager = roleManager;
+            _userService = userService;
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
 
         [HttpGet]
         public ActionResult List()
         {
-            var users = UserManager.Users.ProjectTo<ApplicationUserModel>().ToList();
+            var users = _userManager.Users.ProjectTo<UserBasicModel>().ToList();
 
             foreach (var user in users)
             {
-                user.Roles = UserManager.GetRoles(user.Id);
+                user.Roles = _userManager.GetRoles(user.Id);
             }
 
             return View(users);
@@ -92,9 +66,7 @@ namespace RecruitmentManagementSystem.App.Controllers
 
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
-            var result =
-                await
-                    SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
+            var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -129,12 +101,12 @@ namespace RecruitmentManagementSystem.App.Controllers
                 LastName = model.LastName
             };
 
-            var result = await UserManager.CreateAsync(user, model.Password);
+            var result = await _userManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
             {
                 var role = await _roleManager.FindByIdAsync(model.RoleId);
 
-                await UserManager.AddToRoleAsync(user.Id, role.Name);
+                await _userManager.AddToRoleAsync(user.Id, role.Name);
 
                 // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                 // Send an email with this link
@@ -151,6 +123,11 @@ namespace RecruitmentManagementSystem.App.Controllers
 
         public ActionResult Details(string userId)
         {
+            if (string.IsNullOrEmpty(userId))
+            {
+                throw new HttpException((int) HttpStatusCode.NotFound, "");
+            }
+
             ViewData["UserId"] = userId;
 
             if (!Request.IsAjaxRequest())
@@ -158,11 +135,11 @@ namespace RecruitmentManagementSystem.App.Controllers
                 return View();
             }
 
-            var user = UserManager.Users.ProjectTo<UserModel>().SingleOrDefault(x => x.Id == userId);
+            var user = _userManager.Users.ProjectTo<UserModel>().SingleOrDefault(x => x.Id == userId);
 
             if (user == null)
             {
-                Response.StatusCode = (int)HttpStatusCode.NotFound;
+                Response.StatusCode = (int) HttpStatusCode.NotFound;
                 ModelState.AddModelError("", "No record found!");
                 return new EnhancedJsonResult(ModelState.Values.SelectMany(v => v.Errors));
             }
@@ -184,7 +161,7 @@ namespace RecruitmentManagementSystem.App.Controllers
                 return new EnhancedJsonResult(ModelState.Values.SelectMany(v => v.Errors));
             }
 
-            var user = await UserManager.FindByIdAsync(model.Id);
+            var user = await _userManager.FindByIdAsync(model.Id);
 
             if (user == null)
             {
@@ -193,26 +170,9 @@ namespace RecruitmentManagementSystem.App.Controllers
                 return new EnhancedJsonResult(ModelState.Values.SelectMany(v => v.Errors));
             }
 
-            user.UserName = model.Email;
-            user.FirstName = model.FirstName;
-            user.LastName = model.LastName;
-            user.Email = model.Email;
-            user.PhoneNumber = model.PhoneNumber;
-            user.Address = model.Address;
-            user.Others = model.Others;
-            user.Website = model.Website;
-            user.Files = ManageFiles(model);
+            _userService.Update(model);
 
-            user.Educations = _modelFactory.MapToDomain<EducationModel, Education>(model.Educations);
-
-            //foreach (var m in model.Educations.Where(x => x.UserId == string.Empty))
-            //{
-            //    m.UserId = model.Id;
-            //}
-
-            await UserManager.UpdateAsync(user);
-
-            return new EnhancedJsonResult(model);
+            return null;
         }
 
         #region Reset Password
@@ -221,7 +181,7 @@ namespace RecruitmentManagementSystem.App.Controllers
         public async Task<ActionResult> VerifyCode(string provider, string returnUrl, bool rememberMe)
         {
             // Require that the user has already logged in via username/password or external login
-            if (!await SignInManager.HasBeenVerifiedAsync())
+            if (!await _signInManager.HasBeenVerifiedAsync())
             {
                 return View("Error");
             }
@@ -244,7 +204,7 @@ namespace RecruitmentManagementSystem.App.Controllers
             // You can configure the account lockout settings in IdentityConfig
             var result =
                 await
-                    SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent: model.RememberMe,
+                    _signInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent: model.RememberMe,
                         rememberBrowser: model.RememberBrowser);
             switch (result)
             {
@@ -266,7 +226,7 @@ namespace RecruitmentManagementSystem.App.Controllers
             {
                 return View("Error");
             }
-            var result = await UserManager.ConfirmEmailAsync(userId, code);
+            var result = await _userManager.ConfirmEmailAsync(userId, code);
             return View(result.Succeeded ? "ConfirmEmail" : "Error");
         }
 
@@ -283,8 +243,8 @@ namespace RecruitmentManagementSystem.App.Controllers
         public async Task<ActionResult> ForgotPassword(ForgotPasswordViewModel model)
         {
             if (!ModelState.IsValid) return View(model);
-            var user = await UserManager.FindByNameAsync(model.Email);
-            if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
+            var user = await _userManager.FindByNameAsync(model.Email);
+            if (user == null || !(await _userManager.IsEmailConfirmedAsync(user.Id)))
             {
                 // Don't reveal that the user does not exist or is not confirmed
                 return View("ForgotPasswordConfirmation");
@@ -323,13 +283,13 @@ namespace RecruitmentManagementSystem.App.Controllers
             {
                 return View(model);
             }
-            var user = await UserManager.FindByNameAsync(model.Email);
+            var user = await _userManager.FindByNameAsync(model.Email);
             if (user == null)
             {
                 // Don't reveal that the user does not exist
                 return RedirectToAction("ResetPasswordConfirmation", "Account");
             }
-            var result = await UserManager.ResetPasswordAsync(user.Id, model.Code, model.Password);
+            var result = await _userManager.ResetPasswordAsync(user.Id, model.Code, model.Password);
             if (result.Succeeded)
             {
                 return RedirectToAction("ResetPasswordConfirmation", "Account");
@@ -349,12 +309,12 @@ namespace RecruitmentManagementSystem.App.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> SendCode(string returnUrl, bool rememberMe)
         {
-            var userId = await SignInManager.GetVerifiedUserIdAsync();
+            var userId = await _signInManager.GetVerifiedUserIdAsync();
             if (userId == null)
             {
                 return View("Error");
             }
-            var userFactors = await UserManager.GetValidTwoFactorProvidersAsync(userId);
+            var userFactors = await _userManager.GetValidTwoFactorProvidersAsync(userId);
             var factorOptions =
                 userFactors.Select(purpose => new SelectListItem {Text = purpose, Value = purpose}).ToList();
             return
@@ -372,7 +332,7 @@ namespace RecruitmentManagementSystem.App.Controllers
             }
 
             // Generate the token and send it
-            if (!await SignInManager.SendTwoFactorCodeAsync(model.SelectedProvider))
+            if (!await _signInManager.SendTwoFactorCodeAsync(model.SelectedProvider))
             {
                 return View("Error");
             }
@@ -467,68 +427,5 @@ namespace RecruitmentManagementSystem.App.Controllers
         }
 
         #endregion
-
-        private ICollection<File> ManageFiles(UserCreateModel model)
-        {
-            var files = new List<File>();
-
-            var httpFileCollection = System.Web.HttpContext.Current.Request.Files;
-
-            for (var index = 0; index < httpFileCollection.Count; index++)
-            {
-                if (httpFileCollection[index] == null || httpFileCollection[index].ContentLength <= 0)
-                {
-                    continue;
-                }
-
-                FileType fileType;
-                if (httpFileCollection[index].FileName == model.AvatarFileName)
-                {
-                    fileType = FileType.Avatar;
-                }
-                else if (httpFileCollection[index].FileName == model.ResumeFileName)
-                {
-                    fileType = FileType.Resume;
-                }
-                else
-                {
-                    fileType = FileType.Document;
-                }
-
-                var uploadConfig = FileHelper.Upload(httpFileCollection[index], fileType);
-
-                if (uploadConfig.FileBase == null) continue;
-
-                var existingRecords = _fileRepository.FindAll(x => x.User.Id == model.Id).Select(x => new
-                {
-                    x.Id,
-                    x.RelativePath
-                }).ToList();
-                foreach (var record in existingRecords)
-                {
-                    FileHelper.Delete(record.RelativePath);
-                    _fileRepository.Delete(record.Id);
-                }
-                _fileRepository.Save();
-
-                var file = new File
-                {
-                    Name = uploadConfig.FileName,
-                    MimeType = uploadConfig.FileBase.ContentType,
-                    Size = uploadConfig.FileBase.ContentLength,
-                    RelativePath = uploadConfig.FilePath + uploadConfig.FileName,
-                    FileType = fileType,
-                    ObjectState = ObjectState.Added,
-                    CreatedAt = DateTime.UtcNow,
-                    UpdatedAt = DateTime.UtcNow,
-                    CreatedBy = User.Identity.GetUserId(),
-                    UpdatedBy = User.Identity.GetUserId()
-                };
-
-                files.Add(file);
-            }
-
-            return files;
-        }
     }
 }

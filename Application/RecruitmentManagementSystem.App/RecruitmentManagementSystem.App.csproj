@@ -187,7 +187,6 @@
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
-    <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\OAuthConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\SeedData.cs" />
@@ -215,10 +214,6 @@
     <Content Include="Content\Images\default-avatar.jpg" />
     <Content Include="Global.asax" />
     <Content Include="gulpfile.js" />
-    <Content Include="Scripts\accounts\accounts.module.js" />
-    <Content Include="Scripts\accounts\controllers\accounts.controller.js" />
-    <Content Include="Scripts\accounts\controllers\accounts.profile.controller.js" />
-    <Content Include="Scripts\accounts\templates\account-modal.html" />
     <Content Include="Scripts\core\config\config.js" />
     <Content Include="Scripts\core\config\init.js" />
     <Content Include="Scripts\core\core.module.js" />
@@ -233,6 +228,8 @@
     <Content Include="Scripts\quiz\controllers\quiz.question.controller.js" />
     <Content Include="Scripts\quiz\quiz.module.js" />
     <Content Include="Scripts\quiz\templates\question-modal.html" />
+    <Content Include="Scripts\users\controllers\users.experience.modal.controller.js" />
+    <Content Include="Scripts\users\controllers\users.project.modal.controller.js" />
     <Content Include="Scripts\users\controllers\users.education.modal.controller.js" />
     <Content Include="Scripts\users\controllers\users.controller.js" />
     <Content Include="Scripts\users\templates\education-modal.html" />
@@ -265,7 +262,7 @@
     <Content Include="Views\Account\VerifyCode.cshtml" />
     <Content Include="Views\Manage\AddPhoneNumber.cshtml" />
     <Content Include="Views\Manage\ChangePassword.cshtml" />
-    <Content Include="Views\Manage\Index.cshtml" />
+    <Content Include="Views\Manage\Security.cshtml" />
     <Content Include="Views\Manage\SetPassword.cshtml" />
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
@@ -305,16 +302,13 @@
     <Content Include="Views\Account\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Manage\_Profile.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\Question\List.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Question\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Error\PageNotFound.cshtml" />
+    <Content Include="Views\Error\NotFound.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Question\Create.cshtml" />
@@ -402,6 +396,15 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Account\_Education.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Account\_Experience.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Account\_Skill.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Account\_Project.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

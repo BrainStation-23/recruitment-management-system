@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using AutoMapper;
-using RecruitmentManagementSystem.Core.Models.Candidate;
-using RecruitmentManagementSystem.Core.Models.Institution;
 using RecruitmentManagementSystem.Core.Models.Question;
 using RecruitmentManagementSystem.Core.Models.Quiz;
+using RecruitmentManagementSystem.Core.Models.User;
 using RecruitmentManagementSystem.Core.Tasks;
 using RecruitmentManagementSystem.Model;
 
@@ -61,17 +60,17 @@ namespace RecruitmentManagementSystem.Core.Mappings
 
         private static void LoadModelToEntityMappings()
         {
-            //Mapper.CreateMap<CandidateCreateModel, Candidate>(MemberList.Source)
-            //    .ForMember(s => s.Educations, t => t.Ignore())
-            //    .ForMember(s => s.Experiences, t => t.Ignore())
-            //    .ForMember(s => s.Projects, t => t.Ignore())
-            //    .ForMember(s => s.Skills, t => t.Ignore());
+            Mapper.CreateMap<UserCreateModel, User>(MemberList.Source)
+                .ForMember(s => s.Educations, t => t.Ignore())
+                .ForMember(s => s.Experiences, t => t.Ignore())
+                .ForMember(s => s.Projects, t => t.Ignore())
+                .ForMember(s => s.Skills, t => t.Ignore());
 
-            //Mapper.CreateMap<SkillModel, Skill>(MemberList.Source);
+            Mapper.CreateMap<SkillModel, Skill>(MemberList.Source);
 
-            //Mapper.CreateMap<ProjectModel, Project>(MemberList.Source);
+            Mapper.CreateMap<ProjectModel, Project>(MemberList.Source);
 
-            //Mapper.CreateMap<ExperienceModel, Experience>(MemberList.Source);
+            Mapper.CreateMap<ExperienceModel, Experience>(MemberList.Source);
 
             Mapper.CreateMap<EducationModel, Education>(MemberList.Source)
                 .ForMember(s => s.Institution, t => t.Ignore());
