@@ -1,18 +1,13 @@
-﻿using AutoMapper;
+﻿using System.Collections.Generic;
+using AutoMapper;
+using Microsoft.Build.Framework.XamlTypes;
 using RecruitmentManagementSystem.Core.Mappings;
+using RecruitmentManagementSystem.Core.Models.Shared;
 
 namespace RecruitmentManagementSystem.Core.Models.Question
 {
-    public class QuestionModel : QuestionBase, IHaveCustomMappings
+    public class QuestionModel : QuestionBase, IMapFrom<Model.Question>
     {
-        public string Category { get; set; }
 
-        public void CreateMappings(IConfiguration configuration)
-        {
-            configuration.CreateMap<Model.Question, QuestionModel>()
-                .ForMember(m => m.Category, opt => opt.MapFrom(u => u.Category.Name))
-                .ForMember(m => m.Choices, opt => opt.MapFrom(u => u.Choices))
-                .ForMember(m => m.Files, opt => opt.MapFrom(u => u.Files));
-        }
     }
 }

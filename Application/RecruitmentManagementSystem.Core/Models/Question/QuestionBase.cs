@@ -1,12 +1,19 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using RecruitmentManagementSystem.Model;
+using RecruitmentManagementSystem.Core.Models.Shared;
 
 namespace RecruitmentManagementSystem.Core.Models.Question
 {
-    public class QuestionBase
+    public class QuestionBase : BaseModel
     {
-        public int Id { get; set; }
+        public QuestionBase()
+        {
+            QuestionType = new QuestionType();
+            Answers = new List<Answer>();
+            Files = new List<File>();
+            Category = new QuestionCategory();
+        }
 
         [Required]
         [Display(Name = "Text")]
@@ -17,8 +24,8 @@ namespace RecruitmentManagementSystem.Core.Models.Question
         [Display(Name = "Question Type")]
         public QuestionType QuestionType { get; set; }
 
-        [Display(Name = "Choices")]
-        public ICollection<Choice> Choices { get; set; }
+        [Display(Name = "Answers")]
+        public ICollection<Answer> Answers { get; set; }
 
         public ICollection<File> Files { get; set; }
 
@@ -26,11 +33,13 @@ namespace RecruitmentManagementSystem.Core.Models.Question
         [StringLength(500, ErrorMessage = "The {0} must be at most {1} characters long.")]
         public string Notes { get; set; }
 
-        [StringLength(300, ErrorMessage = "The {0} must be at most {1} characters long.")]
-        public string Answer { get; set; }
+        [Display(Name = "Default Mark")]
+        public decimal DefaultPoint { get; set; }
 
         [Required]
         [Display(Name = "Category")]
         public int CategoryId { get; set; }
+
+        public QuestionCategory Category { get; set; }
     }
 }

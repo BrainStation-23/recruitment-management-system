@@ -1,19 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using AutoMapper.QueryableExtensions;
-using Microsoft.AspNet.Identity;
-using RecruitmentManagementSystem.App.Infrastructure.Constants;
-using RecruitmentManagementSystem.App.Infrastructure.Helpers;
+using RecruitmentManagementSystem.App.Infrastructure.ActionResults;
 using RecruitmentManagementSystem.Core.Models.Question;
 using RecruitmentManagementSystem.Data.Interfaces;
-using RecruitmentManagementSystem.Model;
-using File = RecruitmentManagementSystem.Model.File;
-using JsonResult = RecruitmentManagementSystem.App.Infrastructure.ActionResults.JsonResult;
+using RecruitmentManagementSystem.Core.Interfaces;
+using RecruitmentManagementSystem.Core.Mappings;
 
 namespace RecruitmentManagementSystem.App.Controllers
 {
@@ -22,20 +15,29 @@ namespace RecruitmentManagementSystem.App.Controllers
     {
         private readonly IQuestionRepository _questionRepository;
         private readonly IFileRepository _fileRepository;
-        private readonly IChoiceRepository _choiceRepository;
+        private readonly IAnswerRepository _answerRepository;
+        private readonly IQuestionService _questionService;
+        private readonly IModelFactory _modelFactory;
 
         public QuestionController(IQuestionRepository questionRepository, IFileRepository fileRepository,
-            IChoiceRepository choiceRepository)
+            IAnswerRepository answerRepository, IQuestionService questionService, IModelFactory modelFactory)
         {
             _questionRepository = questionRepository;
             _fileRepository = fileRepository;
-            _choiceRepository = choiceRepository;
+            _answerRepository = answerRepository;
+            _questionService = questionService;
+            _modelFactory = modelFactory;
         }
 
         [HttpGet]
         public ActionResult List()
         {
-            var model = _questionRepository.FindAll().ProjectTo<QuestionModel>();
+            var model = _questionService.GetPagedList();
+
+            if (Request.IsAjaxRequest())
+            {
+                return new EnhancedJsonResult(model, JsonRequestBehavior.AllowGet);
+            }
 
             return View(model);
         }
@@ -48,7 +50,7 @@ namespace RecruitmentManagementSystem.App.Controllers
 
             if (Request.IsAjaxRequest())
             {
-                return new JsonResult(viewModel, JsonRequestBehavior.AllowGet);
+                return new EnhancedJsonResult(viewModel, JsonRequestBehavior.AllowGet);
             }
 
             return View(viewModel);
@@ -62,30 +64,15 @@ namespace RecruitmentManagementSystem.App.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(QuestionCreateModel viewModel)
+        public ActionResult Create(QuestionCreateModel model)
         {
             if (!ModelState.IsValid)
             {
                 Response.StatusCode = (int) HttpStatusCode.BadRequest;
-                return new JsonResult(ModelState.Values.SelectMany(v => v.Errors));
+                return new EnhancedJsonResult(ModelState.Values.SelectMany(v => v.Errors));
             }
 
-            var question = new Question
-            {
-                Text = viewModel.Text,
-                QuestionType = viewModel.QuestionType,
-                Answer = viewModel.Answer,
-                Notes = viewModel.Notes,
-                CategoryId = viewModel.CategoryId,
-                Choices = viewModel.Choices,
-                Files = ManageFiles(Request.Files),
-                CreatedBy = User.Identity.GetUserId(),
-                UpdatedBy = User.Identity.GetUserId()
-            };
-
-            _questionRepository.Insert(question);
-
-            _questionRepository.Save();
+            _questionService.Insert(model);
 
             return Json(null);
         }
@@ -104,45 +91,22 @@ namespace RecruitmentManagementSystem.App.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(QuestionCreateModel model)
         {
+            var entity = _questionRepository.Find(model.Id);
+
+            if (entity == null)
+            {
+                Response.StatusCode = (int) HttpStatusCode.NotFound;
+                ModelState.AddModelError("", "Question not found.");
+                return new EnhancedJsonResult(ModelState.Values.SelectMany(v => v.Errors));
+            }
+
             if (!ModelState.IsValid)
             {
                 Response.StatusCode = (int) HttpStatusCode.BadRequest;
-                return new JsonResult(ModelState.Values.SelectMany(v => v.Errors));
+                return new EnhancedJsonResult(ModelState.Values.SelectMany(v => v.Errors));
             }
 
-            if (model.DeletableFile != null)
-            {
-                foreach (var file in model.DeletableFile)
-                {
-                    _fileRepository.Delete(file.Id);
-                    FileHelper.DeleteFile(file);
-                }
-                _fileRepository.Save();
-            }
-
-            var choices = _choiceRepository.FindAll(x => x.QuestionId == model.Id).ToList();
-
-            if (choices.Count > 0)
-            {
-                foreach (var choice in choices)
-                {
-                    _choiceRepository.Delete(choice);
-                }
-                _choiceRepository.Save();
-            }
-
-            var entity = _questionRepository.Find(model.Id);
-
-            entity.Text = model.Text;
-            entity.Answer = model.Answer;
-            entity.CategoryId = model.CategoryId;
-            entity.Notes = model.Notes;
-            entity.QuestionType = model.QuestionType;
-            entity.Files = ManageFiles(Request.Files);
-            entity.Choices = model.Choices;
-
-            _questionRepository.Update(entity);
-            _questionRepository.Save();
+            _questionService.Update(model);
 
             return Json(null);
         }
@@ -168,67 +132,5 @@ namespace RecruitmentManagementSystem.App.Controllers
 
             return RedirectToAction("List");
         }
-
-        #region Private Methods
-
-        private ICollection<File> ManageFiles(HttpFileCollectionBase fileCollection)
-        {
-            var files = new List<File>();
-
-            for (var index = 0; index < fileCollection.Count; index++)
-            {
-                if (fileCollection[index] == null || fileCollection[index].ContentLength <= 0)
-                {
-                    continue;
-                }
-
-                var uploadConfig = UploadFile(Request.Files[index]);
-
-                if (uploadConfig.FileBase == null) continue;
-
-                var file = new File
-                {
-                    Name = Path.GetFileName(fileCollection[index].FileName),
-                    MimeType = uploadConfig.FileBase.ContentType,
-                    Size = uploadConfig.FileBase.ContentLength,
-                    RelativePath = uploadConfig.FilePath + uploadConfig.FileName,
-                    FileType = FileType.Document,
-                    CreatedBy = User.Identity.GetUserId(),
-                    UpdatedBy = User.Identity.GetUserId()
-                };
-
-                files.Add(file);
-            }
-
-            return files;
-        }
-
-        private static UploadConfig UploadFile(HttpPostedFileBase fileBase)
-        {
-            var fileName = string.Format("{0}.{1}", Guid.NewGuid(), Path.GetFileName(fileBase.FileName));
-
-            const string filePath = FilePath.DocumentRelativePath;
-
-            var uploadConfig = new UploadConfig
-            {
-                FileBase = fileBase,
-                FileName = fileName,
-                FilePath = filePath
-            };
-
-            try
-            {
-                FileHelper.SaveFile(uploadConfig);
-            }
-            catch (Exception)
-            {
-                return new UploadConfig();
-            }
-
-            return uploadConfig;
-        }
-
-
-        #endregion
     }
 }

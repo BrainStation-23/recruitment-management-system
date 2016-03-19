@@ -14,9 +14,9 @@
 * [Toastr](http://codeseven.github.io/toastr/)
 * [Microsoft Unity](http://unity.codeplex.com/)
 * [xUnit](https://xunit.github.io/)
-* [AngularJS](https://angularjs.org/)
+* [Angular](https://angularjs.org/)
 * [Angular UI Bootstrap](http://angular-ui.github.io/bootstrap/)
-* [Gulp.js](http://gulpjs.com/)
+* [Gulp](http://gulpjs.com/)
 
 # Installation
 
@@ -38,7 +38,7 @@ $ npm install -g gulp
 $ gem install scss_lint
 
 $ cd /path/to/RecruitmentManagementSystem.App
-$ npm install # this will also trigger "bower install"
+$ npm install
 $ gulp
 
 # Build and run the solution
@@ -49,7 +49,7 @@ For more information please visit [bower.io](http://bower.io/) and [gulp.js](htt
 
 This application is released under the [MIT](http://www.opensource.org/licenses/MIT) License.
 
-Copyright (c) 2015 [BrainStation-23 Ltd.](http://brainstation-23.com/)
+Copyright (c) 2016 [BrainStation 23 Ltd.](http://brainstation-23.com/)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 

@@ -6,12 +6,12 @@ namespace RecruitmentManagementSystem.Core.Mappings
 {
     public interface IModelFactory
     {
-        ICollection<TEntity> MapToDomain<TDto, TEntity>(ICollection<TDto> models, IEnumerable<TEntity> entities)
+        ICollection<TEntity> MapToDomain<TModel, TEntity>(ICollection<TModel> models)
             where TEntity : BaseEntity
-            where TDto : BaseDto;
+            where TModel : BaseModel;
 
-        TEntity MapToDomain<TDto, TEntity>(TDto dto, TEntity entity)
+        TEntity MapToDomain<TModel, TEntity>(TModel model, TEntity entity)
             where TEntity : BaseEntity
-            where TDto : BaseDto;
+            where TModel : BaseModel;
     }
 }

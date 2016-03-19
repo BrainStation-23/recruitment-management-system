@@ -1,12 +1,7 @@
 {
   "name": "Recruitment Management System",
   "version": "1.0.0",
-  "authors": [
-    "Adnan <adnan.faiz@bs-23.com>",
-    "Arif <arifur.rahman@bs-23.com>",
-    "Ruhul <ruhul.amin@bs-23.com>",
-    "Shibbir <shibbir@bs-23.com>"
-  ],
+  "author": "BrainStation-23 <http://www.brainstation-23.com>",
   "keywords": [
     "asp.net mvc",
     "angular.js"
@@ -16,23 +11,20 @@
     "**/.*",
     "node_modules",
     "bower_components",
-    "/Vendors/bower_components",
     "test",
     "tests"
   ],
   "dependencies": {
-    "jquery": "~2.1.4",
-    "jquery-validation": "~1.14.0",
+    "jquery": "^2.2.2",
+    "jquery-validation": "^1.14.0",
     "jquery-validation-unobtrusive": "~3.2.5",
-    "angular": "~1.4.8",
-    "angular-bootstrap": "~0.14.3",
-    "angular-messages": "~1.4.8",
+    "angular": "^1.5.0",
+    "angular-bootstrap": "^1.2.4",
+    "angular-messages": "^1.5.0",
     "font-awesome": "~4.5.0",
-    "ng-file-upload": "~11.0.0",
+    "ng-file-upload": "^12.0.4",
     "toastr": "~2.1.2",
-    "lodash": "~3.10.1"
-  },
-  "resolutions": {
-    "angular": "~1.4.8"
+    "lodash": "~4.5.0",
+    "bootstrap": "^3.3.6"
   }
 }

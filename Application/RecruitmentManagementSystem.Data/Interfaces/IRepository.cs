@@ -8,6 +8,7 @@ namespace RecruitmentManagementSystem.Data.Interfaces
     public interface IRepository<T>
         where T : BaseEntity
     {
+        void InsertOrUpdate(T entity);
         void Insert(T entity);
         void Update(T entity);
         void Delete(object id);

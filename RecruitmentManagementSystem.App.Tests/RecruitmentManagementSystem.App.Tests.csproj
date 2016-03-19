@@ -108,6 +108,10 @@
       <Project>{aa5c9f2b-ae74-43ea-95c3-071b99b07cbb}</Project>
       <Name>RecruitmentManagementSystem.Data</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Application\RecruitmentManagementSystem.Model\RecruitmentManagementSystem.Model.csproj">
+      <Project>{f332f93c-34fd-42a7-bcdd-5442778981c7}</Project>
+      <Name>RecruitmentManagementSystem.Model</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

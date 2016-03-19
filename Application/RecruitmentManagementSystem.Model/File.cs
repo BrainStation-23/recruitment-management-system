@@ -27,8 +27,6 @@ namespace RecruitmentManagementSystem.Model
 
         public Question Question { get; set; }
 
-        public Candidate Candidate { get; set; }
-
-        public string ApplicationUserId { get; set; }
+        public User User { get; set; }
     }
 }

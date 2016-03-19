@@ -1,0 +1,40 @@
+﻿<div>
+    <hr />
+
+    <div ng-hide="userCtrl.user.projects && userCtrl.user.projects.length" uib-alert type="success">
+        <i class="fa fa-lg fa-exclamation-triangle"></i>
+        No projects are added yet.
+    </div>
+
+    <div class="table-responsive" ng-show="userCtrl.user.projects && userCtrl.user.projects.length">
+        <table class="table">
+            <tr>
+                <th>Title</th>
+                <th>Url</th>
+                <th>Description</th>
+                <th></th>
+            </tr>
+            <tr ng-repeat="project in userCtrl.user.projects">
+                <td>
+                    <div ng-bind="project.title"></div>
+                </td>
+                <td>
+                    <div ng-bind="project.url"></div>
+                </td>
+                <td>
+                    <div ng-bind="project.description"></div>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-success" ng-click="userCtrl.openProjectModal(project)">
+                        <i class="fa fa-edit fa-lg"></i>
+                    </button>
+                    <button type="button" class="btn btn-danger" ng-click="userCtrl.discardProject($index)">
+                        <i class="fa fa-trash fa-lg"></i>
+                    </button>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <button type="button" class="btn btn-primary" ng-click="userCtrl.openProjectModal()">Add Project</button>
+</div>

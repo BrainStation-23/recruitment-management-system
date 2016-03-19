@@ -1,0 +1,58 @@
+﻿<div>
+    <hr/>
+
+    <div ng-hide="userCtrl.user.educations && userCtrl.user.educations.length" uib-alert type="success">
+        <i class="fa fa-lg fa-exclamation-triangle"></i>
+        No educations are added yet.
+    </div>
+
+    <div class="table-responsive" ng-show="userCtrl.user.educations && userCtrl.user.educations.length">
+        <table class="table">
+            <tr>
+                <th>Degree</th>
+                <th>Field Of Study</th>
+                <th>Grade</th>
+                <th>Time Duration</th>
+                <th>Activites</th>
+                <th>Notes</th>
+                <th>Institution</th>
+                <th></th>
+            </tr>
+            <tr ng-repeat="education in userCtrl.user.educations">
+                <td>
+                    <div ng-bind="education.degree"></div>
+                </td>
+                <td>
+                    <div ng-bind="education.fieldOfStudy"></div>
+                </td>
+                <td>
+                    <div ng-bind="education.grade"></div>
+                </td>
+                <td>
+                    <div>
+                        {{ education.startDate | date : 'MMM dd, yyyy' }} to {{ education.present ? 'Present' : (education.endDate | date : 'MMM dd, yyyy') }}
+                    </div>
+                </td>
+                <td>
+                    <div ng-bind="education.activities"></div>
+                </td>
+                <td>
+                    <div ng-bind="education.notes"></div>
+                </td>
+                <td>
+                    <div ng-bind="education.institution.name"></div>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-success" ng-click="userCtrl.openEducationModal(education)">
+                        <i class="fa fa-edit fa-lg"></i>
+                    </button>
+                    <button type="button" class="btn btn-danger" ng-click="userCtrl.discardEducation($index)">
+                        <i class="fa fa-trash fa-lg"></i>
+                    </button>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <button type="button" class="btn btn-primary" ng-click="userCtrl.openEducationModal()">Add Education</button>
+</div>

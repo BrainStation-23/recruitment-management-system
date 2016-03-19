@@ -4,6 +4,7 @@ using System.Data.Entity;
 using System.Linq;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using RecruitmentManagementSystem.Core.Infrastructure;
 using RecruitmentManagementSystem.Core.Tasks;
 using RecruitmentManagementSystem.Data.DbContext;
 using RecruitmentManagementSystem.Model;
@@ -12,7 +13,7 @@ namespace RecruitmentManagementSystem.App
 {
     public class SeedData : IRunAtInit
     {
-        private ApplicationUser _applicationUser;
+        private User _applicationUser;
 
         public void Execute()
         {
@@ -38,11 +39,6 @@ namespace RecruitmentManagementSystem.App
                     SeedInstitution(dbContext);
                 }
 
-                if (!dbContext.JobPositions.Any())
-                {
-                    SeedJobPosition(dbContext);
-                }
-
                 dbContext.SaveChanges();
             }
         }
@@ -57,14 +53,14 @@ namespace RecruitmentManagementSystem.App
             roleManager.Create(new IdentityRole {Name = "Candidate"});
         }
 
-        private static ApplicationUser SeedApplicationUser(DbContext dbContext)
+        private static User SeedApplicationUser(DbContext dbContext)
         {
             const string email = "admin-rms@bs-23.com";
             const string password = "HakunaMatata-23";
 
-            var userManager = new ApplicationUserManager(new UserStore<ApplicationUser>(dbContext));
+            var userManager = new ApplicationUserManager(new UserStore<User>(dbContext));
 
-            userManager.UserValidator = new UserValidator<ApplicationUser>(userManager)
+            userManager.UserValidator = new UserValidator<User>(userManager)
             {
                 AllowOnlyAlphanumericUserNames = false,
                 RequireUniqueEmail = true
@@ -79,7 +75,7 @@ namespace RecruitmentManagementSystem.App
                 RequireUppercase = true,
             };
 
-            var user = new ApplicationUser
+            var user = new User
             {
                 Email = email,
                 UserName = email,
@@ -190,32 +186,6 @@ namespace RecruitmentManagementSystem.App
                 item.CreatedAt = DateTime.UtcNow;
                 item.UpdatedAt = DateTime.UtcNow;
                 dbContext.Institutions.Add(item);
-            }
-        }
-
-        private void SeedJobPosition(ApplicationDbContext dbContext)
-        {
-            var collection = new List<JobPosition>
-            {
-                new JobPosition
-                {
-                    Name = "Junior Software Engineer",
-                    Description = "Lorem Ipsum."
-                },
-                new JobPosition
-                {
-                    Name = "Senior Software Engineer",
-                    Description = "Lorem Ipsum."
-                }
-            };
-
-            foreach (var item in collection)
-            {
-                item.CreatedBy = _applicationUser.Id;
-                item.UpdatedBy = _applicationUser.Id;
-                item.CreatedAt = DateTime.UtcNow;
-                item.UpdatedAt = DateTime.UtcNow;
-                dbContext.JobPositions.Add(item);
             }
         }
     }

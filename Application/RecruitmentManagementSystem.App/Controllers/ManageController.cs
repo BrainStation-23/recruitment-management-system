@@ -1,59 +1,28 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
-using RecruitmentManagementSystem.App.Infrastructure.Constants;
-using RecruitmentManagementSystem.App.Infrastructure.Helpers;
-using RecruitmentManagementSystem.Core.Models.Account;
-using RecruitmentManagementSystem.Data.Interfaces;
-using RecruitmentManagementSystem.Data.Repositories;
-using RecruitmentManagementSystem.Model;
-using File = RecruitmentManagementSystem.Model.File;
-using JsonResult = RecruitmentManagementSystem.App.Infrastructure.ActionResults.JsonResult;
+using RecruitmentManagementSystem.Core.Infrastructure;
+using RecruitmentManagementSystem.Core.Models.User;
 
 namespace RecruitmentManagementSystem.App.Controllers
 {
     [Authorize]
     public class ManageController : BaseController
     {
-        private ApplicationSignInManager _signInManager;
+        private readonly ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
-        private readonly IFileRepository _fileRepository;
 
-        public ManageController()
+        public ManageController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
-            _fileRepository = new FileRepository();
-        }
-
-        public ManageController(ApplicationUserManager userManager, ApplicationSignInManager signInManager,
-            IFileRepository fileRepository)
-        {
-            UserManager = userManager;
-            SignInManager = signInManager;
-            _fileRepository = fileRepository;
-        }
-
-        public ApplicationSignInManager SignInManager
-        {
-            get { return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>(); }
-            private set { _signInManager = value; }
-        }
-
-        public ApplicationUserManager UserManager
-        {
-            get { return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>(); }
-            private set { _userManager = value; }
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
 
         //
         // GET: /Manage/Index
-        public async Task<ActionResult> Index(ManageMessageId? message)
+        public async Task<ActionResult> Security(ManageMessageId? message)
         {
             ViewBag.StatusMessage =
                 message == ManageMessageId.ChangePasswordSuccess
@@ -72,12 +41,12 @@ namespace RecruitmentManagementSystem.App.Controllers
 
             var userId = User.Identity.GetUserId();
 
-            var model = new IndexViewModel
+            var model = new SecurityViewModel
             {
                 HasPassword = HasPassword(),
-                PhoneNumber = await UserManager.GetPhoneNumberAsync(userId),
-                TwoFactor = await UserManager.GetTwoFactorEnabledAsync(userId),
-                Logins = await UserManager.GetLoginsAsync(userId),
+                PhoneNumber = await _userManager.GetPhoneNumberAsync(userId),
+                TwoFactor = await _userManager.GetTwoFactorEnabledAsync(userId),
+                Logins = await _userManager.GetLoginsAsync(userId),
                 BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId)
             };
 
@@ -102,15 +71,15 @@ namespace RecruitmentManagementSystem.App.Controllers
                 return View(model);
             }
             // Generate the token and send it
-            var code = await UserManager.GenerateChangePhoneNumberTokenAsync(User.Identity.GetUserId(), model.Number);
-            if (UserManager.SmsService == null)
+            var code = await _userManager.GenerateChangePhoneNumberTokenAsync(User.Identity.GetUserId(), model.Number);
+            if (_userManager.SmsService == null)
                 return RedirectToAction("VerifyPhoneNumber", new {PhoneNumber = model.Number});
             var message = new IdentityMessage
             {
                 Destination = model.Number,
                 Body = "Your security code is: " + code
             };
-            await UserManager.SmsService.SendAsync(message);
+            await _userManager.SmsService.SendAsync(message);
             return RedirectToAction("VerifyPhoneNumber", new {PhoneNumber = model.Number});
         }
 
@@ -120,13 +89,13 @@ namespace RecruitmentManagementSystem.App.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> EnableTwoFactorAuthentication()
         {
-            await UserManager.SetTwoFactorEnabledAsync(User.Identity.GetUserId(), true);
-            var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+            await _userManager.SetTwoFactorEnabledAsync(User.Identity.GetUserId(), true);
+            var user = await _userManager.FindByIdAsync(User.Identity.GetUserId());
             if (user != null)
             {
-                await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                await _signInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
             }
-            return RedirectToAction("Index", "Manage");
+            return RedirectToAction("Security", "Manage");
         }
 
         //
@@ -135,20 +104,20 @@ namespace RecruitmentManagementSystem.App.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DisableTwoFactorAuthentication()
         {
-            await UserManager.SetTwoFactorEnabledAsync(User.Identity.GetUserId(), false);
-            var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+            await _userManager.SetTwoFactorEnabledAsync(User.Identity.GetUserId(), false);
+            var user = await _userManager.FindByIdAsync(User.Identity.GetUserId());
             if (user != null)
             {
-                await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                await _signInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
             }
-            return RedirectToAction("Index", "Manage");
+            return RedirectToAction("Security", "Manage");
         }
 
         //
         // GET: /Manage/VerifyPhoneNumber
         public async Task<ActionResult> VerifyPhoneNumber(string phoneNumber)
         {
-            var code = await UserManager.GenerateChangePhoneNumberTokenAsync(User.Identity.GetUserId(), phoneNumber);
+            var code = await _userManager.GenerateChangePhoneNumberTokenAsync(User.Identity.GetUserId(), phoneNumber);
             // Send an SMS through the SMS provider to verify the phone number
             return phoneNumber == null
                 ? View("Error")
@@ -166,15 +135,15 @@ namespace RecruitmentManagementSystem.App.Controllers
                 return View(model);
             }
             var result =
-                await UserManager.ChangePhoneNumberAsync(User.Identity.GetUserId(), model.PhoneNumber, model.Code);
+                await _userManager.ChangePhoneNumberAsync(User.Identity.GetUserId(), model.PhoneNumber, model.Code);
             if (result.Succeeded)
             {
-                var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+                var user = await _userManager.FindByIdAsync(User.Identity.GetUserId());
                 if (user != null)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                    await _signInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                 }
-                return RedirectToAction("Index", new {Message = ManageMessageId.AddPhoneSuccess});
+                return RedirectToAction("Security", new {Message = ManageMessageId.AddPhoneSuccess});
             }
             // If we got this far, something failed, redisplay form
             ModelState.AddModelError("", "Failed to verify phone");
@@ -185,17 +154,17 @@ namespace RecruitmentManagementSystem.App.Controllers
         // GET: /Manage/RemovePhoneNumber
         public async Task<ActionResult> RemovePhoneNumber()
         {
-            var result = await UserManager.SetPhoneNumberAsync(User.Identity.GetUserId(), null);
+            var result = await _userManager.SetPhoneNumberAsync(User.Identity.GetUserId(), null);
             if (!result.Succeeded)
             {
-                return RedirectToAction("Index", new {Message = ManageMessageId.Error});
+                return RedirectToAction("Security", new {Message = ManageMessageId.Error});
             }
-            var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+            var user = await _userManager.FindByIdAsync(User.Identity.GetUserId());
             if (user != null)
             {
-                await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                await _signInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
             }
-            return RedirectToAction("Index", new {Message = ManageMessageId.RemovePhoneSuccess});
+            return RedirectToAction("Security", new {Message = ManageMessageId.RemovePhoneSuccess});
         }
 
         //
@@ -216,15 +185,15 @@ namespace RecruitmentManagementSystem.App.Controllers
                 return View(model);
             }
             var result =
-                await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.NewPassword);
+                await _userManager.ChangePasswordAsync(User.Identity.GetUserId(), model.OldPassword, model.NewPassword);
             if (result.Succeeded)
             {
-                var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+                var user = await _userManager.FindByIdAsync(User.Identity.GetUserId());
                 if (user != null)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                    await _signInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                 }
-                return RedirectToAction("Index", new {Message = ManageMessageId.ChangePasswordSuccess});
+                return RedirectToAction("Security", new {Message = ManageMessageId.ChangePasswordSuccess});
             }
             AddErrors(result);
             return View(model);
@@ -245,158 +214,21 @@ namespace RecruitmentManagementSystem.App.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await UserManager.AddPasswordAsync(User.Identity.GetUserId(), model.NewPassword);
+                var result = await _userManager.AddPasswordAsync(User.Identity.GetUserId(), model.NewPassword);
                 if (result.Succeeded)
                 {
-                    var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+                    var user = await _userManager.FindByIdAsync(User.Identity.GetUserId());
                     if (user != null)
                     {
-                        await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                        await _signInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
                     }
-                    return RedirectToAction("Index", new {Message = ManageMessageId.SetPasswordSuccess});
+                    return RedirectToAction("Security", new {Message = ManageMessageId.SetPasswordSuccess});
                 }
                 AddErrors(result);
             }
 
             // If we got this far, something failed, redisplay form
             return View(model);
-        }
-
-        [HttpGet]
-        public async Task<ActionResult> AccountDetails()
-        {
-            var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
-
-            var viewModel = new ApplicationUserDto
-            {
-                Id = user.Id,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Email = user.Email,
-                Avatar = _fileRepository.Find(x => x.ApplicationUserId == user.Id)
-            };
-
-            return new JsonResult(viewModel, JsonRequestBehavior.AllowGet);
-        }
-
-        [HttpPost]
-        public async Task<ActionResult> AccountDetails(AccountDetails viewModel)
-        {
-            if (!ModelState.IsValid)
-            {
-                Response.StatusCode = (int) HttpStatusCode.BadRequest;
-                return new JsonResult(ModelState.Values.SelectMany(v => v.Errors));
-            }
-
-            var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
-
-            user.FirstName = viewModel.FirstName;
-            user.LastName = viewModel.LastName;
-            user.Email = viewModel.Email;
-
-            await UserManager.UpdateAsync(user);
-
-            return new JsonResult(viewModel);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> EditRole(Role roleViewModel)
-        {
-            if (!ModelState.IsValid)
-            {
-                Response.StatusCode = (int) HttpStatusCode.BadRequest;
-                return Json(ModelState.Values.SelectMany(v => v.Errors));
-            }
-
-            var user = await UserManager.FindByIdAsync(User.Identity.GetUserId());
-
-            UserManager.AddToRole(user.Id, roleViewModel.Name);
-            await UserManager.UpdateAsync(user);
-
-            return new JsonResult(user);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult UploadAvatar()
-        {
-            if (Request.Files == null || Request.Files.Count <= 0 || Request.Files[0] == null ||
-                Request.Files[0].ContentLength <= 0)
-            {
-                ModelState.AddModelError("", "Invalid file for avatar");
-
-                Response.StatusCode = (int) HttpStatusCode.BadRequest;
-                return new JsonResult(ModelState.Values.SelectMany(v => v.Errors));
-            }
-
-            var fileBase = Request.Files[0];
-
-            var fileName = string.Format("{0}.{1}", Guid.NewGuid(), Path.GetFileName(fileBase.FileName));
-
-            FileHelper.SaveFile(new UploadConfig
-            {
-                FileBase = fileBase,
-                FileName = fileName,
-                FilePath = FilePath.AvatarRelativePath
-            });
-
-            var userId = User.Identity.GetUserId();
-            var previousFile = _fileRepository.Find(x => x.ApplicationUserId == userId);
-            if (previousFile != null)
-            {
-                _fileRepository.Delete(_fileRepository.Find(x => x.ApplicationUserId == userId));
-
-                var fullPath = Request.MapPath(previousFile.RelativePath);
-
-                if (System.IO.File.Exists(fullPath))
-                {
-                    System.IO.File.Delete(fullPath);
-                }
-            }
-
-            var file = new File
-            {
-                Name = fileName,
-                MimeType = fileBase.ContentType,
-                Size = fileBase.ContentLength,
-                RelativePath = FilePath.AvatarRelativePath + fileName,
-                FileType = FileType.Avatar,
-                ApplicationUserId = User.Identity.GetUserId(),
-                CreatedBy = User.Identity.GetUserId(),
-                UpdatedBy = User.Identity.GetUserId()
-            };
-
-            _fileRepository.Insert(file);
-            _fileRepository.Save();
-
-            return new JsonResult(file);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult RemoveAvatar()
-        {
-            var userId = User.Identity.GetUserId();
-            var file = _fileRepository.Find(x => x.ApplicationUserId == userId);
-
-            if (file == null)
-            {
-                Response.StatusCode = (int) HttpStatusCode.BadRequest;
-                ModelState.AddModelError("", "Invalid arguments.");
-                return Json(ModelState.Values.SelectMany(v => v.Errors));
-            }
-
-            var fullPath = Request.MapPath(file.RelativePath);
-
-            if (System.IO.File.Exists(fullPath))
-            {
-                System.IO.File.Delete(fullPath);
-            }
-
-            _fileRepository.Delete(file);
-            _fileRepository.Save();
-            return Json(null);
         }
 
         protected override void Dispose(bool disposing)
@@ -430,7 +262,7 @@ namespace RecruitmentManagementSystem.App.Controllers
 
         private bool HasPassword()
         {
-            var user = UserManager.FindById(User.Identity.GetUserId());
+            var user = _userManager.FindById(User.Identity.GetUserId());
             if (user != null)
             {
                 return user.PasswordHash != null;
@@ -440,7 +272,7 @@ namespace RecruitmentManagementSystem.App.Controllers
 
         private bool HasPhoneNumber()
         {
-            var user = UserManager.FindById(User.Identity.GetUserId());
+            var user = _userManager.FindById(User.Identity.GetUserId());
             if (user != null)
             {
                 return user.PhoneNumber != null;

@@ -1,0 +1,33 @@
+﻿<div>
+    <hr/>
+
+    <div class="row">
+        <div class="col-sm-4">
+            <input type="text" class="form-control" placeholder="Area of expertise?" ng-model="userCtrl.skill" on-enter="userCtrl.addSkill()">
+        </div>
+        <div class="col-sm-2">
+            <button type="button" class="btn btn-primary" ng-click="userCtrl.addSkill()" ng-disabled="!userCtrl.skill || userCtrl.skill.length < 2">Add</button>
+        </div>
+    </div>
+
+    <p style="font-size: 12px; line-height: 14px; margin-bottom: 10px; margin-top: 5px;">
+        Total skills added:
+        <strong ng-bind="userCtrl.user.skills.length"></strong>
+    </p>
+
+    <hr/>
+
+    <div ng-hide="userCtrl.user.skills && userCtrl.user.skills.length" uib-alert type="warning">
+        <i class="fa fa-lg fa-exclamation-triangle"></i>
+        No skills are added yet.
+    </div>
+
+    <div ng-show="userCtrl.user.skills && userCtrl.user.skills.length">
+        <span ng-repeat="skill in userCtrl.user.skills" class="label label-success" style="font-size: 90%; padding: 8px; margin: 5px;">
+            {{ skill.name }}
+            <a ng-click="userCtrl.discardSkill($index)" style="cursor: pointer;" title="Remove">
+                <i class="fa fa-remove fa-lg"></i>
+            </a>
+        </span>
+    </div>
+</div>

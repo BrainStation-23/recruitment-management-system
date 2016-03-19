@@ -5,7 +5,7 @@ namespace RecruitmentManagementSystem.App.Controllers
     [Authorize]
     public class ErrorController : Controller
     {
-        public ActionResult PageNotFound()
+        public ActionResult NotFound()
         {
             Response.StatusCode = 404;
             return View();

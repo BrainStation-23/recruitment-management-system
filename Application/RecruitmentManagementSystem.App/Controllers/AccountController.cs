@@ -1,22 +1,17 @@
-﻿using System;
-using System.IO;
-using System.Linq;
+﻿using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using AutoMapper.QueryableExtensions;
 using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
-using RecruitmentManagementSystem.App.Infrastructure.Constants;
-using RecruitmentManagementSystem.App.Infrastructure.Helpers;
-using RecruitmentManagementSystem.Core.Models.Account;
-using RecruitmentManagementSystem.Data.DbContext;
-using RecruitmentManagementSystem.Data.Interfaces;
-using RecruitmentManagementSystem.Data.Repositories;
+using RecruitmentManagementSystem.App.Infrastructure.ActionResults;
+using RecruitmentManagementSystem.Core.Infrastructure;
+using RecruitmentManagementSystem.Core.Interfaces;
+using RecruitmentManagementSystem.Core.Models.User;
 using RecruitmentManagementSystem.Model;
-using File = RecruitmentManagementSystem.Model.File;
 
 namespace RecruitmentManagementSystem.App.Controllers
 {
@@ -25,43 +20,28 @@ namespace RecruitmentManagementSystem.App.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
-        private readonly IFileRepository _fileRepository;
-        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IUserService _userService;
+        private readonly ApplicationRoleManager _roleManager;
 
-        public AccountController()
+        public AccountController(ApplicationUserManager userManager,
+            ApplicationSignInManager signInManager,
+            ApplicationRoleManager roleManager,
+            IUserService userService)
         {
-            _fileRepository = new FileRepository();
-            _roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(new ApplicationDbContext()));
-        }
-
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager,
-            IFileRepository fileRepository)
-        {
-            UserManager = userManager;
-            SignInManager = signInManager;
-            _fileRepository = fileRepository;
-        }
-
-        public ApplicationSignInManager SignInManager
-        {
-            get { return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>(); }
-            private set { _signInManager = value; }
-        }
-
-        public ApplicationUserManager UserManager
-        {
-            get { return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>(); }
-            private set { _userManager = value; }
+            _roleManager = roleManager;
+            _userService = userService;
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
 
         [HttpGet]
-        public ActionResult Index()
+        public ActionResult List()
         {
-            var users = UserManager.Users.ProjectTo<ApplicationUserDto>().ToList();
+            var users = _userManager.Users.ProjectTo<UserBasicModel>().ToList();
 
             foreach (var user in users)
             {
-                user.Roles = UserManager.GetRoles(user.Id);
+                user.Roles = _userManager.GetRoles(user.Id);
             }
 
             return View(users);
@@ -86,9 +66,7 @@ namespace RecruitmentManagementSystem.App.Controllers
 
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
-            var result =
-                await
-                    SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
+            var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -103,11 +81,107 @@ namespace RecruitmentManagementSystem.App.Controllers
             }
         }
 
+        [HttpGet]
+        public ActionResult Register()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Register(Register model)
+        {
+            if (!ModelState.IsValid) return View(model);
+
+            var user = new User
+            {
+                UserName = model.Email,
+                Email = model.Email,
+                FirstName = model.FirstName,
+                LastName = model.LastName
+            };
+
+            var result = await _userManager.CreateAsync(user, model.Password);
+            if (result.Succeeded)
+            {
+                var role = await _roleManager.FindByIdAsync(model.RoleId);
+
+                await _userManager.AddToRoleAsync(user.Id, role.Name);
+
+                // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
+                // Send an email with this link
+                // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
+                // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
+                // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+                // if role = canidate view ()
+                return RedirectToAction("Details", "Account", new {userId = user.Id});
+            }
+            AddErrors(result);
+
+            return View(model);
+        }
+
+        public ActionResult Details(string userId)
+        {
+            if (string.IsNullOrEmpty(userId))
+            {
+                throw new HttpException((int) HttpStatusCode.NotFound, "");
+            }
+
+            ViewData["UserId"] = userId;
+
+            if (!Request.IsAjaxRequest())
+            {
+                return View();
+            }
+
+            var user = _userManager.Users.ProjectTo<UserModel>().SingleOrDefault(x => x.Id == userId);
+
+            if (user == null)
+            {
+                Response.StatusCode = (int) HttpStatusCode.NotFound;
+                ModelState.AddModelError("", "No record found!");
+                return new EnhancedJsonResult(ModelState.Values.SelectMany(v => v.Errors));
+            }
+
+            user.Avatar = user.Files.SingleOrDefault(x => x.FileType == FileType.Avatar);
+            user.Resume = user.Files.SingleOrDefault(x => x.FileType == FileType.Resume);
+            user.Files = null;
+
+            return new EnhancedJsonResult(user, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        //[ValidateAntiForgeryToken]
+        public async Task<ActionResult> Update(UserCreateModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                Response.StatusCode = (int) HttpStatusCode.BadRequest;
+                return new EnhancedJsonResult(ModelState.Values.SelectMany(v => v.Errors));
+            }
+
+            var user = await _userManager.FindByIdAsync(model.Id);
+
+            if (user == null)
+            {
+                Response.StatusCode = (int) HttpStatusCode.NotFound;
+                ModelState.AddModelError("", "No record found!");
+                return new EnhancedJsonResult(ModelState.Values.SelectMany(v => v.Errors));
+            }
+
+            _userService.Update(model);
+
+            return null;
+        }
+
+        #region Reset Password
+
         [AllowAnonymous]
         public async Task<ActionResult> VerifyCode(string provider, string returnUrl, bool rememberMe)
         {
             // Require that the user has already logged in via username/password or external login
-            if (!await SignInManager.HasBeenVerifiedAsync())
+            if (!await _signInManager.HasBeenVerifiedAsync())
             {
                 return View("Error");
             }
@@ -130,7 +204,7 @@ namespace RecruitmentManagementSystem.App.Controllers
             // You can configure the account lockout settings in IdentityConfig
             var result =
                 await
-                    SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent: model.RememberMe,
+                    _signInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent: model.RememberMe,
                         rememberBrowser: model.RememberBrowser);
             switch (result)
             {
@@ -145,75 +219,6 @@ namespace RecruitmentManagementSystem.App.Controllers
         }
 
         [HttpGet]
-        public ActionResult Register()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(Register model)
-        {
-            if (!ModelState.IsValid) return View(model);
-
-            var user = new ApplicationUser
-            {
-                UserName = model.Email,
-                Email = model.Email,
-                FirstName = model.FirstName,
-                LastName = model.LastName,
-                PhoneNumber = model.PhoneNumber
-            };
-
-            var result = await UserManager.CreateAsync(user, model.Password);
-            if (result.Succeeded)
-            {
-                var role = await _roleManager.FindByIdAsync(model.RoleId);
-
-                await UserManager.AddToRoleAsync(user.Id, role.Name);
-
-                if (model.Avatar != null && model.Avatar.ContentLength > 0)
-                {
-                    var fileName = $"{Guid.NewGuid()}.{Path.GetFileName(model.Avatar.FileName)}";
-
-                    FileHelper.SaveFile(new UploadConfig
-                    {
-                        FileBase = model.Avatar,
-                        FileName = fileName,
-                        FilePath = FilePath.AvatarRelativePath
-                    });
-
-                    var file = new File
-                    {
-                        Name = fileName,
-                        MimeType = model.Avatar.ContentType,
-                        Size = model.Avatar.ContentLength,
-                        RelativePath = FilePath.AvatarRelativePath + fileName,
-                        FileType = FileType.Avatar,
-                        ApplicationUserId = user.Id,
-                        CreatedBy = User.Identity.GetUserId(),
-                        UpdatedBy = User.Identity.GetUserId()
-                    };
-
-                    _fileRepository.Insert(file);
-                    _fileRepository.Save();
-                }
-
-                // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
-                // Send an email with this link
-                // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
-                // if role = canidate view ()
-                return RedirectToAction("Index", "Account");
-            }
-            AddErrors(result);
-
-            // If we got this far, something failed, redisplay form
-            return View(model);
-        }
-
-        [HttpGet]
         [AllowAnonymous]
         public async Task<ActionResult> ConfirmEmail(string userId, string code)
         {
@@ -221,7 +226,7 @@ namespace RecruitmentManagementSystem.App.Controllers
             {
                 return View("Error");
             }
-            var result = await UserManager.ConfirmEmailAsync(userId, code);
+            var result = await _userManager.ConfirmEmailAsync(userId, code);
             return View(result.Succeeded ? "ConfirmEmail" : "Error");
         }
 
@@ -238,8 +243,8 @@ namespace RecruitmentManagementSystem.App.Controllers
         public async Task<ActionResult> ForgotPassword(ForgotPasswordViewModel model)
         {
             if (!ModelState.IsValid) return View(model);
-            var user = await UserManager.FindByNameAsync(model.Email);
-            if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
+            var user = await _userManager.FindByNameAsync(model.Email);
+            if (user == null || !(await _userManager.IsEmailConfirmedAsync(user.Id)))
             {
                 // Don't reveal that the user does not exist or is not confirmed
                 return View("ForgotPasswordConfirmation");
@@ -278,13 +283,13 @@ namespace RecruitmentManagementSystem.App.Controllers
             {
                 return View(model);
             }
-            var user = await UserManager.FindByNameAsync(model.Email);
+            var user = await _userManager.FindByNameAsync(model.Email);
             if (user == null)
             {
                 // Don't reveal that the user does not exist
                 return RedirectToAction("ResetPasswordConfirmation", "Account");
             }
-            var result = await UserManager.ResetPasswordAsync(user.Id, model.Code, model.Password);
+            var result = await _userManager.ResetPasswordAsync(user.Id, model.Code, model.Password);
             if (result.Succeeded)
             {
                 return RedirectToAction("ResetPasswordConfirmation", "Account");
@@ -304,12 +309,12 @@ namespace RecruitmentManagementSystem.App.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> SendCode(string returnUrl, bool rememberMe)
         {
-            var userId = await SignInManager.GetVerifiedUserIdAsync();
+            var userId = await _signInManager.GetVerifiedUserIdAsync();
             if (userId == null)
             {
                 return View("Error");
             }
-            var userFactors = await UserManager.GetValidTwoFactorProvidersAsync(userId);
+            var userFactors = await _userManager.GetValidTwoFactorProvidersAsync(userId);
             var factorOptions =
                 userFactors.Select(purpose => new SelectListItem {Text = purpose, Value = purpose}).ToList();
             return
@@ -327,13 +332,15 @@ namespace RecruitmentManagementSystem.App.Controllers
             }
 
             // Generate the token and send it
-            if (!await SignInManager.SendTwoFactorCodeAsync(model.SelectedProvider))
+            if (!await _signInManager.SendTwoFactorCodeAsync(model.SelectedProvider))
             {
                 return View("Error");
             }
             return RedirectToAction("VerifyCode",
                 new {Provider = model.SelectedProvider, model.ReturnUrl, model.RememberMe});
         }
+
+        #endregion
 
         [HttpPost]
         [ValidateAntiForgeryToken]

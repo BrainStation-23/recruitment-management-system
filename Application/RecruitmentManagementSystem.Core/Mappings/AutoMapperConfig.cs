@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using AutoMapper;
-using RecruitmentManagementSystem.Core.Models.Candidate;
+using RecruitmentManagementSystem.Core.Models.Question;
+using RecruitmentManagementSystem.Core.Models.Quiz;
+using RecruitmentManagementSystem.Core.Models.User;
 using RecruitmentManagementSystem.Core.Tasks;
 using RecruitmentManagementSystem.Model;
 
@@ -19,7 +21,7 @@ namespace RecruitmentManagementSystem.Core.Mappings
 
             LoadCustomMappings(types);
 
-            LoadDtoToDomainMappings();
+            LoadModelToEntityMappings();
         }
 
         private static void LoadCustomMappings(IEnumerable<Type> types)
@@ -56,23 +58,31 @@ namespace RecruitmentManagementSystem.Core.Mappings
             }
         }
 
-        private static void LoadDtoToDomainMappings()
+        private static void LoadModelToEntityMappings()
         {
-            Mapper.CreateMap<CandidateCreateDto, Candidate>(MemberList.Source)
+            Mapper.CreateMap<UserCreateModel, User>(MemberList.Source)
                 .ForMember(s => s.Educations, t => t.Ignore())
                 .ForMember(s => s.Experiences, t => t.Ignore())
                 .ForMember(s => s.Projects, t => t.Ignore())
                 .ForMember(s => s.Skills, t => t.Ignore());
 
-            Mapper.CreateMap<SkillDto, Skill>(MemberList.Source);
+            Mapper.CreateMap<SkillModel, Skill>(MemberList.Source);
 
-            Mapper.CreateMap<ProjectDto, Project>(MemberList.Source);
+            Mapper.CreateMap<ProjectModel, Project>(MemberList.Source);
 
-            Mapper.CreateMap<ExperienceDto, Experience>(MemberList.Source);
+            Mapper.CreateMap<ExperienceModel, Experience>(MemberList.Source);
 
-            Mapper.CreateMap<EducationDto, Education>(MemberList.Source)
-                .ForMember(s => s.Institution, t => t.Ignore())
-                .ForMember(s => s.Candidate, t => t.Ignore());
+            Mapper.CreateMap<EducationModel, Education>(MemberList.Source)
+                .ForMember(s => s.Institution, t => t.Ignore());
+
+            Mapper.CreateMap<AnswerModel, Answer>();
+
+            Mapper.CreateMap<QuestionCreateModel, Question>();
+            Mapper.CreateMap<QuestionCategoryModel, QuestionCategory>();
+
+            Mapper.CreateMap<QuizModel, Quiz>();
+            Mapper.CreateMap<QuizPageCreateModel, QuizPage>();
+            Mapper.CreateMap<QuizQuestionCreateModel, QuizQuestion>();
         }
     }
 }

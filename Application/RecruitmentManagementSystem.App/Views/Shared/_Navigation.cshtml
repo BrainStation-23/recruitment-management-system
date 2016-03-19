@@ -1,0 +1,68 @@
+﻿@using Microsoft.AspNet.Identity
+
+@if (Request.IsAuthenticated)
+{
+    <ul class="nav navbar-nav">
+        <li>@Html.ActionLink("Home", "Index", "Home")</li>
+
+        <li class="dropdown" uib-dropdown>
+            <a class="dropdown-toggle" uib-dropdown-toggle role="button" aria-haspopup="true" aria-expanded="false">
+                User
+                <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+                <li>@Html.ActionLink("Registered Users", "List", "Account")</li>
+                <li>@Html.ActionLink("Register New User", "Register", "Account")</li>
+            </ul>
+        </li>
+
+        <li class="dropdown" uib-dropdown>
+            <a class="dropdown-toggle" uib-dropdown-toggle role="button" aria-haspopup="true" aria-expanded="false">
+                Course
+                <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+                <li>@Html.ActionLink("Course List", "List", "Course")</li>
+                <li>@Html.ActionLink("Create New Course", "Create", "Course")</li>
+                <li>@Html.ActionLink("Create New Quiz", "Create", "Quiz")</li>
+            </ul>
+        </li>
+
+        <li class="dropdown" uib-dropdown>
+            <a class="dropdown-toggle" uib-dropdown-toggle role="button" aria-haspopup="true" aria-expanded="false">
+                Question Bank
+                <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+                <li>@Html.ActionLink("Questions", "List", "Question")</li>
+                <li>@Html.ActionLink("Create New Question", "Create", "Question")</li>
+                <li>@Html.ActionLink("Categories", "List", "QuestionCategory")</li>
+                <li>@Html.ActionLink("Create New Category", "Create", "QuestionCategory")</li>
+            </ul>
+        </li>
+    </ul>
+
+    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new {id = "logoutForm", @class = "navbar-right"}))
+    {
+        @Html.AntiForgeryToken()
+
+        <ul class="nav navbar-nav navbar-right">
+
+            <li class="dropdown" uib-dropdown>
+                <a class="dropdown-toggle" uib-dropdown-toggle role="button" aria-haspopup="true" aria-expanded="false">@User.Identity.GetUserName() <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li>@Html.ActionLink("Account Details", "Details", "Account", new {userId = User.Identity.GetUserId()}, null)</li>
+                    <li>@Html.ActionLink("Manage Security", "Security", "Manage")</li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+                </ul>
+            </li>
+        </ul>
+    }
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right">
+        <li>@Html.ActionLink("Log in", "Login", "Account", null, new {id = "loginLink"})</li>
+    </ul>
+}

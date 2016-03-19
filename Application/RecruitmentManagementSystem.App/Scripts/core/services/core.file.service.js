@@ -12,8 +12,14 @@
                 });
             };
 
+            var getOriginalFileName = function(dbFileName) {
+                var newGuidLength = 36;
+                return dbFileName.substring(newGuidLength);
+            };
+
             return {
-                postMultipartForm: postMultipartForm
+                postMultipartForm: postMultipartForm,
+                getOriginalFileName: getOriginalFileName
             };
         }
     ]);

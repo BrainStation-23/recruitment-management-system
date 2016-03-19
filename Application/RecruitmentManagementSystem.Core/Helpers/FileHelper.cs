@@ -19,7 +19,8 @@ namespace RecruitmentManagementSystem.Core.Helpers
     {
         public static UploadConfig Upload(HttpPostedFile fileBase, FileType fileType)
         {
-            var fileName = $"{Guid.NewGuid()}.{Path.GetFileName(fileBase.FileName)}";
+            //var fileName = $"{Guid.NewGuid()}.{Path.GetFileName(fileBase.FileName)}";
+            var fileName = String.Format("{0}{1}",Guid.NewGuid(),Path.GetFileName(fileBase.FileName));
 
             var filePath = string.Empty;
 

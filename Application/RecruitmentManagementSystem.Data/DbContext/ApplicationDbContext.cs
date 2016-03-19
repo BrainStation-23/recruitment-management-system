@@ -5,12 +5,12 @@ using RecruitmentManagementSystem.Model;
 
 namespace RecruitmentManagementSystem.Data.DbContext
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    public class ApplicationDbContext : IdentityDbContext<User>
     {
         public ApplicationDbContext()
             : base(WebConfigurationManager.ConnectionStrings["DbConnection"].ConnectionString, false)
         {
-            Configuration.LazyLoadingEnabled = false;
+            Configuration.LazyLoadingEnabled = true;
         }
 
         public static ApplicationDbContext Create()
@@ -18,10 +18,10 @@ namespace RecruitmentManagementSystem.Data.DbContext
             return new ApplicationDbContext();
         }
 
-        public DbSet<Candidate> Candidates { get; set; }
         public DbSet<Question> Questions { get; set; }
         public DbSet<Institution> Institutions { get; set; }
         public DbSet<QuestionCategory> QuestionCategories { get; set; }
-        public DbSet<JobPosition> JobPositions { get; set; }
+        public DbSet<Course> Courses { get; set; }
+        public DbSet<Quiz> Quizzes { get; set; }
     }
 }

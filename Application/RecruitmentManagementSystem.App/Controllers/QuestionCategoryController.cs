@@ -1,10 +1,10 @@
 ﻿using System.Linq;
 using System.Web.Mvc;
 using AutoMapper.QueryableExtensions;
-using Microsoft.AspNet.Identity;
+using RecruitmentManagementSystem.App.Infrastructure.ActionResults;
 using RecruitmentManagementSystem.Data.Interfaces;
-using JsonResult = RecruitmentManagementSystem.App.Infrastructure.ActionResults.JsonResult;
-using QuestionCategory = RecruitmentManagementSystem.Core.Models.Question.QuestionCategory;
+using QuestionCategory = RecruitmentManagementSystem.Core.Models.Question.QuestionCategoryModel;
+using RecruitmentManagementSystem.Core.Interfaces;
 
 namespace RecruitmentManagementSystem.App.Controllers
 {
@@ -13,20 +13,25 @@ namespace RecruitmentManagementSystem.App.Controllers
     {
         private readonly IQuestionCategoryRepository _questionCategoryRepository;
 
-        public QuestionCategoryController(IQuestionCategoryRepository questionCategoryRepository)
+        private readonly IQuestionCategoryService _questionCategoryService;
+
+        public QuestionCategoryController(IQuestionCategoryRepository questionCategoryRepository, IQuestionCategoryService questionCategoryService)
         {
             _questionCategoryRepository = questionCategoryRepository;
+
+            _questionCategoryService = questionCategoryService;
         }
 
         [HttpGet]
-        public ActionResult Index()
+        public ActionResult List()
         {
-            var model = _questionCategoryRepository.FindAll().ProjectTo<QuestionCategory>();
+            var model = _questionCategoryService.GetPagedList();
 
             if (Request.IsAjaxRequest())
             {
-                return new JsonResult(model, JsonRequestBehavior.AllowGet);
+                return new EnhancedJsonResult(model, JsonRequestBehavior.AllowGet);
             }
+
             return View(model);
         }
 
@@ -42,16 +47,9 @@ namespace RecruitmentManagementSystem.App.Controllers
         {
             if (!ModelState.IsValid) return View(question);
 
-            _questionCategoryRepository.Insert(new Model.QuestionCategory
-            {
-                Name = question.Name,
-                Description = question.Description,
-                CreatedBy = User.Identity.GetUserId(),
-                UpdatedBy = User.Identity.GetUserId()
-            });
+            _questionCategoryService.Insert(question);
 
-            _questionCategoryRepository.Save();
-            return RedirectToAction("Index");
+            return RedirectToAction("List");
         }
 
         [HttpGet]
@@ -86,15 +84,18 @@ namespace RecruitmentManagementSystem.App.Controllers
         {
             if (!ModelState.IsValid) return View(model);
 
-            _questionCategoryRepository.Update(new Model.QuestionCategory
-            {
-                Id = model.Id,
-                Name = model.Name,
-                Description = model.Description
-            });
+            _questionCategoryService.Update(model);
 
+            return RedirectToAction("List");
+        }
+
+        [HttpGet]
+        public ActionResult Delete(int id)
+        {
+            _questionCategoryRepository.Delete(id);
             _questionCategoryRepository.Save();
-            return RedirectToAction("Index");
+
+            return RedirectToAction("List");
         }
     }
 }

@@ -2,7 +2,7 @@
     "use strict";
 
     app.controller("QuestionsController", [
-        "$http", "fileService", "notifierService", "questionConstants", "$scope", function ($http, fileService, notifierService, questionConstant, $scope) {
+        "$http", "fileService", "notifierService", "questionConstants", function ($http, fileService, notifierService, questionConstant) {
 
             var vm = this;
 
@@ -12,29 +12,35 @@
 
             vm.categories = [];
 
-            var defaultChoices = [
+            var defaultAnswers = [
                 {
-                    text: "",
-                    isValid: false
+                    answerText: "",
+                    isCorrect: false
                 },
                 {
-                    text: "",
-                    isValid: false
+                    answerText: "",
+                    isCorrect: false
                 }
             ];
-            if (!vm.choices) {
-                vm.choices = angular.copy(defaultChoices);
+
+            vm.descriptiveAnswer = "";
+
+            if (!vm.answers) {
+                vm.answers = angular.copy(defaultAnswers);
             }
 
             vm.create = function () {
+
                 vm.form.submitted = true;
+
+                var descAnswer = (!vm.descriptiveAnswer) ? [] : [{ answerText: vm.descriptiveAnswer, isCorrect: true }];
 
                 var model = {
                     text: vm.text,
                     questionType: vm.questionType,
-                    choices: vm.questionType === vm.constants.questionType.descriptive ? [] : vm.choices,
+                    answers: vm.questionType === vm.constants.questionType.descriptive ? descAnswer : vm.answers,
                     notes: vm.notes,
-                    answer: vm.answer,
+                    defaultPoint : vm.defaultPoint,
                     categoryId: vm.categoryId,
                     files: [],
                     __RequestVerificationToken: angular.element(":input:hidden[name*='RequestVerificationToken']").val()
@@ -43,6 +49,7 @@
                 if (vm.allDocuments && vm.allDocuments.length) {
                     model.files = vm.allDocuments;
                 }
+
                 console.log(model);
 
                 if (vm.form.$valid) {
@@ -97,15 +104,15 @@
                 }
             };
 
-            vm.addNewChoice = function () {
-                vm.choices.push({
-                    text: "",
-                    isValid: false
+            vm.addNewAnswer = function () {
+                vm.answers.push({
+                    answerText: "",
+                    isCorrect: false
                 });
             };
 
-            vm.discardChoice = function (index) {
-                vm.choices.splice(index, 1);
+            vm.discardAnswer = function (index) {
+                vm.answers.splice(index, 1);
             };
 
             vm.find = function (id) {
@@ -123,7 +130,7 @@
             };
 
             vm.findCategories = function () {
-                $http.get("/QuestionCategory/").success(function (data) {
+                $http.get("/QuestionCategory/List/").success(function (data) {
                     vm.categories = data;
                 });
             };
@@ -143,6 +150,10 @@
                 }
 
                 vm.allDocuments.splice(index, 1);
+            };
+
+            vm.getOriginalFileName = function(dbFileName) {
+                return fileService.getOriginalFileName(dbFileName);
             };
 
             //Watchers
