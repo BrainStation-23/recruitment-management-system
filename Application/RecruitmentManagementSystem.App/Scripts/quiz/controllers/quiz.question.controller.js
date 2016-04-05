@@ -21,6 +21,22 @@
                 });
             });
 
+            vm.updateQuestion = function (categoryName) {
+                var data = "";
+                $http.get("/Question/List/?categoryName=" + categoryName).success(function (response) {
+                    vm.questions = response;
+
+
+                    _.map(vm.questions, function (q) {
+                        if (_.find(questionsInAllPages, { id: q.id })) {
+                            q.selected = true;
+                        }
+                        return q;
+                    });
+
+                })
+            };
+
             vm.save = function() {
                 var questions = _.filter(vm.questions, function(x) { return x.selected; });
 

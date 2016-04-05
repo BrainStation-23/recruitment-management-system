@@ -12,7 +12,7 @@ namespace RecruitmentManagementSystem.Model
 
         public int QuestionId { get; set; }
 
-        public Question Question { get; set; }
+        public virtual Question Question { get; set; }
 
         [Required]
         public decimal Point { get; set; }
