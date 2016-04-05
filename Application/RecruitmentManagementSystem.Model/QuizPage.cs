@@ -10,6 +10,6 @@ namespace RecruitmentManagementSystem.Model
 
         public Quiz Quiz { get; set; }
 
-        public ICollection<QuizQuestion> QuizQuestions { get; set; }
+        public virtual ICollection<QuizQuestion> QuizQuestions { get; set; }
     }
 }

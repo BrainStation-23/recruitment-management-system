@@ -62,6 +62,11 @@ namespace RecruitmentManagementSystem.App.Controllers
 
             if (model == null) return new HttpNotFoundResult();
 
+            if (Request.IsAjaxRequest())
+            {
+                return new EnhancedJsonResult(model, JsonRequestBehavior.AllowGet);
+            }
+
             return View(model);
         }
 
