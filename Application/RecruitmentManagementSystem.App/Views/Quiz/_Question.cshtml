@@ -2,19 +2,19 @@
     <div class="panel-heading">Page {{ $index + 1 }}</div>
 
     <div class="panel-body">
-        <div ng-hide="page.questions && page.questions.length">
+        <div ng-hide="page.quizQuestions && page.quizQuestions.length">
             <i class="fa fa-lg fa-exclamation-triangle"></i>
             No questions are added yet.
         </div>
 
-        <div class="table-responsive" ng-show="page.questions && page.questions.length">
+        <div class="table-responsive" ng-show="page.quizQuestions && page.quizQuestions.length">
             <table class="table">
                 <tr>
                     <th>Text</th>
                     <th>Category</th>
                     <th></th>
                 </tr>
-                <tr ng-repeat="question in page.questions track by $index">
+                <tr ng-repeat="question in page.quizQuestions track by $index">
                     <td>
                         <div ng-bind="question.text"></div>
                     </td>
