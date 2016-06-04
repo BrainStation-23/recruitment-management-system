@@ -7,6 +7,8 @@ using RecruitmentManagementSystem.Core.Models.Question;
 using RecruitmentManagementSystem.Data.Interfaces;
 using RecruitmentManagementSystem.Core.Interfaces;
 using RecruitmentManagementSystem.Core.Mappings;
+using RecruitmentManagementSystem.Model;
+using System.Collections.Generic;
 
 namespace RecruitmentManagementSystem.App.Controllers
 {
@@ -30,16 +32,25 @@ namespace RecruitmentManagementSystem.App.Controllers
         }
 
         [HttpGet]
-        public ActionResult List()
+        public ActionResult List(string categoryName)
         {
-            var model = _questionService.GetPagedList();
+            IEnumerable<QuestionModel> model;
 
+            if (!string.IsNullOrEmpty(categoryName) && categoryName!= "undefined")
+            {
+                model = _questionService.GetPagedList().Where(x => x.Category.Name == categoryName);
+            }
+            else
+            {
+                 model = _questionService.GetPagedList();
+            }
             if (Request.IsAjaxRequest())
             {
                 return new EnhancedJsonResult(model, JsonRequestBehavior.AllowGet);
             }
 
             return View(model);
+
         }
 
         [HttpGet]
@@ -68,7 +79,7 @@ namespace RecruitmentManagementSystem.App.Controllers
         {
             if (!ModelState.IsValid)
             {
-                Response.StatusCode = (int) HttpStatusCode.BadRequest;
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return new EnhancedJsonResult(ModelState.Values.SelectMany(v => v.Errors));
             }
 
@@ -95,14 +106,14 @@ namespace RecruitmentManagementSystem.App.Controllers
 
             if (entity == null)
             {
-                Response.StatusCode = (int) HttpStatusCode.NotFound;
+                Response.StatusCode = (int)HttpStatusCode.NotFound;
                 ModelState.AddModelError("", "Question not found.");
                 return new EnhancedJsonResult(ModelState.Values.SelectMany(v => v.Errors));
             }
 
             if (!ModelState.IsValid)
             {
-                Response.StatusCode = (int) HttpStatusCode.BadRequest;
+                Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 return new EnhancedJsonResult(ModelState.Values.SelectMany(v => v.Errors));
             }
 

@@ -9,7 +9,7 @@
             <div class="col-xs-12">
                 <div class="form-group">
                     <label class="required">Question Category</label>
-                    <select class="form-control" ng-model="modalCtrl.category" ng-options="option.name for option in modalCtrl.categories" required>
+                    <select class="form-control" ng-model="modalCtrl.category" ng-options="option.name for option in modalCtrl.categories" required ng-change="modalCtrl.updateQuestion(modalCtrl.category.name)">
                         <option value="">Select One</option>
                     </select>
                 </div>
@@ -30,7 +30,7 @@
                                 <div ng-bind="question.text"></div>
                             </td>
                             <td>
-                                <div ng-bind="question.category"></div>
+                                <div ng-bind="question.category.name"></div>
                             </td>
                             <td>
                                 <div class="checkbox">
