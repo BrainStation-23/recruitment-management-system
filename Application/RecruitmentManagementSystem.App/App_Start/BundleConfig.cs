@@ -8,17 +8,17 @@ namespace RecruitmentManagementSystem.App
         public static void RegisterBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/bundles/library").Include(
-                "~/bower_components/jquery/dist/jquery.js",
-                "~/bower_components/angular/angular.js",
-                "~/bower_components/angular-messages/angular-messages.js",
-                "~/bower_components/angular-bootstrap/ui-bootstrap-tpls.js",
-                "~/bower_components/ng-file-upload/ng-file-upload.js",
-                "~/bower_components/toastr/toastr.js",
-                "~/bower_components/lodash/lodash.js"));
+                "~/node_modules/jquery/dist/jquery.js",
+                "~/node_modules/angular/angular.js",
+                "~/node_modules/angular-messages/angular-messages.js",
+                "~/node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js",
+                "~/node_modules/ng-file-upload/dist/ng-file-upload.js",
+                "~/node_modules/toastr/toastr.js",
+                "~/node_modules/lodash/lodash.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
-                "~/bower_components/jquery-validation/dist/jquery.validate.js",
-                "~/bower_components/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"));
+                "~/node_modules/jquery-validation/dist/jquery.validate.js",
+                "~/node_modules/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/application").Include(
                 "~/Scripts/core/config/config.js",
@@ -41,10 +41,10 @@ namespace RecruitmentManagementSystem.App
                 "~/Scripts/users/controllers/users.project.modal.controller.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                "~/bower_components/bootstrap/dist/css/bootstrap.css",
-                "~/bower_components/toastr/toastr.css",
-                "~/bower_components/font-awesome/css/font-awesome.css",
-                "~/Content/Styles/main.css"));
+                "~/node_modules/bootstrap/dist/css/bootstrap.css",
+                "~/node_modules/toastr/toastr.css",
+                "~/node_modules/font-awesome/css/font-awesome.css",
+                "~/Content/Styles/site.css"));
         }
     }
 }
