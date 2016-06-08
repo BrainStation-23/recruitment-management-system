@@ -18,7 +18,7 @@
                     <div class="form-group">
                         <label class="control-label col-sm-2">Title</label>
                         <div class="col-sm-10">
-                            <input type="text" name="title" ng-model="ctrl.title" required class="form-control" />
+                            <input type="text" name="title" ng-model="ctrl.title" required class="form-control"/>
                             <div class="text-danger field-validation-error" ng-messages="ctrl.form.submitted && ctrl.form.title.$error">
                                 <span ng-message="required">This field is required.</span>
                             </div>
@@ -40,15 +40,17 @@
                         </div>
                     </div>
 
-                    <button type="button" class="btn btn-primary" ng-click="ctrl.addNewPage()">Add Page</button>
+                    <p>
+                        <button type="button" class="btn btn-primary" ng-click="ctrl.addNewPage()">Add Page</button>
+                    </p>
 
                     @Html.Partial("_Question")
 
-                    <hr />
+                    <hr/>
 
                     <div class="form-group">
                         <div class="col-sm-offset-2 col-sm-10">
-                            <input type="submit" value="Create" class="btn btn-success" />
+                            <input type="submit" value="Create" class="btn btn-success"/>
                             @Html.ActionLink("Back to List", "List")
                         </div>
                     </div>

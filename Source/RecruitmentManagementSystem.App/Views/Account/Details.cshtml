@@ -2,10 +2,10 @@
     ViewBag.Title = "User Details";
 }
 
-<h2>User Details</h2>
+<h3>User Details</h3>
 <hr/>
 
-<div ng-controller="UsersController as userCtrl" ng-init="userCtrl.find('@ViewData["UserId"]')">
+<div ng-controller="UsersController as userCtrl" ng-init="userCtrl.find('@ViewData["UserId"]')" class="clearfix">
     <div active="active" uib-tabset>
         <div uib-tab index="0">
             <div uib-tab-heading>
@@ -13,31 +13,38 @@
             </div>
             @Html.Partial("_PersonalInformation")
         </div>
+
         <div uib-tab index="1">
             <div uib-tab-heading>
                 <i class="fa fa-university fa-lg"></i> Educations
             </div>
             @Html.Partial("_Education")
         </div>
+
         <div uib-tab index="2">
             <div uib-tab-heading>
                 <i class="fa fa-certificate fa-lg"></i> Experiences
             </div>
             @Html.Partial("_Experience")
         </div>
+
         <div uib-tab index="3">
             <div uib-tab-heading>
                 <i class="fa fa-lightbulb-o fa-lg"></i> Skills
             </div>
             @Html.Partial("_Skill")
         </div>
-        <div uib-tab index="3">
+
+        <div uib-tab index="4">
             <div uib-tab-heading>
                 <i class="fa fa-terminal fa-lg"></i> Projects
             </div>
             @Html.Partial("_Project")
         </div>
     </div>
-    <hr />
-    <input type="button" class="btn btn-success" value="Save" ng-click="userCtrl.save()" />
+
+    <div class="pull-right">
+        <input type="button" class="btn btn-success" value="Save" ng-click="userCtrl.save()"/>
+        @Html.ActionLink("Back to List", "List")
+    </div>
 </div>

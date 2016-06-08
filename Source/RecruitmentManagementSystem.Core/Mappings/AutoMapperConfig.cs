@@ -77,7 +77,7 @@ namespace RecruitmentManagementSystem.Core.Mappings
 
             Mapper.CreateMap<ChoiceModel, Choice>();
 
-            Mapper.CreateMap<QuestionCreateModel, Question>();
+            Mapper.CreateMap<QuestionModel, Question>();
             Mapper.CreateMap<QuestionCategoryModel, QuestionCategory>();
 
             Mapper.CreateMap<QuizModel, Quiz>();

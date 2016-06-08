@@ -33,7 +33,6 @@ namespace RecruitmentManagementSystem.App.Controllers
             }
 
             return View(model);
-
         }
 
         [HttpGet]
@@ -57,7 +56,7 @@ namespace RecruitmentManagementSystem.App.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(QuestionCreateModel model)
+        public ActionResult Create(QuestionModel model)
         {
             if (!ModelState.IsValid)
             {

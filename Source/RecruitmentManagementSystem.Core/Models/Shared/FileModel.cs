@@ -4,10 +4,8 @@ using RecruitmentManagementSystem.Model;
 
 namespace RecruitmentManagementSystem.Core.Models.Shared
 {
-    public class FileModel : IMapFrom<File>
+    public class FileModel : BaseModel, IMapFrom<File>
     {
-        public int Id { get; set; }
-
         [Required]
         [StringLength(255, ErrorMessage = "The {0} must be at most {1} characters long.")]
         public string Name { get; set; }

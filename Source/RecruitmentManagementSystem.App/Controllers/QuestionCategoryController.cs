@@ -3,8 +3,8 @@ using System.Web.Mvc;
 using AutoMapper.QueryableExtensions;
 using RecruitmentManagementSystem.App.Infrastructure.ActionResults;
 using RecruitmentManagementSystem.Data.Interfaces;
-using QuestionCategory = RecruitmentManagementSystem.Core.Models.Question.QuestionCategoryModel;
 using RecruitmentManagementSystem.Core.Interfaces;
+using RecruitmentManagementSystem.Core.Models.Question;
 
 namespace RecruitmentManagementSystem.App.Controllers
 {
@@ -15,7 +15,8 @@ namespace RecruitmentManagementSystem.App.Controllers
 
         private readonly IQuestionCategoryService _questionCategoryService;
 
-        public QuestionCategoryController(IQuestionCategoryRepository questionCategoryRepository, IQuestionCategoryService questionCategoryService)
+        public QuestionCategoryController(IQuestionCategoryRepository questionCategoryRepository,
+            IQuestionCategoryService questionCategoryService)
         {
             _questionCategoryRepository = questionCategoryRepository;
 
@@ -43,7 +44,7 @@ namespace RecruitmentManagementSystem.App.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(QuestionCategory question)
+        public ActionResult Create(QuestionCategoryModel question)
         {
             if (!ModelState.IsValid) return View(question);
 
@@ -57,7 +58,7 @@ namespace RecruitmentManagementSystem.App.Controllers
         {
             var model =
                 _questionCategoryRepository.FindAll()
-                    .ProjectTo<QuestionCategory>()
+                    .ProjectTo<QuestionCategoryModel>()
                     .FirstOrDefault(x => x.Id == id);
 
             if (model == null) return new HttpNotFoundResult();
@@ -75,7 +76,7 @@ namespace RecruitmentManagementSystem.App.Controllers
         {
             var model =
                 _questionCategoryRepository.FindAll()
-                    .ProjectTo<QuestionCategory>()
+                    .ProjectTo<QuestionCategoryModel>()
                     .FirstOrDefault(x => x.Id == id);
 
             if (model == null) return new HttpNotFoundResult();
@@ -85,20 +86,11 @@ namespace RecruitmentManagementSystem.App.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(QuestionCategory model)
+        public ActionResult Edit(QuestionCategoryModel model)
         {
             if (!ModelState.IsValid) return View(model);
 
             _questionCategoryService.Update(model);
-
-            return RedirectToAction("List");
-        }
-
-        [HttpGet]
-        public ActionResult Delete(int id)
-        {
-            _questionCategoryRepository.Delete(id);
-            _questionCategoryRepository.Save();
 
             return RedirectToAction("List");
         }

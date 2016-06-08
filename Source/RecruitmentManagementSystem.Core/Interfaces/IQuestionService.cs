@@ -7,6 +7,6 @@ namespace RecruitmentManagementSystem.Core.Interfaces
     {
         IEnumerable<QuestionModel> GetPagedList();
 
-        void Insert(QuestionCreateModel model);
+        void Insert(QuestionModel model);
     }
 }

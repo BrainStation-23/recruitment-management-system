@@ -122,10 +122,7 @@
     <Compile Include="Models\Course\CourseModel.cs" />
     <Compile Include="Models\Institution\InstitutionModel.cs" />
     <Compile Include="Models\Question\ChoiceModel.cs" />
-    <Compile Include="Models\Question\QuestionCategoryBase.cs" />
-    <Compile Include="Models\Question\QuestionBase.cs" />
     <Compile Include="Models\Question\QuestionCategoryModel.cs" />
-    <Compile Include="Models\Question\QuestionCreateModel.cs" />
     <Compile Include="Models\Question\QuestionEditModel.cs" />
     <Compile Include="Models\Question\QuestionModel.cs" />
     <Compile Include="Models\Quiz\QuizCreateModel.cs" />

@@ -10,7 +10,7 @@ namespace RecruitmentManagementSystem.Core.Models.Question
         [StringLength(200, ErrorMessage = "The {0} must be at most {1} characters long.")]
         public string Text { get; set; }
 
-        public bool IsCorrect { get; set; }        
+        public bool IsCorrect { get; set; }
 
         public int QuestionId { get; set; }
 

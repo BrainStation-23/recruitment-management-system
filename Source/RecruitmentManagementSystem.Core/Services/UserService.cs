@@ -144,7 +144,7 @@ namespace RecruitmentManagementSystem.Core.Services
 
             for (var index = 0; index < httpFileCollection.Count; index++)
             {
-                if (httpFileCollection[index] == null || httpFileCollection[index].ContentLength <= 0)
+                if (httpFileCollection[index].ContentLength <= 0)
                 {
                     continue;
                 }

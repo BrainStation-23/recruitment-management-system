@@ -34,9 +34,9 @@ namespace RecruitmentManagementSystem.Core.Services
             return model;
         }
 
-        public void Insert(QuestionCreateModel model)
+        public void Insert(QuestionModel model)
         {
-            var entity = _modelFactory.MapToDomain<QuestionCreateModel, Question>(model, null);
+            var entity = _modelFactory.MapToDomain<QuestionModel, Question>(model, null);
 
             entity.Choices = _modelFactory.MapToDomain<ChoiceModel, Choice>(model.Choices);
 
@@ -49,10 +49,10 @@ namespace RecruitmentManagementSystem.Core.Services
 
         #region Private methodes
 
-        private ICollection<File> ManageFiles(QuestionCreateModel model)
+        private ICollection<File> ManageFiles(QuestionModel model)
         {
             var files = new List<File>();
-            FileType fileType = FileType.Document;
+            const FileType fileType = FileType.Document;
             var fileCollection = HttpContext.Current.Request.Files;
 
             for (var index = 0; index < fileCollection.Count; index++)
