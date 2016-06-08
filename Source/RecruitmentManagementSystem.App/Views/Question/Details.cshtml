@@ -1,0 +1,45 @@
+﻿@model RecruitmentManagementSystem.Core.Models.Question.QuestionModel
+
+@{
+    ViewBag.Title = "Question Details";
+}
+
+<h3>Question Details</h3>
+<hr />
+
+<div>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Text)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Text)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.QuestionType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.QuestionType)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Notes)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Notes)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Category)
+        </dt>
+    </dl>
+</div>
+
+<p>
+    @Html.ActionLink("Edit", "Edit", new {id = Model.Id}) |
+    @Html.ActionLink("Back to List", "List")
+</p>

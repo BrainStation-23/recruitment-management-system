@@ -1,0 +1,44 @@
+﻿<div>
+    <br/>
+
+    <div ng-hide="userCtrl.user.experiences && userCtrl.user.experiences.length" uib-alert type="info">
+        <i class="fa fa-lg fa-exclamation-triangle"></i>
+        No experiences are added yet.
+    </div>
+
+    <div class="table-responsive" ng-show="userCtrl.user.experiences && userCtrl.user.experiences.length">
+        <table class="table">
+            <tr>
+                <th>Company Name</th>
+                <th>Job Title</th>
+                <th>Time Duration</th>
+                <th>Description</th>
+                <th></th>
+            </tr>
+            <tr ng-repeat="experience in userCtrl.user.experiences">
+                <td>
+                    <div ng-bind="experience.organization"></div>
+                </td>
+                <td>
+                    <div ng-bind="experience.jobTitle"></div>
+                </td>
+                <td>
+                    <div>
+                        {{ experience.startDate | date : 'MMM yyyy' }} - {{ experience.present ? 'Present' : (experience.endDate | date : 'MMM yyyy') }}
+                    </div>
+                </td>
+                <td>
+                <div ng-bind="experience.description"></div>
+                <td>
+                    <button type="button" class="btn btn-success" ng-click="userCtrl.openExperienceModal(experience)">
+                        <i class="fa fa-edit fa-lg"></i>
+                    </button>
+                    <button type="button" class="btn btn-danger" ng-click="userCtrl.discardExperience($index)">
+                        <i class="fa fa-trash fa-lg"></i>
+                    </button>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <button type="button" class="btn btn-primary" ng-click="userCtrl.openExperienceModal()">Add Experience</button>
+</div>

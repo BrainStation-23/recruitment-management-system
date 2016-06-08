@@ -1,10 +1,11 @@
-# Recruitment Management System
+## Recruitment Management System
 
 [![Build status](https://ci.appveyor.com/api/projects/status/7sa9b0lnwjen7808?svg=true)](https://ci.appveyor.com/project/shibbir/recruitment-management-system-nv0ec)
 [![Dependency Status](https://www.versioneye.com/user/projects/5753144d7757a00034dc4260/badge.svg?style=flat)](https://www.versioneye.com/user/projects/5753144d7757a00034dc4260)
+[![Code Climate](https://codeclimate.com/github/BrainStation-23/recruitment-management-system/badges/gpa.svg)](https://codeclimate.com/github/BrainStation-23/recruitment-management-system)
 [![License](https://img.shields.io/npm/l/express.svg)](http://opensource.org/licenses/MIT)
 
-# Built With
+## Built With
 
 * [ASP.NET MVC 5](http://www.asp.net/mvc)
 * [ASP.NET Identity](http://www.asp.net/identity)
@@ -13,12 +14,11 @@
 * [AutoMapper](http://automapper.org/)
 * [Toastr](http://codeseven.github.io/toastr/)
 * [Microsoft Unity](http://unity.codeplex.com/)
-* [xUnit](https://xunit.github.io/)
 * [AngularJS](https://angularjs.org/)
 * [Angular UI Bootstrap](http://angular-ui.github.io/bootstrap/)
 * [Gulp](http://gulpjs.com/)
 
-# Installation
+## Installation
 
 Cloning the repository:
 
@@ -43,7 +43,7 @@ $ gulp
 ```
 For more information please visit [gulp.js](http://gulpjs.com/)
 
-# License
+## License
 
 This application is released under the [MIT](http://www.opensource.org/licenses/MIT) License.
 
