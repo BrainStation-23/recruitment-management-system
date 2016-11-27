@@ -44,7 +44,7 @@ namespace RecruitmentManagementSystem.App
                 "~/Scripts/users/controllers/users.project.modal.controller.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                "~/Content/Styles/bootstrap-paper.css",
+                "~/node_modules/bootstrap/dist/css/bootstrap.css",
                 "~/node_modules/font-awesome/css/font-awesome.css",
                 "~/node_modules/summernote/dist/summernote.css",
                 "~/node_modules/toastr/build/toastr.css",
